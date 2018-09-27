@@ -1,20 +1,26 @@
 import json
 import os
 import re
+import shutil
+import subprocess
 import sys
 import zipfile
 from urllib.request import urlopen
-import subprocess
+
 from bs4 import BeautifulSoup
+from fbs_runtime.application_context import ApplicationContext
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import QCoreApplication, QThread, pyqtSignal
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import (QFileDialog, QHBoxLayout, QMainWindow,
+                             QMessageBox, QPushButton, QSizePolicy)
 
 import main_window_design
 
 
-class YourThreadName(QThread):
+class BuildLoader(QThread):
     finished = pyqtSignal()
-    progress_changed = pyqtSignal('PyQt_PyObject')
+    progress_changed = pyqtSignal('PyQt_PyObject', 'PyQt_PyObject')
 
     def __init__(self, root_path, download_url):
         QThread.__init__(self)
@@ -24,8 +30,13 @@ class YourThreadName(QThread):
     def run(self):
         blender_zip = urlopen(self.download_url)
         size = blender_zip.info()['Content-Length']
-        download_path = self.root_path + '/' + \
-            self.download_url.split('/', -1)[-1]
+        temp_path = os.path.join(self.root_path, "temp")
+
+        if not os.path.exists(temp_path):
+            os.makedirs(temp_path)
+
+        download_path = os.path.join(
+            temp_path, self.download_url.split('/', -1)[-1])
 
         with open(download_path, 'wb') as f:
             while True:
@@ -36,7 +47,7 @@ class YourThreadName(QThread):
 
                 f.write(chunk)
                 self.progress_changed.emit(
-                    os.stat(download_path).st_size / int(size))
+                    os.stat(download_path).st_size / int(size), "Downloading")
 
         zf = zipfile.ZipFile(download_path)
         uncompress_size = sum((file.file_size for file in zf.infolist()))
@@ -45,45 +56,105 @@ class YourThreadName(QThread):
         for file in zf.infolist():
             zf.extract(file, self.root_path)
             extracted_size += file.file_size
-            self.progress_changed.emit(extracted_size / uncompress_size)
+            self.progress_changed.emit(
+                extracted_size / uncompress_size, "Extracting")
 
         self.finished.emit()
 
-
-class TestButton(QtWidgets.QPushButton):
-    def __init__( self, text, parent=None):
-        super(TestButton, self).__init__(parent)
-        self.setText(text)
-        self.clicked.connect(lambda: subprocess.Popen(text + "/blender.exe"))
-        #self.clicked.connect(self.deleteLater)
+    def stop(self):
+        self.terminate()
+        self.finished.emit()
 
 
-class ExampleApp(QtWidgets.QMainWindow, main_window_design.Ui_MainWindow):
+class B3dVersionItemLayout(QHBoxLayout):
+    def __init__(self, path, show_star, parent=None):
+        super(B3dVersionItemLayout, self).__init__(parent)
+        self.path = path
+
+        self.btnOpen = QPushButton(path)
+        self.btnOpen.clicked.connect(
+            lambda: subprocess.Popen(path + "/blender.exe"))
+
+        if (show_star):
+            self.btnOpen.setIcon(QIcon(os.path.join("icons", "star.png")))
+
+        self.btnDelete = QPushButton("Delete")
+        self.btnDelete.setSizePolicy(
+            QSizePolicy.Maximum, QSizePolicy.Preferred)
+        self.btnDelete.clicked.connect(lambda: self.delete())
+
+        self.addWidget(self.btnOpen)
+        self.addWidget(self.btnDelete)
+
+    def delete(self):
+        shutil.rmtree(self.path)
+        self.parent().parent().parent().parent().draw_versions_layout()
+
+
+class B3dVersionManger(QMainWindow, main_window_design.Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.setWindowIcon(QIcon(os.path.join("icons", "blender_logo.png")))
 
         self.actionQuit.triggered.connect(lambda: sys.exit())
+        self.actionClearTempFolder.triggered.connect(lambda: sys.exit())
 
         self.btnSetRootFolder.clicked.connect(self.set_root_folder)
         self.btnOpenRootFolder.clicked.connect(self.open_root_folder)
 
         self.btnUpdate.clicked.connect(self.update)
-        self.btnCancel.clicked.connect(self.cancel)
         self.btnCancel.hide()
 
         root_path = self.read_settings("root_path")
-        self.labelRootFolder.setText(
-            root_path if root_path else "No Root Folder Specified!")
+
+        if root_path:
+            self.labelRootFolder.setText(root_path)
+            self.draw_versions_layout()
+        else:
+            self.labelRootFolder.setText("No Root Folder Specified!")
+
+    def delete_items(self, layout):
+        while layout.count():
+            item = layout.takeAt(0)
+            widget = item.widget()
+
+            if widget is not None:
+                widget.deleteLater()
+            else:
+                self.delete_items(item.layout())
+
+    def collect_versions(self):
+        root_path = self.read_settings("root_path")
+
+        if not os.path.exists(root_path):
+            os.makedirs(root_path)
+            return
 
         dirs = next(os.walk(root_path))[1]
         prog = re.compile("blender-2.80")
+
+        versions = []
+
         for dir in dirs:
             if prog.match(dir):
-                self.test.addWidget(TestButton(root_path + "/" + dir))
+                versions.append(dir)
+
+        return versions
+
+    def draw_versions_layout(self):
+        self.delete_items(self.listVersions)
+        root_path = self.read_settings("root_path")
+        last_verison = self.get_url().split('-',)[-2]
+
+        for dir in self.collect_versions():
+            show_star = True if last_verison in dir else False
+
+            self.listVersions.addLayout(
+                B3dVersionItemLayout(root_path + "/" + dir, show_star))
 
     def set_root_folder(self):
-        dir = QtWidgets.QFileDialog.getExistingDirectory(
+        dir = QFileDialog.getExistingDirectory(
             self, "Choose folder")
 
         if dir:
@@ -115,15 +186,22 @@ class ExampleApp(QtWidgets.QMainWindow, main_window_design.Ui_MainWindow):
             w.setEnabled(is_enabled)
 
     def update(self):
+        last_verison = self.get_url().split('-',)[-2]
+
+        for version in self.collect_versions():
+            if last_verison in version:
+                QMessageBox.information(
+                    self, "Information", "You are up to date!", QMessageBox.Ok)
+                return
+
         self.btnUpdate.hide()
         self.btnCancel.show()
         self.is_root_folder_settings_enabled(False)
-
-        self.thread = YourThreadName(
+        self.thread = BuildLoader(
             self.read_settings("root_path"), self.get_url())
         self.thread.finished.connect(self.finished)
         self.thread.progress_changed.connect(self.update_progress_bar)
-        self.btnCancel.clicked.connect(self.thread.terminate)
+        self.btnCancel.clicked.connect(lambda: self.thread.stop())
         self.thread.start()
 
     def finished(self):
@@ -131,12 +209,15 @@ class ExampleApp(QtWidgets.QMainWindow, main_window_design.Ui_MainWindow):
         self.btnUpdate.show()
         self.progressBar.setValue(0)
         self.is_root_folder_settings_enabled(True)
+        self.draw_versions_layout()
+        self.labelUpdateStatus.setText("No Tasks")
 
     def cancel(self):
         self.finished()
 
-    def update_progress_bar(self, val):
+    def update_progress_bar(self, val, status):
         self.progressBar.setValue(val * 100)
+        self.labelUpdateStatus.setText(status)
 
     def open_root_folder(self):
         root_path = self.read_settings("root_path")
@@ -154,12 +235,24 @@ class ExampleApp(QtWidgets.QMainWindow, main_window_design.Ui_MainWindow):
         return builder_url + version_url
 
 
-def main():
-    app = QtWidgets.QApplication(sys.argv)
-    window = ExampleApp()
-    window.show()
-    app.exec_()
+# def main():
+#     app = QtWidgets.QApplication(sys.argv)
+#     window = B3dVersionManger()
+#     window.show()
+#     app.exec_()
+
+
+# if __name__ == '__main__':
+#     main()
+
+class AppContext(ApplicationContext):
+    def run(self):
+        window = B3dVersionManger()
+        window.show()
+        return self.app.exec_()
 
 
 if __name__ == '__main__':
-    main()
+    appctxt = AppContext()
+    exit_code = appctxt.run()
+    sys.exit(exit_code)

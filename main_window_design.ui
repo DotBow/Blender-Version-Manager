@@ -10,6 +10,12 @@
     <height>339</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string>Blender Version Manager</string>
   </property>
@@ -29,7 +35,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>No root folder specified!</string>
+         <string>No Root Folder Specified!</string>
         </property>
        </widget>
       </item>
@@ -61,7 +67,7 @@
       <item>
        <widget class="QLabel" name="labelUpdateStatus">
         <property name="text">
-         <string>Downloading</string>
+         <string>No Tasks</string>
         </property>
        </widget>
       </item>
@@ -95,7 +101,28 @@
      </layout>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="test"/>
+     <widget class="Line" name="line_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="listVersions">
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>No Versions Found!</string>
+        </property>
+        <property name="textFormat">
+         <enum>Qt::AutoText</enum>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
     <item>
      <spacer name="verticalSpacer">
@@ -125,6 +152,7 @@
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionClearTempFolder"/>
     <addaction name="actionQuit"/>
    </widget>
    <addaction name="menuFile"/>
@@ -138,6 +166,11 @@
   <action name="actionQuit">
    <property name="text">
     <string>Quit</string>
+   </property>
+  </action>
+  <action name="actionClearTempFolder">
+   <property name="text">
+    <string>Clear Temp Folder</string>
    </property>
   </action>
  </widget>
