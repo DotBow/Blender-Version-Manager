@@ -8,7 +8,6 @@ import zipfile
 from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
-from fbs_runtime.application_context import ApplicationContext
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import QCoreApplication, QThread, pyqtSignal
 from PyQt5.QtGui import QIcon
@@ -235,24 +234,12 @@ class B3dVersionManger(QMainWindow, main_window_design.Ui_MainWindow):
         return builder_url + version_url
 
 
-# def main():
-#     app = QtWidgets.QApplication(sys.argv)
-#     window = B3dVersionManger()
-#     window.show()
-#     app.exec_()
-
-
-# if __name__ == '__main__':
-#     main()
-
-class AppContext(ApplicationContext):
-    def run(self):
-        window = B3dVersionManger()
-        window.show()
-        return self.app.exec_()
+def main():
+    app = QtWidgets.QApplication(sys.argv)
+    window = B3dVersionManger()
+    window.show()
+    app.exec_()
 
 
 if __name__ == '__main__':
-    appctxt = AppContext()
-    exit_code = appctxt.run()
-    sys.exit(exit_code)
+    main()
