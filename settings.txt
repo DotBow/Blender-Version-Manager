@@ -1,1 +1,1 @@
-{"root_path": "D:/BlenderRoot"}
+{"root_path": ""}
