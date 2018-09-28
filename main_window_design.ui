@@ -108,21 +108,7 @@
      </widget>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="listVersions">
-      <item>
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>No Versions Found!</string>
-        </property>
-        <property name="textFormat">
-         <enum>Qt::AutoText</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <layout class="QVBoxLayout" name="listVersions"/>
     </item>
     <item>
      <spacer name="verticalSpacer">

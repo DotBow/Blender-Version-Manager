@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'D:\Repositories\Blender-Version-Manager\main_window_design.ui'
+# Form implementation generated from reading ui file 'main_window_design.ui'
 #
 # Created by: PyQt5 UI code generator 5.11.2
 #
@@ -69,11 +69,6 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.line_2)
         self.listVersions = QtWidgets.QVBoxLayout()
         self.listVersions.setObjectName("listVersions")
-        self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setTextFormat(QtCore.Qt.AutoText)
-        self.label.setAlignment(QtCore.Qt.AlignCenter)
-        self.label.setObjectName("label")
-        self.listVersions.addWidget(self.label)
         self.verticalLayout.addLayout(self.listVersions)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem)
@@ -109,7 +104,6 @@ class Ui_MainWindow(object):
         self.labelUpdateStatus.setText(_translate("MainWindow", "No Tasks"))
         self.btnUpdate.setText(_translate("MainWindow", "Update"))
         self.btnCancel.setText(_translate("MainWindow", "Cancel"))
-        self.label.setText(_translate("MainWindow", "No Versions Found!"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.actionSetRootFolder.setText(_translate("MainWindow", "Set Root Folder"))
         self.actionQuit.setText(_translate("MainWindow", "Quit"))

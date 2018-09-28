@@ -2,116 +2,51 @@ import json
 import os
 import re
 import shutil
-import subprocess
 import sys
-import zipfile
 from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
-from PyQt5 import QtWidgets
-from PyQt5.QtCore import QCoreApplication, QThread, pyqtSignal
+from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtCore import QSettings
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import (QFileDialog, QHBoxLayout, QMainWindow,
-                             QMessageBox, QPushButton, QSizePolicy)
+from PyQt5.QtWidgets import QFileDialog, QLabel, QMainWindow, QMessageBox
 
 import main_window_design
+from build_loader import BuildLoader
+from version_layout import B3dVersionItemLayout
 
 
-class BuildLoader(QThread):
-    finished = pyqtSignal()
-    progress_changed = pyqtSignal('PyQt_PyObject', 'PyQt_PyObject')
-
-    def __init__(self, root_path, download_url):
-        QThread.__init__(self)
-        self.download_url = download_url
-        self.root_path = root_path
-
-    def run(self):
-        blender_zip = urlopen(self.download_url)
-        size = blender_zip.info()['Content-Length']
-        temp_path = os.path.join(self.root_path, "temp")
-
-        if not os.path.exists(temp_path):
-            os.makedirs(temp_path)
-
-        download_path = os.path.join(
-            temp_path, self.download_url.split('/', -1)[-1])
-
-        with open(download_path, 'wb') as f:
-            while True:
-                chunk = blender_zip.read(16 * 1024)
-
-                if not chunk:
-                    break
-
-                f.write(chunk)
-                self.progress_changed.emit(
-                    os.stat(download_path).st_size / int(size), "Downloading")
-
-        zf = zipfile.ZipFile(download_path)
-        uncompress_size = sum((file.file_size for file in zf.infolist()))
-        extracted_size = 0
-
-        for file in zf.infolist():
-            zf.extract(file, self.root_path)
-            extracted_size += file.file_size
-            self.progress_changed.emit(
-                extracted_size / uncompress_size, "Extracting")
-
-        self.finished.emit()
-
-    def stop(self):
-        self.terminate()
-        self.finished.emit()
-
-
-class B3dVersionItemLayout(QHBoxLayout):
-    def __init__(self, path, show_star, parent=None):
-        super(B3dVersionItemLayout, self).__init__(parent)
-        self.path = path
-
-        self.btnOpen = QPushButton(path)
-        self.btnOpen.clicked.connect(
-            lambda: subprocess.Popen(path + "/blender.exe"))
-
-        if (show_star):
-            self.btnOpen.setIcon(QIcon(os.path.join("icons", "star.png")))
-
-        self.btnDelete = QPushButton("Delete")
-        self.btnDelete.setSizePolicy(
-            QSizePolicy.Maximum, QSizePolicy.Preferred)
-        self.btnDelete.clicked.connect(lambda: self.delete())
-
-        self.addWidget(self.btnOpen)
-        self.addWidget(self.btnDelete)
-
-    def delete(self):
-        shutil.rmtree(self.path)
-        self.parent().parent().parent().parent().draw_versions_layout()
-
-
-class B3dVersionManger(QMainWindow, main_window_design.Ui_MainWindow):
+class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.setWindowIcon(QIcon(os.path.join("icons", "blender_logo.png")))
 
         self.actionQuit.triggered.connect(lambda: sys.exit())
-        self.actionClearTempFolder.triggered.connect(lambda: sys.exit())
+        self.actionClearTempFolder.triggered.connect(self.clear_temp_folder)
 
-        self.btnSetRootFolder.clicked.connect(self.set_root_folder)
+        self.btnSetRootFolder.clicked.connect(
+            lambda: self.set_root_folder(False))
         self.btnOpenRootFolder.clicked.connect(self.open_root_folder)
 
         self.btnUpdate.clicked.connect(self.update)
         self.btnCancel.hide()
 
-        root_path = self.read_settings("root_path")
+        self.settings = QSettings('b3d_version_manager', 'settings')
+        self.root_folder = self.settings.value('root_folder')
 
-        if root_path:
-            self.labelRootFolder.setText(root_path)
-            self.draw_versions_layout()
-        else:
-            self.labelRootFolder.setText("No Root Folder Specified!")
+        if not self.root_folder or not os.path.isdir(self.root_folder):
+            self.settings.setValue(
+                'root_folder', os.path.dirname(os.path.realpath(__file__)))
+
+        self.labelRootFolder.setText(self.root_folder)
+        self.draw_versions_layout()
+
+    def clear_temp_folder(self):
+        temp_folder = os.path.join(self.root_folder, "temp")
+
+        if os.path.isdir(temp_folder):
+            shutil.rmtree(temp_folder)
 
     def delete_items(self, layout):
         while layout.count():
@@ -124,13 +59,7 @@ class B3dVersionManger(QMainWindow, main_window_design.Ui_MainWindow):
                 self.delete_items(item.layout())
 
     def collect_versions(self):
-        root_path = self.read_settings("root_path")
-
-        if not os.path.exists(root_path):
-            os.makedirs(root_path)
-            return
-
-        dirs = next(os.walk(root_path))[1]
+        dirs = next(os.walk(self.root_folder))[1]
         prog = re.compile("blender-2.80")
 
         versions = []
@@ -143,61 +72,50 @@ class B3dVersionManger(QMainWindow, main_window_design.Ui_MainWindow):
 
     def draw_versions_layout(self):
         self.delete_items(self.listVersions)
-        root_path = self.read_settings("root_path")
         last_verison = self.get_url().split('-',)[-2]
+        versions = self.collect_versions()
 
-        for dir in self.collect_versions():
-            show_star = True if last_verison in dir else False
+        if versions:
+            for version in versions:
+                show_star = True if last_verison in version else False
 
-            self.listVersions.addLayout(
-                B3dVersionItemLayout(root_path + "/" + dir, show_star))
+                self.listVersions.addLayout(
+                    B3dVersionItemLayout(self.root_folder, version, show_star))
+        else:
+            self.listVersions.addWidget(QLabel("No Versions Found!"))
 
-    def set_root_folder(self):
+    def set_root_folder(self, warning):
         dir = QFileDialog.getExistingDirectory(
-            self, "Choose folder")
+            self, "Choose Root Folder")
 
         if dir:
-            self.write_settings("root_path", dir)
+            self.settings.setValue('root_folder', dir)
             self.labelRootFolder.setText(dir)
-
-    def read_settings(self, key):
-        with open("settings.txt", 'r') as settings_file:
-            settings_data = json.load(settings_file)
-            settings_file.close()
-
-        return settings_data[key]
-
-    def write_settings(self, key, value):
-        with open("settings.txt", 'r') as settings_file:
-            settings_data = json.load(settings_file)
-            settings_file.close()
-
-        settings_data[key] = value
-
-        with open("settings.txt", 'w') as settings_file:
-            settings_file.write(json.dumps(settings_data))
-            settings_file.close()
+            self.draw_versions_layout()
 
     def is_root_folder_settings_enabled(self, is_enabled):
         items = (self.layoutRootFolderSettings.itemAt(i).widget()
                  for i in range(self.layoutRootFolderSettings.count()))
-        for w in items:
-            w.setEnabled(is_enabled)
+
+        for item in items:
+            item.setEnabled(is_enabled)
 
     def update(self):
         last_verison = self.get_url().split('-',)[-2]
+        versions = self.collect_versions()
 
-        for version in self.collect_versions():
-            if last_verison in version:
-                QMessageBox.information(
-                    self, "Information", "You are up to date!", QMessageBox.Ok)
-                return
+        if versions:
+            for version in versions:
+                if last_verison in version:
+                    QMessageBox.information(
+                        self, "Information", "You are up to date!", QMessageBox.Ok)
+                    return
 
         self.btnUpdate.hide()
         self.btnCancel.show()
         self.is_root_folder_settings_enabled(False)
         self.thread = BuildLoader(
-            self.read_settings("root_path"), self.get_url())
+            self.root_folder, self.get_url())
         self.thread.finished.connect(self.finished)
         self.thread.progress_changed.connect(self.update_progress_bar)
         self.btnCancel.clicked.connect(lambda: self.thread.stop())
@@ -219,12 +137,8 @@ class B3dVersionManger(QMainWindow, main_window_design.Ui_MainWindow):
         self.labelUpdateStatus.setText(status)
 
     def open_root_folder(self):
-        root_path = self.read_settings("root_path")
+        os.startfile(self.root_folder)
 
-        if root_path:
-            os.startfile(root_path)
-
-    # Get download URL from builder page
     def get_url(self):
         builder_url = "https://builder.blender.org"
         builder_content = urlopen(builder_url + "/download").read()
@@ -232,14 +146,3 @@ class B3dVersionManger(QMainWindow, main_window_design.Ui_MainWindow):
         version_url = builder_soup.find(
             href=re.compile("blender-2.80"))['href']
         return builder_url + version_url
-
-
-def main():
-    app = QtWidgets.QApplication(sys.argv)
-    window = B3dVersionManger()
-    window.show()
-    app.exec_()
-
-
-if __name__ == '__main__':
-    main()
