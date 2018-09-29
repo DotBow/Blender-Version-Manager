@@ -10,7 +10,7 @@ def main():
     QApplication.setApplicationVersion('1.0.0')
 
     app = QApplication(sys.argv)
-    window = B3dVersionMangerMainWindow()
+    window = B3dVersionMangerMainWindow(app)
     window.show()
     app.exec_()
 

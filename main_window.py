@@ -9,7 +9,8 @@ from bs4 import BeautifulSoup
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import QSettings
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QFileDialog, QLabel, QMainWindow, QMessageBox
+from PyQt5.QtWidgets import (QAction, QFileDialog, QLabel, QMainWindow, QMenu,
+                             QMessageBox, QSystemTrayIcon)
 
 import main_window_design
 from build_loader import BuildLoader
@@ -17,13 +18,24 @@ from version_layout import B3dVersionItemLayout
 
 
 class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
-    def __init__(self):
+    def __init__(self, app):
         super().__init__()
+        self.app = app
         self.setupUi(self)
         self.setWindowIcon(QIcon(os.path.join("icons", "app.ico")))
 
-        self.actionQuit.triggered.connect(lambda: sys.exit())
+        self.settings = QSettings('b3d_version_manager', 'settings')
+        root_folder = self.settings.value('root_folder')
+
+        if (not root_folder) or (not os.path.isdir(root_folder)):
+            self.settings.setValue(
+                'root_folder', os.path.dirname(os.path.realpath(__file__)))
+
         self.actionClearTempFolder.triggered.connect(self.clear_temp_folder)
+        self.actionMinimizeToTray.setChecked(
+            self.settings.value('minimize_to_tray', type=bool))
+        self.actionMinimizeToTray.triggered.connect(self.minimize_to_tray)
+        self.actionQuit.triggered.connect(self.quit_app)
 
         self.btnSetRootFolder.clicked.connect(self.set_root_folder)
         self.btnOpenRootFolder.clicked.connect(self.open_root_folder)
@@ -31,20 +43,46 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.btnUpdate.clicked.connect(self.update)
         self.btnCancel.hide()
 
-        self.settings = QSettings('b3d_version_manager', 'settings')
-        self.root_folder = self.settings.value('root_folder')
-
-        if (not self.root_folder) or (not os.path.isdir(self.root_folder)):
-            self.settings.setValue(
-                'root_folder', os.path.dirname(os.path.realpath(__file__)))
-
-        self.root_folder = self.settings.value('root_folder')
-
-        self.labelRootFolder.setText(self.root_folder)
+        self.labelRootFolder.setText(self.settings.value('root_folder'))
         self.draw_versions_layout()
+        self.is_thread_running = False
+
+        self.tray_icon = QSystemTrayIcon(self)
+        self.tray_icon.setIcon(QIcon(os.path.join("icons", "app.ico")))
+
+        show_action = QAction("Show", self)
+        quit_action = QAction("Exit", self)
+        hide_action = QAction("Hide", self)
+        show_action.triggered.connect(self.show)
+        hide_action.triggered.connect(self.hide)
+        quit_action.triggered.connect(self.quit_app)
+        tray_menu = QMenu()
+        tray_menu.addAction(show_action)
+        tray_menu.addAction(hide_action)
+        tray_menu.addAction(quit_action)
+        self.tray_icon.setContextMenu(tray_menu)
+        self.tray_icon.show()
+
+    def quit_app(self):
+        if self.can_quit():
+            self.app.quit()
+
+    def can_quit(self):
+        if self.is_thread_running:
+            QMessageBox.information(
+                self, "Warning", "Update task in progress!", QMessageBox.Ok)
+            return False
+        else:
+            return True
+
+    def minimize_to_tray(self, is_checked):
+        self.settings.setValue('minimize_to_tray', is_checked)
 
     def clear_temp_folder(self):
-        temp_folder = os.path.join(self.root_folder, "temp")
+        if not self.can_quit():
+            return
+
+        temp_folder = os.path.join(self.settings.value('root_folder'), "temp")
 
         if os.path.isdir(temp_folder):
             shutil.rmtree(temp_folder)
@@ -60,7 +98,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
                 self.delete_items(item.layout())
 
     def collect_versions(self):
-        dirs = next(os.walk(self.root_folder))[1]
+        dirs = next(os.walk(self.settings.value('root_folder')))[1]
         prog = re.compile("blender-2.80")
 
         versions = []
@@ -81,13 +119,13 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
                 show_star = True if last_verison in version else False
 
                 self.listVersions.addLayout(
-                    B3dVersionItemLayout(self.root_folder, version, show_star))
+                    B3dVersionItemLayout(self.settings.value('root_folder'), version, show_star))
         else:
             self.listVersions.addWidget(QLabel("No Versions Found!"))
 
     def set_root_folder(self):
         dir = QFileDialog.getExistingDirectory(
-            self, "Choose Root Folder")
+            self, "Choose Root Folder", self.settings.value('root_folder'))
 
         if dir:
             self.settings.setValue('root_folder', dir)
@@ -121,23 +159,25 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.thread.progress_changed.connect(self.update_progress_bar)
         self.btnCancel.clicked.connect(self.cancel_thread)
         self.thread.start()
+        self.is_thread_running = True
 
     def cancel_thread(self):
         self.thread.stop()
 
     def finished(self):
+        self.is_thread_running = False
         self.btnCancel.hide()
         self.btnUpdate.show()
         self.is_root_folder_settings_enabled(True)
-        self.draw_versions_layout()
         self.update_progress_bar(0, "No Tasks")
+        self.draw_versions_layout()
 
     def update_progress_bar(self, val, status):
         self.progressBar.setValue(val * 100)
         self.labelUpdateStatus.setText(status)
 
     def open_root_folder(self):
-        os.startfile(self.root_folder)
+        os.startfile(self.settings.value('root_folder'))
 
     def get_url(self):
         builder_url = "https://builder.blender.org"
@@ -146,3 +186,12 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         version_url = builder_soup.find(
             href=re.compile("blender-2.80"))['href']
         return builder_url + version_url
+
+    def closeEvent(self, event):
+        if self.actionMinimizeToTray.isChecked():
+            event.ignore()
+            self.hide()
+        elif not self.can_quit():
+            event.ignore()
+        else:
+            event.accept()

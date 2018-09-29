@@ -139,6 +139,7 @@
      <string>File</string>
     </property>
     <addaction name="actionClearTempFolder"/>
+    <addaction name="actionMinimizeToTray"/>
     <addaction name="actionQuit"/>
    </widget>
    <addaction name="menuFile"/>
@@ -149,14 +150,22 @@
     <string>Set Root Folder</string>
    </property>
   </action>
-  <action name="actionQuit">
-   <property name="text">
-    <string>Quit</string>
-   </property>
-  </action>
   <action name="actionClearTempFolder">
    <property name="text">
     <string>Clear Temp Folder</string>
+   </property>
+  </action>
+  <action name="actionMinimizeToTray">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Toggle Minimize to Tray</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
    </property>
   </action>
  </widget>

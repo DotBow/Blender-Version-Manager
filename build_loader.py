@@ -26,7 +26,7 @@ class BuildLoader(QThread):
         download_path = os.path.join(
             temp_path, self.download_url.split('/', -1)[-1])
 
-        with open(download_path, 'wb') as f:
+        with open(download_path, 'wb') as self.f:
             while True:
                 QtWidgets.QApplication.processEvents()
                 chunk = blender_zip.read(16 * 1024)
@@ -34,7 +34,7 @@ class BuildLoader(QThread):
                 if not chunk:
                     break
 
-                f.write(chunk)
+                self.f.write(chunk)
                 self.progress_changed.emit(
                     os.stat(download_path).st_size / int(size), "Downloading")
 
@@ -56,5 +56,8 @@ class BuildLoader(QThread):
         self.wait()
 
     def stop(self):
+        if self.f:
+            self.f.close()
+
         self.terminate()
         self.finished.emit()
