@@ -1,2 +1,2 @@
-pyinstaller --noconsole --onefile --windowed --icon=blender_logo.ico --paths "C:\Windows\WinSxS\x86_microsoft-windows-m..namespace-downlevel_31bf3856ad364e35_10.0.17134.1_none_50c6cb8431e7428f" main.py
+pyinstaller --noconsole --onefile --windowed --icon=app_inv.ico main.py
 pause

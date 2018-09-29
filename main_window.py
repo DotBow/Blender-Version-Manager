@@ -20,7 +20,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.setWindowIcon(QIcon(os.path.join("icons", "blender_logo.png")))
+        self.setWindowIcon(QIcon(os.path.join("icons", "app.ico")))
 
         self.actionQuit.triggered.connect(lambda: sys.exit())
         self.actionClearTempFolder.triggered.connect(self.clear_temp_folder)
@@ -35,9 +35,11 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.settings = QSettings('b3d_version_manager', 'settings')
         self.root_folder = self.settings.value('root_folder')
 
-        if not self.root_folder or not os.path.isdir(self.root_folder):
+        if (not self.root_folder) or (not os.path.isdir(self.root_folder)):
             self.settings.setValue(
                 'root_folder', os.path.dirname(os.path.realpath(__file__)))
+
+        self.root_folder = self.settings.value('root_folder')
 
         self.labelRootFolder.setText(self.root_folder)
         self.draw_versions_layout()

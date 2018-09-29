@@ -17,7 +17,7 @@ class B3dVersionItemLayout(QHBoxLayout):
             lambda: subprocess.Popen(os.path.join(root_folder, version, "blender.exe")))
 
         if (show_star):
-            self.btnOpen.setIcon(QIcon(os.path.join("icons", "star.png")))
+            self.btnOpen.setIcon(QIcon(os.path.join("icons", "star.ico")))
 
         self.btnDelete = QPushButton("Delete")
         self.btnDelete.setSizePolicy(
