@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import QHBoxLayout, QMessageBox, QPushButton, QSizePolicy
 class B3dVersionItemLayout(QHBoxLayout):
     def __init__(self, root_folder, version, show_star, parent=None):
         super(B3dVersionItemLayout, self).__init__(parent)
-        self.path = root_folder
+        self.root_folder = root_folder
         self.version = version
 
         self.btnOpen = QPushButton(version)
@@ -34,5 +34,5 @@ class B3dVersionItemLayout(QHBoxLayout):
             parent, "Warning", "Are you sure you want to delete '" + self.version + "' from disk?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
         if delete == QMessageBox.Yes:
-            shutil.rmtree(self.path)
+            shutil.rmtree(os.path.join(self.root_folder, self.version))
             parent.draw_versions_layout()

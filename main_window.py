@@ -25,8 +25,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.actionQuit.triggered.connect(lambda: sys.exit())
         self.actionClearTempFolder.triggered.connect(self.clear_temp_folder)
 
-        self.btnSetRootFolder.clicked.connect(
-            lambda: self.set_root_folder(False))
+        self.btnSetRootFolder.clicked.connect(self.set_root_folder)
         self.btnOpenRootFolder.clicked.connect(self.open_root_folder)
 
         self.btnUpdate.clicked.connect(self.update)
@@ -86,7 +85,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         else:
             self.listVersions.addWidget(QLabel("No Versions Found!"))
 
-    def set_root_folder(self, warning):
+    def set_root_folder(self):
         dir = QFileDialog.getExistingDirectory(
             self, "Choose Root Folder")
 
@@ -117,22 +116,21 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.btnCancel.show()
         self.is_root_folder_settings_enabled(False)
         self.thread = BuildLoader(
-            self.root_folder, self.get_url())
+            self.settings.value('root_folder'), self.get_url())
         self.thread.finished.connect(self.finished)
         self.thread.progress_changed.connect(self.update_progress_bar)
-        self.btnCancel.clicked.connect(lambda: self.thread.stop())
+        self.btnCancel.clicked.connect(self.cancel_thread)
         self.thread.start()
+
+    def cancel_thread(self):
+        self.thread.stop()
 
     def finished(self):
         self.btnCancel.hide()
         self.btnUpdate.show()
-        self.progressBar.setValue(0)
         self.is_root_folder_settings_enabled(True)
         self.draw_versions_layout()
-        self.labelUpdateStatus.setText("No Tasks")
-
-    def cancel(self):
-        self.finished()
+        self.update_progress_bar(0, "No Tasks")
 
     def update_progress_bar(self, val, status):
         self.progressBar.setValue(val * 100)

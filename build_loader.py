@@ -28,6 +28,7 @@ class BuildLoader(QThread):
 
         with open(download_path, 'wb') as f:
             while True:
+                QtWidgets.QApplication.processEvents()
                 chunk = blender_zip.read(16 * 1024)
 
                 if not chunk:
@@ -42,12 +43,17 @@ class BuildLoader(QThread):
         extracted_size = 0
 
         for file in zf.infolist():
+            QtWidgets.QApplication.processEvents()
             zf.extract(file, self.root_folder)
             extracted_size += file.file_size
             self.progress_changed.emit(
                 extracted_size / uncompress_size, "Extracting")
 
         self.finished.emit()
+
+    def __del__(self):
+        self.quit()
+        self.wait()
 
     def stop(self):
         self.terminate()
