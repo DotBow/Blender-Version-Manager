@@ -35,7 +35,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.actionMinimizeToTray.setChecked(
             self.settings.value('minimize_to_tray', type=bool))
         self.actionMinimizeToTray.triggered.connect(self.minimize_to_tray)
-        self.actionQuit.triggered.connect(self.quit_app)
+        self.actionQuit.triggered.connect(self.quit)
 
         self.btnSetRootFolder.clicked.connect(self.set_root_folder)
         self.btnOpenRootFolder.clicked.connect(self.open_root_folder)
@@ -51,11 +51,11 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.tray_icon.setIcon(QIcon(os.path.join("icons", "app.ico")))
 
         show_action = QAction("Show", self)
-        quit_action = QAction("Exit", self)
+        quit_action = QAction("Quit", self)
         hide_action = QAction("Hide", self)
         show_action.triggered.connect(self.show)
         hide_action.triggered.connect(self.hide)
-        quit_action.triggered.connect(self.quit_app)
+        quit_action.triggered.connect(self.quit)
         tray_menu = QMenu()
         tray_menu.addAction(show_action)
         tray_menu.addAction(hide_action)
@@ -63,7 +63,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.tray_icon.setContextMenu(tray_menu)
         self.tray_icon.show()
 
-    def quit_app(self):
+    def quit(self):
         if self.can_quit():
             self.app.quit()
 
