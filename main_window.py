@@ -67,6 +67,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.tray_menu.addAction(hide_action)
         self.tray_menu.addAction(quit_action)
         self.tray_icon.setContextMenu(self.tray_menu)
+        self.tray_icon.messageClicked.connect(self.show)
         self.tray_icon.show()
 
         self.draw_versions_layout()
