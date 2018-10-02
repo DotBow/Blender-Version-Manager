@@ -7,7 +7,7 @@ from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import QSettings
+from PyQt5.QtCore import QSettings, QThread
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QAction, QFileDialog, QLabel, QMainWindow, QMenu,
                              QMessageBox, QSystemTrayIcon)
@@ -41,6 +41,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.btnOpenRootFolder.clicked.connect(self.open_root_folder)
 
         self.btnUpdate.clicked.connect(self.update)
+        self.btnCancel.clicked.connect(self.cancel_thread)
         self.btnCancel.hide()
 
         self.labelRootFolder.setText(self.settings.value('root_folder'))
@@ -162,24 +163,28 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.btnUpdate.hide()
         self.btnCancel.show()
         self.is_root_folder_settings_enabled(False)
-        self.thread = BuildLoader(
+
+        self.thread = QThread()
+        self.build_loader = BuildLoader(
             self.settings.value('root_folder'), self.get_url())
-        self.thread.finished.connect(self.finished)
-        self.thread.progress_changed.connect(self.update_progress_bar)
-        self.btnCancel.clicked.connect(self.cancel_thread)
-        self.thread.start()
+        self.build_loader.moveToThread(self.thread)
+        self.build_loader.finished.connect(self.finished)
+        self.build_loader.progress_changed.connect(self.update_progress_bar)
+        self.thread.started.connect(self.build_loader.run)
         self.is_thread_running = True
+        self.thread.start()
 
     def cancel_thread(self):
-        self.thread.stop()
+        self.thread.terminate()
+        self.build_loader.stop()
 
     def finished(self):
-        self.is_thread_running = False
         self.btnCancel.hide()
         self.btnUpdate.show()
         self.is_root_folder_settings_enabled(True)
         self.update_progress_bar(0, "No Tasks")
         self.draw_versions_layout()
+        self.is_thread_running = False
 
     def update_progress_bar(self, val, status):
         self.progressBar.setValue(val * 100)

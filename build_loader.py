@@ -3,15 +3,15 @@ import zipfile
 from urllib.request import urlopen
 
 from PyQt5 import QtWidgets
-from PyQt5.QtCore import QThread, pyqtSignal
+from PyQt5.QtCore import pyqtSignal, QObject
 
 
-class BuildLoader(QThread):
+class BuildLoader(QObject):
     finished = pyqtSignal()
     progress_changed = pyqtSignal('PyQt_PyObject', 'PyQt_PyObject')
 
     def __init__(self, root_folder, download_url):
-        QThread.__init__(self)
+        QObject.__init__(self)
         self.download_url = download_url
         self.root_folder = root_folder
 
@@ -51,13 +51,8 @@ class BuildLoader(QThread):
 
         self.finished.emit()
 
-    def __del__(self):
-        self.quit()
-        self.wait()
-
     def stop(self):
         if self.f:
             self.f.close()
 
-        self.terminate()
         self.finished.emit()
