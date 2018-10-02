@@ -53,7 +53,6 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
         self.blender_action = QAction("Blender", self)
         self.blender_action.setIcon(QIcon(os.path.join("icons", "star.ico")))
-        self.blender_action.setVisible(False)
         show_action = QAction("Show", self)
         quit_action = QAction("Quit", self)
         hide_action = QAction("Hide", self)
@@ -147,6 +146,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
                     self.blender_action.setVisible(True)
         else:
             self.listVersions.addWidget(QLabel("No Versions Found!"))
+            self.blender_action.setVisible(False)
 
     def set_root_folder(self):
         dir = QFileDialog.getExistingDirectory(
@@ -182,30 +182,32 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.thread = QThread()
         self.build_loader = BuildLoader(
             self.settings.value('root_folder'), self.get_url())
-        self.build_loader.moveToThread(self.thread)
         self.build_loader.finished.connect(self.finished)
         self.build_loader.progress_changed.connect(self.update_progress_bar)
         self.thread.started.connect(self.build_loader.run)
+        self.build_loader.moveToThread(self.thread)
         self.is_thread_running = True
         self.thread.start()
 
     def cancel_thread(self):
-        self.thread.terminate()
         self.build_loader.stop()
 
-    def finished(self):
+    def finished(self, status):
+        self.thread.terminate()
         self.btnCancel.hide()
         self.btnUpdate.show()
         self.is_root_folder_settings_enabled(True)
         self.update_progress_bar(0, "No Tasks")
         self.draw_versions_layout()
         self.is_thread_running = False
-        self.tray_icon.showMessage(
-            "Blender Version Manager", "Update finished!", QSystemTrayIcon.Information, 2000)
 
-    def update_progress_bar(self, val, status):
+        if status:
+            self.tray_icon.showMessage(
+                "Blender Version Manager", "Update finished!", QSystemTrayIcon.Information, 2000)
+
+    def update_progress_bar(self, val, text):
         self.progressBar.setValue(val * 100)
-        self.labelUpdateStatus.setText(status)
+        self.labelUpdateStatus.setText(text)
 
     def open_root_folder(self):
         os.startfile(self.settings.value('root_folder'))
