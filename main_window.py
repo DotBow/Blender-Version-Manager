@@ -111,15 +111,24 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
     def draw_versions_layout(self):
         self.delete_items(self.listVersions)
-        last_verison = self.get_url().split('-',)[-2]
+        root_folder = self.settings.value('root_folder')
         versions = self.collect_versions()
 
         if versions:
-            for version in versions:
-                show_star = True if last_verison in version else False
+            latest_ver = ""
+            latest_time = 0
 
-                self.listVersions.addLayout(
-                    B3dVersionItemLayout(self.settings.value('root_folder'), version, show_star))
+            for ver in versions:
+                time = os.path.getctime(os.path.join(
+                    root_folder, ver, "blender.exe"))
+                if time > latest_time:
+                    latest_time = time
+                    latest_ver = ver
+
+            for ver in versions:
+                b3d_item_layout = B3dVersionItemLayout(
+                    root_folder, ver, True if ver == latest_ver else False)
+                self.listVersions.addLayout(b3d_item_layout)
         else:
             self.listVersions.addWidget(QLabel("No Versions Found!"))
 
