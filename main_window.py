@@ -140,6 +140,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
                 self.listVersions.addLayout(b3d_item_layout)
 
                 if is_latest:
+                    self.blender_action.triggered.disconnect()
                     self.blender_action.triggered.connect(
                         lambda: subprocess.Popen(os.path.join(root_folder, ver, "blender.exe")))
                     self.blender_action.setVisible(True)
