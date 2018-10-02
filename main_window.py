@@ -2,6 +2,7 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 from urllib.request import urlopen
 
@@ -45,24 +46,30 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.btnCancel.hide()
 
         self.labelRootFolder.setText(self.settings.value('root_folder'))
-        self.draw_versions_layout()
         self.is_thread_running = False
 
         self.tray_icon = QSystemTrayIcon(self)
         self.tray_icon.setIcon(QIcon(os.path.join("icons", "app.ico")))
 
+        self.blender_action = QAction("Blender", self)
+        self.blender_action.setIcon(QIcon(os.path.join("icons", "star.ico")))
+        self.blender_action.setVisible(False)
         show_action = QAction("Show", self)
         quit_action = QAction("Quit", self)
         hide_action = QAction("Hide", self)
         show_action.triggered.connect(self.show)
         hide_action.triggered.connect(self.hide)
         quit_action.triggered.connect(self.quit)
-        tray_menu = QMenu()
-        tray_menu.addAction(show_action)
-        tray_menu.addAction(hide_action)
-        tray_menu.addAction(quit_action)
-        self.tray_icon.setContextMenu(tray_menu)
+        self.tray_menu = QMenu()
+        self.tray_menu.addAction(self.blender_action)
+        self.tray_menu.addSeparator()
+        self.tray_menu.addAction(show_action)
+        self.tray_menu.addAction(hide_action)
+        self.tray_menu.addAction(quit_action)
+        self.tray_icon.setContextMenu(self.tray_menu)
         self.tray_icon.show()
+
+        self.draw_versions_layout()
 
     def quit(self):
         if self.can_quit():
@@ -127,9 +134,15 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
                     latest_ver = ver
 
             for ver in versions:
+                is_latest = True if ver == latest_ver else False
                 b3d_item_layout = B3dVersionItemLayout(
-                    root_folder, ver, True if ver == latest_ver else False)
+                    root_folder, ver, is_latest)
                 self.listVersions.addLayout(b3d_item_layout)
+
+                if is_latest:
+                    self.blender_action.triggered.connect(
+                        lambda: subprocess.Popen(os.path.join(root_folder, ver, "blender.exe")))
+                    self.blender_action.setVisible(True)
         else:
             self.listVersions.addWidget(QLabel("No Versions Found!"))
 
@@ -185,6 +198,8 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.update_progress_bar(0, "No Tasks")
         self.draw_versions_layout()
         self.is_thread_running = False
+        self.tray_icon.showMessage(
+            "Blender Version Manager", "Update finished!", QSystemTrayIcon.Information, 2000)
 
     def update_progress_bar(self, val, status):
         self.progressBar.setValue(val * 100)

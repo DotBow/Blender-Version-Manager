@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QHBoxLayout, QMessageBox, QPushButton, QSizePolicy
 
 
 class B3dVersionItemLayout(QHBoxLayout):
-    def __init__(self, root_folder, version, show_star, parent=None):
+    def __init__(self, root_folder, version, is_latest, parent=None):
         super(B3dVersionItemLayout, self).__init__(parent)
         self.root_folder = root_folder
         self.version = version
@@ -16,7 +16,7 @@ class B3dVersionItemLayout(QHBoxLayout):
         self.btnOpen.clicked.connect(
             lambda: subprocess.Popen(os.path.join(root_folder, version, "blender.exe")))
 
-        if (show_star):
+        if (is_latest):
             self.btnOpen.setIcon(QIcon(os.path.join("icons", "star.ico")))
 
         self.btnDelete = QPushButton("Delete")
