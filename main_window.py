@@ -16,7 +16,7 @@ from PyQt5.QtWidgets import (QAction, QFileDialog, QLabel, QMainWindow, QMenu,
 import main_window_design
 import resources_rc
 from build_loader import BuildLoader
-from version_layout import B3dVersionItemLayout
+from version_layout import B3dItemLayout
 
 
 class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
@@ -24,7 +24,9 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         super().__init__()
         self.app = app
         self.setupUi(self)
-        self.setWindowIcon(QIcon(QPixmap(":/icons/app.ico")))
+        self.app_icon = QIcon(QPixmap(":/icons/app.ico"))
+        self.star_icon = QIcon(QPixmap(":/icons/star.ico"))
+        self.setWindowIcon(self.app_icon)
 
         self.settings = QSettings('b3d_version_manager', 'settings')
         root_folder = self.settings.value('root_folder')
@@ -50,10 +52,10 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.is_thread_running = False
 
         self.tray_icon = QSystemTrayIcon(self)
-        self.tray_icon.setIcon(QIcon(os.path.join("icons", "app.ico")))
+        self.tray_icon.setIcon(self.app_icon)
 
         self.blender_action = QAction("Blender", self)
-        self.blender_action.setIcon(QIcon(os.path.join("icons", "star.ico")))
+        self.blender_action.setIcon(self.star_icon)
         show_action = QAction("Show", self)
         quit_action = QAction("Quit", self)
         hide_action = QAction("Hide", self)
@@ -136,8 +138,8 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
             for ver in versions:
                 is_latest = True if ver == latest_ver else False
-                b3d_item_layout = B3dVersionItemLayout(
-                    root_folder, ver, is_latest)
+                b3d_item_layout = B3dItemLayout(
+                    root_folder, ver, is_latest, self)
                 self.listVersions.addLayout(b3d_item_layout)
 
                 if is_latest:

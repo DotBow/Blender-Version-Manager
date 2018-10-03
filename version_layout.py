@@ -8,18 +8,19 @@ from PyQt5.QtWidgets import QHBoxLayout, QMessageBox, QPushButton, QSizePolicy
 import resources_rc
 
 
-class B3dVersionItemLayout(QHBoxLayout):
-    def __init__(self, root_folder, version, is_latest, parent=None):
-        super(B3dVersionItemLayout, self).__init__(parent)
+class B3dItemLayout(QHBoxLayout):
+    def __init__(self, root_folder, version, is_latest, parent):
+        super(B3dItemLayout, self).__init__(None)
         self.root_folder = root_folder
         self.version = version
+        self.parent = parent
 
         self.btnOpen = QPushButton(version)
         self.btnOpen.clicked.connect(
             lambda: subprocess.Popen(os.path.join(root_folder, version, "blender.exe")))
 
         if (is_latest):
-            self.btnOpen.setIcon(QIcon(QPixmap(":/icons/star.ico")))
+            self.btnOpen.setIcon(parent.star_icon)
 
         self.btnDelete = QPushButton("Delete")
         self.btnDelete.setSizePolicy(
@@ -30,11 +31,9 @@ class B3dVersionItemLayout(QHBoxLayout):
         self.addWidget(self.btnDelete)
 
     def delete(self):
-        parent = self.parent().parent().parent().parent()
-
         delete = QMessageBox.question(
-            parent, "Warning", "Are you sure you want to delete '" + self.version + "' from disk?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            self.parent, "Warning", "Are you sure you want to delete '" + self.version + "' from disk?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
         if delete == QMessageBox.Yes:
             shutil.rmtree(os.path.join(self.root_folder, self.version))
-            parent.draw_versions_layout()
+            self.parent.draw_versions_layout()
