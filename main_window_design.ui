@@ -140,12 +140,18 @@
     </property>
     <addaction name="actionClearTempFolder"/>
     <addaction name="actionMinimizeToTray"/>
+    <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionClearTempFolder">
+   <property name="icon">
+    <iconset>
+     <normalon>:/icons/clear.ico</normalon>
+    </iconset>
+   </property>
    <property name="text">
     <string>Clear Temp Folder</string>
    </property>
@@ -154,11 +160,21 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset>
+     <normalon>:/icons/tray.ico</normalon>
+    </iconset>
+   </property>
    <property name="text">
     <string>Toggle Minimize to Tray</string>
    </property>
   </action>
   <action name="actionQuit">
+   <property name="icon">
+    <iconset>
+     <normalon>:/icons/quit.ico</normalon>
+    </iconset>
+   </property>
    <property name="text">
     <string>Quit</string>
    </property>

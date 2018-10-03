@@ -22,7 +22,7 @@ class B3dItemLayout(QHBoxLayout):
         if (is_latest):
             self.btnOpen.setIcon(parent.star_icon)
 
-        self.btnDelete = QPushButton("Delete")
+        self.btnDelete = QPushButton(parent.trash_icon, "")
         self.btnDelete.setSizePolicy(
             QSizePolicy.Maximum, QSizePolicy.Preferred)
         self.btnDelete.clicked.connect(lambda: self.delete())

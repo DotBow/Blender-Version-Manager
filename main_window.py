@@ -26,6 +26,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.setupUi(self)
         self.app_icon = QIcon(QPixmap(":/icons/app.ico"))
         self.star_icon = QIcon(QPixmap(":/icons/star.ico"))
+        self.trash_icon = QIcon(QPixmap(":/icons/trash.ico"))
         self.setWindowIcon(self.app_icon)
 
         self.settings = QSettings('b3d_version_manager', 'settings')

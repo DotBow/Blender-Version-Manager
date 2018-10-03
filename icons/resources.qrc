@@ -1,5 +1,9 @@
 <RCC>
   <qresource prefix="icons">
+    <file>trash.ico</file>
+    <file>tray.ico</file>
+    <file>clear.ico</file>
+    <file>quit.ico</file>
     <file>app.ico</file>
     <file>app_inv.ico</file>
     <file>star.ico</file>
