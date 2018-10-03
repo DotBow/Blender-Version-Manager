@@ -1,6 +1,7 @@
 import os
 import shutil
 import subprocess
+import time
 
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QHBoxLayout, QMessageBox, QPushButton, QSizePolicy
@@ -15,7 +16,11 @@ class B3dItemLayout(QHBoxLayout):
         self.version = version
         self.parent = parent
 
-        self.btnOpen = QPushButton(version)
+        ts = os.path.getctime(os.path.join(
+            root_folder, version, "blender.exe"))
+        date = time.strftime("%d-%b-%Y", time.gmtime(ts))
+        self.btnOpen = QPushButton(
+            (version.split('-',)[-2]).replace("git.", "Git-") + " | " + date)
         self.btnOpen.clicked.connect(
             lambda: subprocess.Popen(os.path.join(root_folder, version, "blender.exe")))
 

@@ -16,11 +16,28 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
+  <property name="font">
+   <font>
+    <weight>50</weight>
+    <bold>false</bold>
+    <strikeout>false</strikeout>
+    <stylestrategy>PreferAntialias</stylestrategy>
+    <kerning>true</kerning>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Blender Version Manager</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normalon>:/icons/app.ico</normalon>
+   </iconset>
+  </property>
   <property name="accessibleDescription">
    <string/>
+  </property>
+  <property name="documentMode">
+   <bool>false</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
