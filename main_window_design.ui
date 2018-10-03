@@ -145,11 +145,6 @@
    <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionSetRootFolder">
-   <property name="text">
-    <string>Set Root Folder</string>
-   </property>
-  </action>
   <action name="actionClearTempFolder">
    <property name="text">
     <string>Clear Temp Folder</string>
@@ -169,6 +164,8 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="icons/resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

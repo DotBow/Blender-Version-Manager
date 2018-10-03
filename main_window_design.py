@@ -82,8 +82,6 @@ class Ui_MainWindow(object):
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
-        self.actionSetRootFolder = QtWidgets.QAction(MainWindow)
-        self.actionSetRootFolder.setObjectName("actionSetRootFolder")
         self.actionClearTempFolder = QtWidgets.QAction(MainWindow)
         self.actionClearTempFolder.setObjectName("actionClearTempFolder")
         self.actionMinimizeToTray = QtWidgets.QAction(MainWindow)
@@ -109,8 +107,8 @@ class Ui_MainWindow(object):
         self.btnUpdate.setText(_translate("MainWindow", "Update"))
         self.btnCancel.setText(_translate("MainWindow", "Cancel"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
-        self.actionSetRootFolder.setText(_translate("MainWindow", "Set Root Folder"))
         self.actionClearTempFolder.setText(_translate("MainWindow", "Clear Temp Folder"))
         self.actionMinimizeToTray.setText(_translate("MainWindow", "Toggle Minimize to Tray"))
         self.actionQuit.setText(_translate("MainWindow", "Quit"))
 
+import resources_rc

@@ -2,8 +2,10 @@ import os
 import shutil
 import subprocess
 
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QHBoxLayout, QMessageBox, QPushButton, QSizePolicy
+
+import resources_rc
 
 
 class B3dVersionItemLayout(QHBoxLayout):
@@ -17,7 +19,7 @@ class B3dVersionItemLayout(QHBoxLayout):
             lambda: subprocess.Popen(os.path.join(root_folder, version, "blender.exe")))
 
         if (is_latest):
-            self.btnOpen.setIcon(QIcon(os.path.join("icons", "star.ico")))
+            self.btnOpen.setIcon(QIcon(QPixmap(":/icons/star.ico")))
 
         self.btnDelete = QPushButton("Delete")
         self.btnDelete.setSizePolicy(

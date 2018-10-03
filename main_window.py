@@ -9,11 +9,12 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import QSettings, QThread
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import (QAction, QFileDialog, QLabel, QMainWindow, QMenu,
                              QMessageBox, QSystemTrayIcon)
 
 import main_window_design
+import resources_rc
 from build_loader import BuildLoader
 from version_layout import B3dVersionItemLayout
 
@@ -23,7 +24,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         super().__init__()
         self.app = app
         self.setupUi(self)
-        self.setWindowIcon(QIcon(os.path.join("icons", "app.ico")))
+        self.setWindowIcon(QIcon(QPixmap(":/icons/app.ico")))
 
         self.settings = QSettings('b3d_version_manager', 'settings')
         root_folder = self.settings.value('root_folder')

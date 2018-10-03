@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>app.ico</file>
+    <file>app_inv.ico</file>
+    <file>star.ico</file>
+  </qresource>
+</RCC>
