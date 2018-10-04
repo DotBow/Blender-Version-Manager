@@ -59,6 +59,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         show_action = QAction("Show", self)
         quit_action = QAction("Quit", self)
         hide_action = QAction("Hide", self)
+        self.blender_action.triggered.connect(self.exec_blender)
         show_action.triggered.connect(self.show)
         hide_action.triggered.connect(self.hide)
         quit_action.triggered.connect(self.quit)
@@ -76,6 +77,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
     def quit(self):
         if self.can_quit():
+            self.tray_icon.hide()
             self.app.quit()
 
     def can_quit(self):
@@ -126,15 +128,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         versions = self.collect_versions()
 
         if versions:
-            latest_ver = ""
-            latest_time = 0
-
-            for ver in versions:
-                time = os.path.getctime(os.path.join(
-                    root_folder, ver, "blender.exe"))
-                if time > latest_time:
-                    latest_time = time
-                    latest_ver = ver
+            latest_ver = self.get_latest_local()
 
             for ver in versions:
                 is_latest = True if ver == latest_ver else False
@@ -143,13 +137,32 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
                 self.listVersions.addLayout(b3d_item_layout)
 
                 if is_latest:
-                    self.blender_action.triggered.disconnect()
-                    self.blender_action.triggered.connect(
-                        lambda: subprocess.Popen(os.path.join(root_folder, ver, "blender.exe")))
                     self.blender_action.setVisible(True)
         else:
             self.listVersions.addWidget(QLabel("No Versions Found!"))
             self.blender_action.setVisible(False)
+
+    def get_latest_local(self):
+        root_folder = self.settings.value('root_folder')
+        versions = self.collect_versions()
+        latest_ver = None
+
+        if versions:
+            latest_time = 0
+
+            for ver in versions:
+                ctime = os.path.getctime(os.path.join(
+                    root_folder, ver, "blender.exe"))
+                if ctime > latest_time:
+                    latest_time = ctime
+                    latest_ver = ver
+
+        return latest_ver
+
+    def exec_blender(self):
+        latest_ver = self.get_latest_local()
+        root_folder = self.settings.value('root_folder')
+        subprocess.Popen(os.path.join(root_folder, latest_ver, "blender.exe"))
 
     def set_root_folder(self):
         dir = QFileDialog.getExistingDirectory(
