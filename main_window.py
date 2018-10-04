@@ -27,6 +27,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.app_icon = QIcon(QPixmap(":/icons/app.ico"))
         self.star_icon = QIcon(QPixmap(":/icons/star.ico"))
         self.trash_icon = QIcon(QPixmap(":/icons/trash.ico"))
+        self.quit_icon = QIcon(QPixmap(":/icons/quit.ico"))
 
         self.settings = QSettings('b3d_version_manager', 'settings')
         root_folder = self.settings.value('root_folder')
@@ -36,8 +37,8 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
                 'root_folder', os.path.dirname(os.path.realpath(__file__)))
 
         self.actionClearTempFolder.triggered.connect(self.clear_temp_folder)
-        self.actionMinimizeToTray.setChecked(
-            self.settings.value('minimize_to_tray', type=bool))
+        minimize_to_tray = self.settings.value('minimize_to_tray', type=bool)
+        self.actionMinimizeToTray.setChecked(minimize_to_tray)
         self.actionMinimizeToTray.triggered.connect(self.minimize_to_tray)
         self.actionQuit.triggered.connect(self.quit)
 
@@ -54,11 +55,10 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.tray_icon = QSystemTrayIcon(self)
         self.tray_icon.setIcon(self.app_icon)
 
-        self.blender_action = QAction("Blender", self)
-        self.blender_action.setIcon(self.star_icon)
+        self.blender_action = QAction(self.star_icon, "Blender", self)
         show_action = QAction("Show", self)
-        quit_action = QAction("Quit", self)
         hide_action = QAction("Hide", self)
+        quit_action = QAction(self.quit_icon, "Quit", self)
         self.blender_action.triggered.connect(self.exec_blender)
         show_action.triggered.connect(self.show)
         hide_action.triggered.connect(self.hide)
@@ -71,7 +71,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.tray_menu.addAction(quit_action)
         self.tray_icon.setContextMenu(self.tray_menu)
         self.tray_icon.messageClicked.connect(self.show)
-        self.tray_icon.show()
+        self.tray_icon.show() if minimize_to_tray else self.tray_icon.hide()
 
         self.draw_versions_layout()
 
@@ -90,6 +90,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
     def minimize_to_tray(self, is_checked):
         self.settings.setValue('minimize_to_tray', is_checked)
+        self.tray_icon.show() if is_checked else self.tray_icon.hide()
 
     def clear_temp_folder(self):
         if not self.can_quit():
@@ -243,4 +244,5 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         elif not self.can_quit():
             event.ignore()
         else:
+            self.tray_icon.hide()
             event.accept()
