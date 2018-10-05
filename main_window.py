@@ -52,8 +52,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.labelRootFolder.setText(self.settings.value('root_folder'))
         self.is_thread_running = False
 
-        self.tray_icon = QSystemTrayIcon(self)
-        self.tray_icon.setIcon(self.app_icon)
+        self.tray_icon = QSystemTrayIcon(self.app_icon, self)
 
         self.blender_action = QAction(self.star_icon, "Blender", self)
         show_action = QAction("Show", self)
@@ -72,8 +71,13 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.tray_icon.setContextMenu(self.tray_menu)
         self.tray_icon.messageClicked.connect(self.show)
         self.tray_icon.show() if minimize_to_tray else self.tray_icon.hide()
+        self.tray_icon.activated.connect(self.tray_icon_clicked)
 
         self.draw_versions_layout()
+
+    def tray_icon_clicked(self, btn):
+        if btn == 3:
+            self.show()
 
     def quit(self):
         if self.can_quit():
