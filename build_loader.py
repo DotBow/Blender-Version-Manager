@@ -39,7 +39,7 @@ class BuildLoader(QObject):
 
                 self.f.write(chunk)
                 self.progress_changed.emit(
-                    os.stat(download_path).st_size / int(size), "Downloading")
+                    os.stat(download_path).st_size / int(size), "Downloading: %p%")
 
                 if not self.is_running:
                     self.f.close()
@@ -56,7 +56,7 @@ class BuildLoader(QObject):
             zf.extract(file, self.root_folder)
             extracted_size += file.file_size
             self.progress_changed.emit(
-                extracted_size / uncompress_size, "Extracting")
+                extracted_size / uncompress_size, "Extracting: %p%")
 
             if not self.is_running:
                 shutil.rmtree(os.path.join(self.root_folder,

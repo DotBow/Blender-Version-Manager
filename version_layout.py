@@ -16,11 +16,11 @@ class B3dItemLayout(QHBoxLayout):
         self.version = version
         self.parent = parent
 
-        ts = os.path.getctime(os.path.join(
+        ctime = os.path.getctime(os.path.join(
             root_folder, version, "blender.exe"))
-        date = time.strftime("%d-%b-%Y", time.gmtime(ts))
+        fctime = time.strftime("%d-%b-%Y", time.gmtime(ctime))
         self.btnOpen = QPushButton(
-            (version.split('-',)[-2]).replace("git.", "Git-") + " | " + date)
+            (version.split('-',)[-2]).replace("git.", "Git-") + " | " + fctime)
         self.btnOpen.clicked.connect(
             lambda: subprocess.Popen(os.path.join(root_folder, version, "blender.exe")))
 
@@ -37,8 +37,8 @@ class B3dItemLayout(QHBoxLayout):
 
     def delete(self):
         delete = QMessageBox.question(
-            self.parent, "Warning", "Are you sure you want to delete '" + self.version + "' from disk?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            self.parent, "Warning", "Are you sure you want to delete '" + self.btnOpen.text() + "' from disk?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
         if delete == QMessageBox.Yes:
             shutil.rmtree(os.path.join(self.root_folder, self.version))
-            self.parent.draw_versions_layout()
+            self.parent.draw_list_versions()

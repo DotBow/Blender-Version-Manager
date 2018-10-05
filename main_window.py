@@ -1,4 +1,5 @@
 import json
+import operator
 import os
 import re
 import shutil
@@ -50,7 +51,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.btnCancel.hide()
 
         self.labelRootFolder.setText(self.settings.value('root_folder'))
-        self.is_thread_running = False
+        self.is_update_running = False
 
         self.tray_icon = QSystemTrayIcon(self.app_icon, self)
 
@@ -58,54 +59,60 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         show_action = QAction("Show", self)
         hide_action = QAction("Hide", self)
         quit_action = QAction(self.quit_icon, "Quit", self)
+
         self.blender_action.triggered.connect(self.exec_blender)
         show_action.triggered.connect(self.show)
         hide_action.triggered.connect(self.hide)
         quit_action.triggered.connect(self.quit)
+
         self.tray_menu = QMenu()
         self.tray_menu.addAction(self.blender_action)
         self.tray_menu.addSeparator()
         self.tray_menu.addAction(show_action)
         self.tray_menu.addAction(hide_action)
         self.tray_menu.addAction(quit_action)
+
         self.tray_icon.setContextMenu(self.tray_menu)
         self.tray_icon.messageClicked.connect(self.show)
-        self.tray_icon.show() if minimize_to_tray else self.tray_icon.hide()
         self.tray_icon.activated.connect(self.tray_icon_clicked)
 
-        self.draw_versions_layout()
+        if minimize_to_tray:
+            self.tray_icon.show()
+        else:
+            self.tray_icon.hide()
 
-    def tray_icon_clicked(self, btn):
-        if btn == 3:
+        self.draw_list_versions()
+
+    def tray_icon_clicked(self, button):
+        if button == 3:
             self.show()
 
     def quit(self):
-        if self.can_quit():
+        if not self.is_running_task():
             self.tray_icon.hide()
             self.app.quit()
 
-    def can_quit(self):
-        if self.is_thread_running:
+    def is_running_task(self):
+        if self.is_update_running:
             QMessageBox.information(
                 self, "Warning", "Update task in progress!", QMessageBox.Ok)
-            return False
-        else:
             return True
+        else:
+            return False
 
     def minimize_to_tray(self, is_checked):
         self.settings.setValue('minimize_to_tray', is_checked)
         self.tray_icon.show() if is_checked else self.tray_icon.hide()
 
     def clear_temp_folder(self):
-        if not self.can_quit():
-            return
+        if not self.is_running_task():
+            temp_folder = os.path.join(
+                self.settings.value('root_folder'), "temp")
 
-        temp_folder = os.path.join(self.settings.value('root_folder'), "temp")
+            if os.path.isdir(temp_folder):
+                shutil.rmtree(temp_folder)
 
-        if os.path.isdir(temp_folder):
-            shutil.rmtree(temp_folder)
-
-    def delete_items(self, layout):
+    def cleanup_layout(self, layout):
         while layout.count():
             item = layout.takeAt(0)
             widget = item.widget()
@@ -113,59 +120,42 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             if widget is not None:
                 widget.deleteLater()
             else:
-                self.delete_items(item.layout())
+                self.cleanup_layout(item.layout())
 
     def collect_versions(self):
+        root_folder = self.settings.value('root_folder')
         dirs = next(os.walk(self.settings.value('root_folder')))[1]
         prog = re.compile("blender-2.80")
-
         versions = []
 
         for dir in dirs:
             if prog.match(dir):
                 versions.append(dir)
 
+        versions.sort(key=lambda ver: os.path.getctime(
+            os.path.join(root_folder, ver, "blender.exe")), reverse=True)
+
         return versions
 
-    def draw_versions_layout(self):
-        self.delete_items(self.listVersions)
+    def draw_list_versions(self):
+        self.cleanup_layout(self.listVersions)
         root_folder = self.settings.value('root_folder')
         versions = self.collect_versions()
 
         if versions:
-            latest_ver = self.get_latest_local()
+            self.blender_action.setVisible(True)
 
             for ver in versions:
-                is_latest = True if ver == latest_ver else False
+                is_latest = True if ver == versions[0] else False
                 b3d_item_layout = B3dItemLayout(
                     root_folder, ver, is_latest, self)
                 self.listVersions.addLayout(b3d_item_layout)
-
-                if is_latest:
-                    self.blender_action.setVisible(True)
         else:
             self.listVersions.addWidget(QLabel("No Versions Found!"))
             self.blender_action.setVisible(False)
 
-    def get_latest_local(self):
-        root_folder = self.settings.value('root_folder')
-        versions = self.collect_versions()
-        latest_ver = None
-
-        if versions:
-            latest_time = 0
-
-            for ver in versions:
-                ctime = os.path.getctime(os.path.join(
-                    root_folder, ver, "blender.exe"))
-                if ctime > latest_time:
-                    latest_time = ctime
-                    latest_ver = ver
-
-        return latest_ver
-
     def exec_blender(self):
-        latest_ver = self.get_latest_local()
+        latest_ver = self.collect_versions()[0]
         root_folder = self.settings.value('root_folder')
         subprocess.Popen(os.path.join(root_folder, latest_ver, "blender.exe"))
 
@@ -176,25 +166,18 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         if dir:
             self.settings.setValue('root_folder', dir)
             self.labelRootFolder.setText(dir)
-            self.draw_versions_layout()
+            self.draw_list_versions()
 
     def is_root_folder_settings_enabled(self, is_enabled):
-        items = (self.layoutRootFolderSettings.itemAt(i).widget()
-                 for i in range(self.layoutRootFolderSettings.count()))
-
-        for item in items:
-            item.setEnabled(is_enabled)
+        self.btnSetRootFolder.setEnabled(is_enabled)
 
     def update(self):
-        last_verison = self.get_url().split('-',)[-2]
-        versions = self.collect_versions()
+        latest_verison = self.get_download_url().split('-',)[-2]
 
-        if versions:
-            for version in versions:
-                if last_verison in version:
-                    QMessageBox.information(
-                        self, "Information", "You are up to date!", QMessageBox.Ok)
-                    return
+        if latest_verison in self.collect_versions()[0]:
+            QMessageBox.information(
+                self, "Information", "You are up to date!", QMessageBox.Ok)
+            return
 
         self.btnUpdate.hide()
         self.btnCancel.show()
@@ -202,38 +185,38 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
         self.thread = QThread()
         self.build_loader = BuildLoader(
-            self.settings.value('root_folder'), self.get_url())
+            self.settings.value('root_folder'), self.get_download_url())
         self.build_loader.finished.connect(self.finished)
-        self.build_loader.progress_changed.connect(self.update_progress_bar)
+        self.build_loader.progress_changed.connect(self.set_progress_bar)
         self.thread.started.connect(self.build_loader.run)
         self.build_loader.moveToThread(self.thread)
-        self.is_thread_running = True
+        self.is_update_running = True
         self.thread.start()
 
     def cancel_thread(self):
         self.build_loader.stop()
 
-    def finished(self, status):
+    def finished(self, success):
         self.thread.terminate()
         self.btnCancel.hide()
         self.btnUpdate.show()
         self.is_root_folder_settings_enabled(True)
-        self.update_progress_bar(0, "No Tasks")
-        self.draw_versions_layout()
-        self.is_thread_running = False
+        self.set_progress_bar(0, "No Tasks")
+        self.draw_list_versions()
+        self.is_update_running = False
 
-        if status:
+        if success:
             self.tray_icon.showMessage(
                 "Blender Version Manager", "Update finished!", QSystemTrayIcon.Information, 2000)
 
-    def update_progress_bar(self, val, text):
+    def set_progress_bar(self, val, format):
         self.progressBar.setValue(val * 100)
-        self.labelUpdateStatus.setText(text)
+        self.progressBar.setFormat(format)
 
     def open_root_folder(self):
         os.startfile(self.settings.value('root_folder'))
 
-    def get_url(self):
+    def get_download_url(self):
         builder_url = "https://builder.blender.org"
         builder_content = urlopen(builder_url + "/download").read()
         builder_soup = BeautifulSoup(builder_content, 'html.parser')
@@ -245,7 +228,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         if self.actionMinimizeToTray.isChecked():
             event.ignore()
             self.hide()
-        elif not self.can_quit():
+        elif self.is_running_task():
             event.ignore()
         else:
             self.tray_icon.hide()

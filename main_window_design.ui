@@ -82,22 +82,21 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QLabel" name="labelUpdateStatus">
-        <property name="text">
-         <string>No Tasks</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QProgressBar" name="progressBar">
         <property name="value">
          <number>0</number>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
         <property name="textVisible">
          <bool>true</bool>
         </property>
         <property name="textDirection">
          <enum>QProgressBar::TopToBottom</enum>
+        </property>
+        <property name="format">
+         <string>No Tasks</string>
         </property>
        </widget>
       </item>
