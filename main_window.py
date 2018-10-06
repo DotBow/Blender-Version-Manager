@@ -35,7 +35,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
         if (not root_folder) or (not os.path.isdir(root_folder)):
             self.settings.setValue(
-                'root_folder', os.path.dirname(os.path.realpath(__file__)))
+                'root_folder', os.path.dirname(sys.executable))
 
         self.actionClearTempFolder.triggered.connect(self.clear_temp_folder)
         minimize_to_tray = self.settings.value('minimize_to_tray', type=bool)
