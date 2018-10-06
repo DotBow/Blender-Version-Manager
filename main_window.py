@@ -173,11 +173,13 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
     def update(self):
         latest_verison = self.get_download_url().split('-',)[-2]
+        versions = self.collect_versions()
 
-        if latest_verison in self.collect_versions()[0]:
-            QMessageBox.information(
-                self, "Information", "You are up to date!", QMessageBox.Ok)
-            return
+        if versions:
+            if latest_verison in versions[0]:
+                QMessageBox.information(
+                    self, "Information", "You are up to date!", QMessageBox.Ok)
+                return
 
         self.btnUpdate.hide()
         self.btnCancel.show()
