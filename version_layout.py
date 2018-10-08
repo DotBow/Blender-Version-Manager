@@ -4,7 +4,8 @@ import subprocess
 import time
 
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtWidgets import QHBoxLayout, QMessageBox, QPushButton, QSizePolicy
+from PyQt5.QtWidgets import (QApplication, QHBoxLayout, QMessageBox,
+                             QPushButton, QSizePolicy)
 
 import resources_rc
 
@@ -40,5 +41,8 @@ class B3dItemLayout(QHBoxLayout):
             self.parent, "Warning", "Are you sure you want to delete '" + self.btnOpen.text() + "' from disk?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
         if delete == QMessageBox.Yes:
+            self.btnOpen.setEnabled(False)
+            self.btnDelete.setEnabled(False)
+            QApplication.processEvents()
             shutil.rmtree(os.path.join(self.root_folder, self.version))
             self.parent.draw_list_versions()

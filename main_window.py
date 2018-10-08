@@ -200,16 +200,17 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
     def finished(self, success):
         self.thread.terminate()
-        self.btnCancel.hide()
-        self.btnUpdate.show()
         self.is_root_folder_settings_enabled(True)
-        self.set_progress_bar(0, "No Tasks")
         self.draw_list_versions()
-        self.is_update_running = False
 
         if success:
             self.tray_icon.showMessage(
                 "Blender Version Manager", "Update finished!", QSystemTrayIcon.Information, 2000)
+
+        self.set_progress_bar(0, "No Tasks")
+        self.btnCancel.hide()
+        self.btnUpdate.show()
+        self.is_update_running = False
 
     def set_progress_bar(self, val, format):
         self.progressBar.setValue(val * 100)
