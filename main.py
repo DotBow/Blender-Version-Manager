@@ -1,5 +1,6 @@
 import sys
 
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication
 
 from main_window import B3dVersionMangerMainWindow
@@ -11,6 +12,7 @@ def main():
 
     app = QApplication(sys.argv)
     window = B3dVersionMangerMainWindow(app)
+    window.setWindowFlags(Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint)
     window.show()
     app.exec_()
 
