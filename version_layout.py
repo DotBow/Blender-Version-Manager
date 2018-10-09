@@ -3,6 +3,7 @@ import shutil
 import subprocess
 import time
 
+from PyQt5 import QtCore
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import (QApplication, QHBoxLayout, QMessageBox,
                              QPushButton, QSizePolicy)
@@ -29,6 +30,9 @@ class B3dItemLayout(QHBoxLayout):
             self.btnOpen.setIcon(parent.star_icon)
 
         self.btnDelete = QPushButton(parent.trash_icon, "")
+        self.btnDelete.setIconSize(QtCore.QSize(20, 20))
+        self.btnDelete.setFlat(True)
+        self.btnDelete.setToolTip("Delete From Drive")
         self.btnDelete.setSizePolicy(
             QSizePolicy.Maximum, QSizePolicy.Preferred)
         self.btnDelete.clicked.connect(lambda: self.delete())
@@ -40,7 +44,7 @@ class B3dItemLayout(QHBoxLayout):
         delete = QMessageBox.question(
             self.parent,
             "Warning",
-            "Are you sure you want to delete '" + self.btnOpen.text() + "' from disk?",
+            "Are you sure you want to delete '" + self.btnOpen.text() + "' from drive?",
             QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
         if delete == QMessageBox.Yes:

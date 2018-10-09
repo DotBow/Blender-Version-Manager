@@ -28,9 +28,9 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.app = app
         self.setupUi(self)
         self.app_icon = QIcon(QPixmap(":/icons/app.ico"))
-        self.star_icon = QIcon(QPixmap(":/icons/star.ico"))
-        self.trash_icon = QIcon(QPixmap(":/icons/trash.ico"))
-        self.quit_icon = QIcon(QPixmap(":/icons/quit.ico"))
+        self.star_icon = QIcon(QPixmap(":/icons/star.png"))
+        self.trash_icon = QIcon(QPixmap(":/icons/trash.png"))
+        self.quit_icon = QIcon(QPixmap(":/icons/quit.png"))
 
         self.settings = QSettings('b3d_version_manager', 'settings')
         root_folder = self.settings.value('root_folder')
@@ -91,6 +91,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.update_task()
 
     def update_task(self, notify=True):
+        print("Task")
         url = self.get_download_url()
         version = self.get_download_url().split('-',)[-2]
         versions = self.collect_versions()
@@ -279,4 +280,4 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         elif self.is_running_task():
             event.ignore()
         else:
-            self.quit()
+            event.accept()

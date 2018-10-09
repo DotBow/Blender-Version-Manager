@@ -51,28 +51,121 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+          <weight>50</weight>
+          <bold>false</bold>
+          <underline>false</underline>
+          <strikeout>false</strikeout>
+          <kerning>true</kerning>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string notr="true">Root Folder Path</string>
+        </property>
+        <property name="statusTip">
+         <string notr="true"/>
+        </property>
         <property name="text">
-         <string>No Root Folder Specified!</string>
+         <string notr="true">C:/Blender/2.8</string>
+        </property>
+        <property name="textFormat">
+         <enum>Qt::PlainText</enum>
+        </property>
+        <property name="scaledContents">
+         <bool>false</bool>
+        </property>
+        <property name="textInteractionFlags">
+         <set>Qt::NoTextInteraction</set>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="btnSetRootFolder">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
         <property name="cursor">
          <cursorShape>ArrowCursor</cursorShape>
         </property>
+        <property name="toolTip">
+         <string notr="true">Change Root Folder</string>
+        </property>
+        <property name="statusTip">
+         <string notr="true"/>
+        </property>
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
         <property name="text">
-         <string>Change</string>
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normalon>:/icons/folder_add.png</normalon>
+         </iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="btnOpenRootFolder">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
         <property name="cursor">
          <cursorShape>ArrowCursor</cursorShape>
         </property>
+        <property name="toolTip">
+         <string notr="true">Open Root Folder</string>
+        </property>
+        <property name="statusTip">
+         <string notr="true"/>
+        </property>
         <property name="text">
-         <string>Open</string>
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normalon>:/icons/folder.png</normalon>
+         </iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="default">
+         <bool>false</bool>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -101,8 +194,19 @@
           <height>22</height>
          </size>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
         <property name="cursor">
          <cursorShape>ArrowCursor</cursorShape>
+        </property>
+        <property name="toolTip">
+         <string notr="true"/>
+        </property>
+        <property name="statusTip">
+         <string notr="true"/>
         </property>
         <property name="value">
          <number>0</number>
@@ -126,13 +230,28 @@
         <property name="cursor">
          <cursorShape>ArrowCursor</cursorShape>
         </property>
+        <property name="toolTip">
+         <string notr="true">Start Downloading</string>
+        </property>
+        <property name="statusTip">
+         <string notr="true"/>
+        </property>
         <property name="text">
-         <string/>
+         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset>
-          <normalon>:/icons/download.ico</normalon>
+          <normalon>:/icons/download.png</normalon>
          </iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -141,13 +260,28 @@
         <property name="cursor">
          <cursorShape>ArrowCursor</cursorShape>
         </property>
+        <property name="toolTip">
+         <string notr="true">Cancel Downloading</string>
+        </property>
+        <property name="statusTip">
+         <string notr="true"/>
+        </property>
         <property name="text">
-         <string/>
+         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset>
-          <normalon>:/icons/cancel.ico</normalon>
+          <normalon>:/icons/cancel.png</normalon>
          </iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -195,11 +329,17 @@
   <action name="actionClearTempFolder">
    <property name="icon">
     <iconset>
-     <normalon>:/icons/clear.ico</normalon>
+     <normalon>:/icons/clear.png</normalon>
     </iconset>
    </property>
    <property name="text">
-    <string>Clear Temp Folder</string>
+    <string notr="true">Clear Temp Folder</string>
+   </property>
+   <property name="toolTip">
+    <string notr="true">Clear Temp Folder</string>
+   </property>
+   <property name="statusTip">
+    <string notr="true"/>
    </property>
   </action>
   <action name="actionMinimizeToTray">
@@ -208,21 +348,33 @@
    </property>
    <property name="icon">
     <iconset>
-     <normalon>:/icons/tray.ico</normalon>
+     <normalon>:/icons/tray.png</normalon>
     </iconset>
    </property>
    <property name="text">
-    <string>Toggle Minimize to Tray</string>
+    <string notr="true">Toggle Minimize to Tray</string>
+   </property>
+   <property name="toolTip">
+    <string notr="true">Toggle Minimize to Tray</string>
+   </property>
+   <property name="statusTip">
+    <string notr="true"/>
    </property>
   </action>
   <action name="actionQuit">
    <property name="icon">
     <iconset>
-     <normalon>:/icons/quit.ico</normalon>
+     <normalon>:/icons/quit.png</normalon>
     </iconset>
    </property>
    <property name="text">
-    <string>Quit</string>
+    <string notr="true">Quit</string>
+   </property>
+   <property name="toolTip">
+    <string notr="true">Quit</string>
+   </property>
+   <property name="statusTip">
+    <string notr="true"/>
    </property>
   </action>
  </widget>
