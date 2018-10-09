@@ -5,14 +5,16 @@ import re
 import shutil
 import subprocess
 import sys
+import threading
+import time
 from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import QSettings, QThread
+from PyQt5.QtCore import QSettings, Qt, QThread
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import (QAction, QFileDialog, QLabel, QMainWindow, QMenu,
-                             QMessageBox, QSystemTrayIcon)
+                             QMessageBox, QSizePolicy, QSystemTrayIcon)
 
 import main_window_design
 import resources_rc
@@ -83,6 +85,45 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
         self.draw_list_versions()
 
+        self.progressBar.hide()
+        self.btnUpdate.hide()
+        self.task = None
+        self.update_task()
+
+    def update_task(self, notify=True):
+        url = self.get_download_url()
+        version = self.get_download_url().split('-',)[-2]
+        versions = self.collect_versions()
+        new_version = True
+
+        if versions:
+            if version in versions[0]:
+                new_version = False
+
+        if new_version:
+            info = urlopen(url).info()
+            ctime = info['last-modified']
+            size = str(int(info['content-length']) // 1048576) + " MB"
+
+            self.set_progress_bar(0, "Git-" + version +
+                                  " | " + ctime + " | " + size)
+            self.progressBar.show()
+            self.btnUpdate.show()
+
+            if notify:
+                self.tray_icon.showMessage(
+                    "Blender Version Manager",
+                    "New version of Blender 2.8 is avaliable!",
+                    QSystemTrayIcon.Information, 2000)
+        else:
+            if self.progressBar.isVisible():
+                self.progressBar.hide()
+                self.btnUpdate.hide()
+                self.btnCancel.hide()
+
+            self.task = threading.Timer(5.0, self.update_task)
+            self.task.start()
+
     def tray_icon_clicked(self, button):
         if button == 3:
             self.show()
@@ -90,6 +131,10 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
     def quit(self):
         if not self.is_running_task():
             self.tray_icon.hide()
+
+            if self.task:
+                self.task.cancel()
+
             self.app.quit()
 
     def is_running_task(self):
@@ -124,7 +169,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
     def collect_versions(self):
         root_folder = self.settings.value('root_folder')
-        dirs = next(os.walk(self.settings.value('root_folder')))[1]
+        dirs = next(os.walk(root_folder))[1]
         prog = re.compile("blender-2.80")
         versions = []
 
@@ -138,7 +183,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         return versions
 
     def draw_list_versions(self):
-        self.cleanup_layout(self.listVersions)
+        self.cleanup_layout(self.layoutListVersions)
         root_folder = self.settings.value('root_folder')
         versions = self.collect_versions()
 
@@ -149,9 +194,12 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
                 is_latest = True if ver == versions[0] else False
                 b3d_item_layout = B3dItemLayout(
                     root_folder, ver, is_latest, self)
-                self.listVersions.addLayout(b3d_item_layout)
+                self.layoutListVersions.addLayout(b3d_item_layout)
         else:
-            self.listVersions.addWidget(QLabel("No Versions Found!"))
+            label = QLabel("No Local Versions Found!")
+            label.setAlignment(Qt.AlignCenter)
+            label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+            self.layoutListVersions.addWidget(label)
             self.blender_action.setVisible(False)
 
     def exec_blender(self):
@@ -168,22 +216,15 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             self.labelRootFolder.setText(dir)
             self.draw_list_versions()
 
-    def is_root_folder_settings_enabled(self, is_enabled):
-        self.btnSetRootFolder.setEnabled(is_enabled)
+            if self.task:
+                self.task.cancel()
+
+            self.update_task()
 
     def update(self):
-        latest_verison = self.get_download_url().split('-',)[-2]
-        versions = self.collect_versions()
-
-        if versions:
-            if latest_verison in versions[0]:
-                QMessageBox.information(
-                    self, "Information", "You are up to date!", QMessageBox.Ok)
-                return
-
         self.btnUpdate.hide()
         self.btnCancel.show()
-        self.is_root_folder_settings_enabled(False)
+        self.btnSetRootFolder.setEnabled(False)
 
         self.thread = QThread()
         self.build_loader = BuildLoader(
@@ -200,17 +241,21 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
     def finished(self, success):
         self.thread.terminate()
-        self.is_root_folder_settings_enabled(True)
+        self.btnSetRootFolder.setEnabled(True)
+        self.btnCancel.hide()
+        self.btnUpdate.hide()
+        self.progressBar.hide()
         self.draw_list_versions()
+        self.is_update_running = False
 
         if success:
             self.tray_icon.showMessage(
-                "Blender Version Manager", "Update finished!", QSystemTrayIcon.Information, 2000)
-
-        self.set_progress_bar(0, "No Tasks")
-        self.btnCancel.hide()
-        self.btnUpdate.show()
-        self.is_update_running = False
+                "Blender Version Manager",
+                "Update finished!",
+                QSystemTrayIcon.Information, 2000)
+            self.update_task()
+        else:
+            self.update_task(False)
 
     def set_progress_bar(self, val, format):
         self.progressBar.setValue(val * 100)
@@ -234,5 +279,4 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         elif self.is_running_task():
             event.ignore()
         else:
-            self.tray_icon.hide()
-            event.accept()
+            self.quit()

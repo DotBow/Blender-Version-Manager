@@ -66,6 +66,7 @@ class BuildLoader(QObject):
                 self.finished.emit(False)
                 return
 
+        self.progress_changed.emit(0, "Finishing...")
         self.finished.emit(True)
 
     def stop(self):

@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="icons">
+    <file>cancel.ico</file>
+    <file>download.ico</file>
     <file>trash.ico</file>
     <file>tray.ico</file>
     <file>clear.ico</file>
