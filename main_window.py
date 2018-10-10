@@ -13,8 +13,9 @@ from bs4 import BeautifulSoup
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import QSettings, Qt, QThread
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtWidgets import (QAction, QFileDialog, QLabel, QMainWindow, QMenu,
-                             QMessageBox, QSizePolicy, QSystemTrayIcon)
+from PyQt5.QtWidgets import (QAction, QApplication, QFileDialog, QLabel,
+                             QMainWindow, QMenu, QMessageBox, QSizePolicy,
+                             QSystemTrayIcon)
 
 import main_window_design
 import resources_rc
@@ -46,11 +47,10 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.actionQuit.triggered.connect(self.quit)
 
         self.btnSetRootFolder.clicked.connect(self.set_root_folder)
-        self.btnOpenRootFolder.clicked.connect(lambda: os.startfile(self.settings.value('root_folder')))
+        self.btnOpenRootFolder.clicked.connect(
+            lambda: os.startfile(self.settings.value('root_folder')))
 
         self.btnUpdate.clicked.connect(self.update)
-        self.btnCancel.clicked.connect(lambda: self.build_loader.stop())
-        self.btnCancel.hide()
 
         self.labelRootFolder.setText(self.settings.value('root_folder'))
         self.is_update_running = False
@@ -80,15 +80,15 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
         self.tray_icon.show() if minimize_to_tray else self.tray_icon.hide()
 
+        self.set_task_visible(False)
+        self.uptodate_thread = None
+        self.uptodate_task()
         self.draw_list_versions()
 
-        self.set_task_visible(False)
+    def uptodate_task(self):
+        if self.uptodate_thread:
+            self.uptodate_thread.finished.set()
 
-        self.task = threading.Timer(5.0, self.update_task)
-        self.task.setDaemon(True)
-        self.task.start()
-
-    def update_task(self):
         url = self.get_download_url()
         version = self.get_download_url().split('-',)[-2]
         versions = self.collect_versions()
@@ -116,9 +116,10 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             if self.progressBar.isVisible():
                 self.set_task_visible(False)
 
-            self.task = threading.Timer(5.0, self.update_task)
-            self.task.setDaemon(True)
-            self.task.start()
+        self.uptodate_thread = threading.Timer(5.0, self.uptodate_task)
+        self.uptodate_thread.setDaemon(True)
+        self.uptodate_thread.finished.clear()
+        self.uptodate_thread.start()
 
     def set_task_visible(self, is_visible):
         if is_visible:
@@ -209,39 +210,44 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             self, "Choose Root Folder", self.settings.value('root_folder'))
 
         if dir:
+            if self.uptodate_thread:
+                self.uptodate_thread.cancel()
+
             self.settings.setValue('root_folder', dir)
             self.labelRootFolder.setText(dir)
+            self.uptodate_task()
             self.draw_list_versions()
 
-            if self.task:
-                self.task.cancel()
-
-            self.update_task()
-
     def update(self):
+        self.is_update_running = True
+
+        while self.uptodate_thread.finished.isSet():
+            pass
+
+        self.uptodate_thread.cancel()
+
         self.btnUpdate.hide()
         self.btnCancel.show()
         self.btnSetRootFolder.setEnabled(False)
 
-        self.thread = QThread()
+        self.loader_thread = QThread()
         self.build_loader = BuildLoader(
             self.settings.value('root_folder'), self.get_download_url())
         self.build_loader.finished.connect(self.finished)
         self.build_loader.progress_changed.connect(self.set_progress_bar)
-        self.thread.started.connect(self.build_loader.run)
-        self.build_loader.moveToThread(self.thread)
-        self.is_update_running = True
-        self.thread.start()
+        self.loader_thread.started.connect(self.build_loader.run)
+        self.btnCancel.clicked.connect(self.build_loader.stop)
+
+        self.build_loader.moveToThread(self.loader_thread)
+        self.loader_thread.start()
 
     def finished(self, success):
-        self.thread.quit()
-        self.thread.terminate()
-        self.thread.wait()
+        self.loader_thread.quit()
+        self.loader_thread.terminate()
+        self.loader_thread.wait()
 
         self.btnSetRootFolder.setEnabled(True)
-        self.btnCancel.hide()
-        self.btnUpdate.hide()
-        self.progressBar.hide()
+        self.set_task_visible(False)
         self.draw_list_versions()
         self.is_update_running = False
 
@@ -251,7 +257,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
                 "Update finished!",
                 QSystemTrayIcon.Information, 2000)
 
-        self.update_task()
+        self.uptodate_task()
 
     def set_progress_bar(self, val, format):
         self.progressBar.setValue(val * 100)

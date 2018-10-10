@@ -42,10 +42,10 @@ class B3dItemLayout(QHBoxLayout):
         self.addWidget(self.btnDelete)
 
     def delete(self):
-        delete = QMessageBox.question(
+        delete = QMessageBox.warning(
             self.parent,
             "Warning",
-            "Are you sure you want to delete '" + self.btnOpen.text() + "' from drive?",
+            "Are you sure you want to delete\n'" + self.btnOpen.text() + "'\nfrom drive?",
             QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
         if delete == QMessageBox.Yes:
