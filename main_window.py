@@ -46,10 +46,10 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.actionQuit.triggered.connect(self.quit)
 
         self.btnSetRootFolder.clicked.connect(self.set_root_folder)
-        self.btnOpenRootFolder.clicked.connect(self.open_root_folder)
+        self.btnOpenRootFolder.clicked.connect(lambda: os.startfile(self.settings.value('root_folder')))
 
         self.btnUpdate.clicked.connect(self.update)
-        self.btnCancel.clicked.connect(self.cancel_thread)
+        self.btnCancel.clicked.connect(lambda: self.build_loader.stop())
         self.btnCancel.hide()
 
         self.labelRootFolder.setText(self.settings.value('root_folder'))
@@ -233,9 +233,6 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.is_update_running = True
         self.thread.start()
 
-    def cancel_thread(self):
-        self.build_loader.stop()
-
     def finished(self, success):
         self.thread.quit()
         self.thread.terminate()
@@ -259,9 +256,6 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
     def set_progress_bar(self, val, format):
         self.progressBar.setValue(val * 100)
         self.progressBar.setFormat(format)
-
-    def open_root_folder(self):
-        os.startfile(self.settings.value('root_folder'))
 
     def get_download_url(self):
         builder_url = "https://builder.blender.org"
