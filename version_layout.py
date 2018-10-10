@@ -4,7 +4,7 @@ import subprocess
 import time
 
 from PyQt5 import QtCore
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QIcon, QPixmap, QFont
 from PyQt5.QtWidgets import (QApplication, QHBoxLayout, QMessageBox,
                              QPushButton, QSizePolicy)
 
@@ -35,6 +35,7 @@ class B3dItemLayout(QHBoxLayout):
         self.btnDelete.setToolTip("Delete From Drive")
         self.btnDelete.setSizePolicy(
             QSizePolicy.Maximum, QSizePolicy.Preferred)
+        self.btnOpen.setFont(QFont("MS Shell Dlg 2", 10))
         self.btnDelete.clicked.connect(lambda: self.delete())
 
         self.addWidget(self.btnOpen)

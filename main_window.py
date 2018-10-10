@@ -78,20 +78,17 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.tray_icon.messageClicked.connect(self.show)
         self.tray_icon.activated.connect(self.tray_icon_clicked)
 
-        if minimize_to_tray:
-            self.tray_icon.show()
-        else:
-            self.tray_icon.hide()
+        self.tray_icon.show() if minimize_to_tray else self.tray_icon.hide()
 
         self.draw_list_versions()
 
-        self.progressBar.hide()
-        self.btnUpdate.hide()
-        self.task = None
-        self.update_task()
+        self.set_task_visible(False)
 
-    def update_task(self, notify=True):
-        print("Task")
+        self.task = threading.Timer(5.0, self.update_task)
+        self.task.setDaemon(True)
+        self.task.start()
+
+    def update_task(self):
         url = self.get_download_url()
         version = self.get_download_url().split('-',)[-2]
         versions = self.collect_versions()
@@ -108,35 +105,34 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
             self.set_progress_bar(0, "Git-" + version +
                                   " | " + ctime + " | " + size)
-            self.progressBar.show()
-            self.btnUpdate.show()
+            self.set_task_visible(True)
 
-            if notify:
+            if self.isHidden():
                 self.tray_icon.showMessage(
                     "Blender Version Manager",
                     "New version of Blender 2.8 is avaliable!",
                     QSystemTrayIcon.Information, 2000)
         else:
             if self.progressBar.isVisible():
-                self.progressBar.hide()
-                self.btnUpdate.hide()
-                self.btnCancel.hide()
+                self.set_task_visible(False)
 
             self.task = threading.Timer(5.0, self.update_task)
+            self.task.setDaemon(True)
             self.task.start()
+
+    def set_task_visible(self, is_visible):
+        if is_visible:
+            self.progressBar.show()
+            self.btnUpdate.show()
+            self.btnCancel.hide()
+        else:
+            self.progressBar.hide()
+            self.btnUpdate.hide()
+            self.btnCancel.hide()
 
     def tray_icon_clicked(self, button):
         if button == 3:
             self.show()
-
-    def quit(self):
-        if not self.is_running_task():
-            self.tray_icon.hide()
-
-            if self.task:
-                self.task.cancel()
-
-            self.app.quit()
 
     def is_running_task(self):
         if self.is_update_running:
@@ -241,7 +237,10 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.build_loader.stop()
 
     def finished(self, success):
+        self.thread.quit()
         self.thread.terminate()
+        self.thread.wait()
+
         self.btnSetRootFolder.setEnabled(True)
         self.btnCancel.hide()
         self.btnUpdate.hide()
@@ -254,9 +253,8 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
                 "Blender Version Manager",
                 "Update finished!",
                 QSystemTrayIcon.Information, 2000)
-            self.update_task()
-        else:
-            self.update_task(False)
+
+        self.update_task()
 
     def set_progress_bar(self, val, format):
         self.progressBar.setValue(val * 100)
@@ -272,6 +270,11 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         version_url = builder_soup.find(
             href=re.compile("blender-2.80"))['href']
         return builder_url + version_url
+
+    def quit(self):
+        if not self.is_running_task():
+            self.tray_icon.hide()
+            self.app.quit()
 
     def closeEvent(self, event):
         if self.actionMinimizeToTray.isChecked():
