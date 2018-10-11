@@ -11,7 +11,7 @@ from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import QSettings, Qt, QThread
+from PyQt5.QtCore import QSettings, Qt, QThread, QPoint
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import (QAction, QApplication, QFileDialog, QLabel,
                              QMainWindow, QMenu, QMessageBox, QSizePolicy,
@@ -32,7 +32,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.star_icon = QIcon(QPixmap(":/icons/star.png"))
         self.trash_icon = QIcon(QPixmap(":/icons/trash.png"))
         self.quit_icon = QIcon(QPixmap(":/icons/quit.png"))
-
+        self.menubar.hide()
         self.settings = QSettings('b3d_version_manager', 'settings')
         root_folder = self.settings.value('root_folder')
 
@@ -86,6 +86,9 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.uptodate_thread = None
         self.uptodate_silent = False
         self.uptodate_task()
+
+        self.pressed = False
+        self.oldPos = self.pos()
 
     def uptodate_task(self):
         if self.uptodate_thread:
@@ -290,3 +293,16 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         else:
             self.tray_icon.hide()
             event.accept()
+
+    def mousePressEvent(self, event):
+        self.oldPos = event.globalPos()
+        self.pressing = True
+
+    def mouseMoveEvent(self, event):
+        if self.pressing:
+            delta = QPoint (event.globalPos() - self.oldPos)
+            self.move(self.x() + delta.x(), self.y() + delta.y())
+            self.oldPos = event.globalPos()
+
+    def mouseReleaseEvent(self, QMouseEvent):
+        self.pressing = False
