@@ -4,7 +4,6 @@ import zipfile
 from urllib.request import urlopen
 
 from PyQt5.QtCore import QObject, pyqtSignal
-from PyQt5.QtWidgets import QApplication
 
 
 class BuildLoader(QObject):
@@ -31,7 +30,6 @@ class BuildLoader(QObject):
 
         with open(download_path, 'wb') as self.f:
             while True:
-                QApplication.processEvents()
                 chunk = blender_zip.read(16 * 1024)
 
                 if not chunk:
@@ -52,7 +50,6 @@ class BuildLoader(QObject):
         extracted_size = 0
 
         for file in zf.infolist():
-            QApplication.processEvents()
             zf.extract(file, self.root_folder)
             extracted_size += file.file_size
             self.progress_changed.emit(

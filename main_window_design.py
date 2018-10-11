@@ -179,8 +179,8 @@ class Ui_MainWindow(object):
         icon6 = QtGui.QIcon()
         icon6.addPixmap(QtGui.QPixmap(":/icons/tray.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.actionMinimizeToTray.setIcon(icon6)
-        self.actionMinimizeToTray.setText("Toggle Minimize to Tray")
-        self.actionMinimizeToTray.setToolTip("Toggle Minimize to Tray")
+        self.actionMinimizeToTray.setText("Minimize to Tray")
+        self.actionMinimizeToTray.setToolTip("Minimize to Tray")
         self.actionMinimizeToTray.setStatusTip("")
         self.actionMinimizeToTray.setObjectName("actionMinimizeToTray")
         self.actionQuit = QtWidgets.QAction(MainWindow)
@@ -202,8 +202,9 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Blender Version Manager"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Blender Version Manager 1.2"))
         self.progressBar.setFormat(_translate("MainWindow", "No Tasks"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
+        self.actionQuit.setShortcut(_translate("MainWindow", "Ctrl+Q"))
 
 import resources_rc

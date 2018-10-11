@@ -76,14 +76,16 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
         self.tray_icon.setContextMenu(self.tray_menu)
         self.tray_icon.messageClicked.connect(self.show)
-        self.tray_icon.activated.connect(self.tray_icon_clicked)
+        self.tray_icon.activated.connect(
+            lambda btn: self.show() if btn == 3 else False)
 
         self.tray_icon.show() if minimize_to_tray else self.tray_icon.hide()
 
+        self.draw_list_versions()
         self.set_task_visible(False)
         self.uptodate_thread = None
+        self.uptodate_silent = False
         self.uptodate_task()
-        self.draw_list_versions()
 
     def uptodate_task(self):
         if self.uptodate_thread:
@@ -91,11 +93,10 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
         url = self.get_download_url()
         version = self.get_download_url().split('-',)[-2]
-        versions = self.collect_versions()
         new_version = True
 
-        if versions:
-            if version in versions[0]:
+        if self.latest_local:
+            if version in self.latest_local:
                 new_version = False
 
         if new_version:
@@ -103,22 +104,23 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             ctime = info['last-modified']
             size = str(int(info['content-length']) // 1048576) + " MB"
 
+            self.set_task_visible(True)
             self.set_progress_bar(0, "Git-" + version +
                                   " | " + ctime + " | " + size)
-            self.set_task_visible(True)
 
-            if self.isHidden():
+            if self.isHidden() and not self.uptodate_silent:
                 self.tray_icon.showMessage(
                     "Blender Version Manager",
                     "New version of Blender 2.8 is avaliable!",
                     QSystemTrayIcon.Information, 2000)
+
+            self.uptodate_silent = True
         else:
             if self.progressBar.isVisible():
                 self.set_task_visible(False)
 
         self.uptodate_thread = threading.Timer(5.0, self.uptodate_task)
         self.uptodate_thread.setDaemon(True)
-        self.uptodate_thread.finished.clear()
         self.uptodate_thread.start()
 
     def set_task_visible(self, is_visible):
@@ -187,13 +189,15 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
         if versions:
             self.blender_action.setVisible(True)
+            self.latest_local = versions[0]
 
             for ver in versions:
-                is_latest = True if ver == versions[0] else False
+                is_latest = True if ver == self.latest_local else False
                 b3d_item_layout = B3dItemLayout(
                     root_folder, ver, is_latest, self)
                 self.layoutListVersions.addLayout(b3d_item_layout)
         else:
+            self.latest_local = None
             label = QLabel("No Local Versions Found!")
             label.setAlignment(Qt.AlignCenter)
             label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -215,8 +219,8 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
             self.settings.setValue('root_folder', dir)
             self.labelRootFolder.setText(dir)
-            self.uptodate_task()
             self.draw_list_versions()
+            self.uptodate_task()
 
     def update(self):
         self.is_update_running = True
@@ -260,8 +264,9 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.uptodate_task()
 
     def set_progress_bar(self, val, format):
-        self.progressBar.setValue(val * 100)
         self.progressBar.setFormat(format)
+        self.progressBar.setValue(val * 100)
+        QApplication.processEvents()
 
     def get_download_url(self):
         builder_url = "https://builder.blender.org"
@@ -283,4 +288,5 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         elif self.is_running_task():
             event.ignore()
         else:
+            self.tray_icon.hide()
             event.accept()
