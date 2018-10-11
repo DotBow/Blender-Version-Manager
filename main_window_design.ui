@@ -95,7 +95,7 @@
          </font>
         </property>
         <property name="cursor">
-         <cursorShape>ArrowCursor</cursorShape>
+         <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="toolTip">
          <string notr="true">Change Root Folder</string>
@@ -139,7 +139,7 @@
          </font>
         </property>
         <property name="cursor">
-         <cursorShape>ArrowCursor</cursorShape>
+         <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="toolTip">
          <string notr="true">Open Root Folder</string>
@@ -228,7 +228,7 @@
       <item>
        <widget class="QPushButton" name="btnUpdate">
         <property name="cursor">
-         <cursorShape>ArrowCursor</cursorShape>
+         <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="toolTip">
          <string notr="true">Start Downloading</string>
@@ -258,7 +258,7 @@
       <item>
        <widget class="QPushButton" name="btnCancel">
         <property name="cursor">
-         <cursorShape>ArrowCursor</cursorShape>
+         <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="toolTip">
          <string notr="true">Cancel Downloading</string>

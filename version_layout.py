@@ -4,7 +4,7 @@ import subprocess
 import time
 
 from PyQt5 import QtCore
-from PyQt5.QtGui import QIcon, QPixmap, QFont
+from PyQt5.QtGui import QIcon, QPixmap, QFont, QCursor
 from PyQt5.QtWidgets import (QApplication, QHBoxLayout, QMessageBox,
                              QPushButton, QSizePolicy)
 
@@ -21,6 +21,7 @@ class B3dItemLayout(QHBoxLayout):
         ctime = os.path.getctime(os.path.join(
             root_folder, version, "blender.exe"))
         fctime = time.strftime("%d-%b-%Y", time.gmtime(ctime))
+
         self.btnOpen = QPushButton(
             (version.split('-',)[-2]).replace("git.", "Git-") + " | " + fctime)
         self.btnOpen.clicked.connect(
@@ -28,6 +29,7 @@ class B3dItemLayout(QHBoxLayout):
 
         if (is_latest):
             self.btnOpen.setIcon(parent.star_icon)
+        self.btnOpen.setFont(QFont("MS Shell Dlg 2", 10))
 
         self.btnDelete = QPushButton(parent.trash_icon, "")
         self.btnDelete.setIconSize(QtCore.QSize(20, 20))
@@ -35,7 +37,7 @@ class B3dItemLayout(QHBoxLayout):
         self.btnDelete.setToolTip("Delete From Drive")
         self.btnDelete.setSizePolicy(
             QSizePolicy.Maximum, QSizePolicy.Preferred)
-        self.btnOpen.setFont(QFont("MS Shell Dlg 2", 10))
+        self.btnDelete.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
         self.btnDelete.clicked.connect(lambda: self.delete())
 
         self.addWidget(self.btnOpen)
