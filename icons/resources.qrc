@@ -1,8 +1,12 @@
 <RCC>
   <qresource prefix="icons">
+    <file>app.png</file>
+    <file>stop.png</file>
+    <file>fake.png</file>
+    <file>minimize.png</file>
     <file>folder_add.png</file>
-    <file>cancel.png</file>
     <file>star.png</file>
+    <file>close.png</file>
     <file>trash.png</file>
     <file>download.png</file>
     <file>folder.png</file>

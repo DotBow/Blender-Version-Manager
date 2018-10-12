@@ -36,11 +36,23 @@
   <property name="accessibleDescription">
    <string/>
   </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow
+{
+	background-color: rgb(30, 30, 30);
+}</string>
+  </property>
   <property name="documentMode">
    <bool>false</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="contextMenuPolicy">
+    <enum>Qt::DefaultContextMenu</enum>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0">
     <property name="leftMargin">
      <number>0</number>
     </property>
@@ -65,6 +77,60 @@
        <number>0</number>
       </property>
       <item>
+       <widget class="QPushButton" name="btnFile">
+        <property name="sizeIncrement">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="toolTip">
+         <string notr="true">Cancel Downloading</string>
+        </property>
+        <property name="statusTip">
+         <string notr="true"/>
+        </property>
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton
+{
+	background-color: rgb(60, 60, 60);
+	border-style: solid;
+	border-width: 6px;
+}
+
+QPushButton:pressed
+{
+	background-color: rgb(80, 80, 80);
+}
+
+QPushButton:hover
+{
+	background-color: rgb(80, 80, 80);
+}</string>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normalon>:/icons/app.png</normalon>
+         </iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QLabel" name="label">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -88,7 +154,8 @@
         </property>
         <property name="styleSheet">
          <string notr="true">background-color: rgb(60, 60, 60);
-color: rgb(204, 204, 204);</string>
+color: rgb(204, 204, 204);
+padding: 0px 0px 0px 20px;</string>
         </property>
         <property name="text">
          <string notr="true">Blender Version Manager 1.2</string>
@@ -105,7 +172,7 @@ color: rgb(204, 204, 204);</string>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btnCancel_2">
+       <widget class="QPushButton" name="btnMinimize">
         <property name="sizeIncrement">
          <size>
           <width>0</width>
@@ -125,16 +192,82 @@ color: rgb(204, 204, 204);</string>
          <bool>false</bool>
         </property>
         <property name="styleSheet">
-         <string notr="true">background-color: rgb(60, 60, 60);
-border-style: solid;
-border-width: 6px;</string>
+         <string notr="true">QPushButton
+{
+	background-color: rgb(60, 60, 60);
+	border-style: solid;
+	border-width: 6px;
+}
+
+QPushButton:pressed
+{
+	background-color: rgb(80, 80, 80);
+}
+
+QPushButton:hover
+{
+	background-color: rgb(80, 80, 80);
+}</string>
+        </property>
+        <property name="text">
+         <string notr="true"/>
+        </property>
+        <property name="icon">
+         <iconset resource="icons/resources.qrc">
+          <normaloff>:/icons/minimize.png</normaloff>:/icons/minimize.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnClose">
+        <property name="sizeIncrement">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="toolTip">
+         <string notr="true">Cancel Downloading</string>
+        </property>
+        <property name="statusTip">
+         <string notr="true"/>
+        </property>
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton
+{
+	background-color: rgb(60, 60, 60);
+	border-style: solid;
+	border-width: 6px;
+}
+
+QPushButton:pressed
+{
+	background-color: rgb(232, 17, 35);
+}
+
+QPushButton:hover
+{
+	background-color: rgb(232, 17, 35);
+}</string>
         </property>
         <property name="text">
          <string notr="true"/>
         </property>
         <property name="icon">
          <iconset>
-          <normalon>:/icons/cancel.png</normalon>
+          <normalon>:/icons/close.png</normalon>
          </iconset>
         </property>
         <property name="iconSize">
@@ -149,6 +282,12 @@ border-width: 6px;</string>
     </item>
     <item>
      <layout class="QHBoxLayout" name="layoutRootFolderSettings">
+      <property name="leftMargin">
+       <number>6</number>
+      </property>
+      <property name="rightMargin">
+       <number>6</number>
+      </property>
       <item>
        <widget class="QLabel" name="labelRootFolder">
         <property name="sizePolicy">
@@ -172,6 +311,9 @@ border-width: 6px;</string>
         </property>
         <property name="statusTip">
          <string notr="true"/>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(255, 255, 255);</string>
         </property>
         <property name="text">
          <string notr="true">C:/Blender/2.8</string>
@@ -211,6 +353,25 @@ border-width: 6px;</string>
         </property>
         <property name="autoFillBackground">
          <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton
+{
+	border-style: solid;
+	border-width: 4px;
+}
+                 
+QPushButton:pressed
+{
+	background-color: rgb(80, 80, 80);
+	border-color: rgb(80, 80, 80);
+}
+                 
+QPushButton:hover
+{
+	background-color: rgb(80, 80, 80);
+	border-color: rgb(80, 80, 80);
+}</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -253,6 +414,25 @@ border-width: 6px;</string>
         <property name="statusTip">
          <string notr="true"/>
         </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton
+{
+	border-style: solid;
+	border-width: 4px;
+}
+                 
+QPushButton:pressed
+{
+	background-color: rgb(80, 80, 80);
+	border-color: rgb(80, 80, 80);
+}
+                 
+QPushButton:hover
+{
+	background-color: rgb(80, 80, 80);
+	border-color: rgb(80, 80, 80);
+}</string>
+        </property>
         <property name="text">
          <string notr="true"/>
         </property>
@@ -279,6 +459,16 @@ border-width: 6px;</string>
     </item>
     <item>
      <widget class="Line" name="line">
+      <property name="styleSheet">
+       <string notr="true">margin: 0px 6px 0px 6px;
+color:  rgb(97, 97, 98);</string>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <property name="lineWidth">
+       <number>2</number>
+      </property>
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
@@ -286,6 +476,15 @@ border-width: 6px;</string>
     </item>
     <item>
      <layout class="QHBoxLayout" name="layoutUpdateTaskIndicator">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>6</number>
+      </property>
+      <property name="rightMargin">
+       <number>6</number>
+      </property>
       <item>
        <widget class="QProgressBar" name="progressBar">
         <property name="sizePolicy">
@@ -314,6 +513,21 @@ border-width: 6px;</string>
         <property name="statusTip">
          <string notr="true"/>
         </property>
+        <property name="styleSheet">
+         <string notr="true">QProgressBar
+{
+	color: rgb(255, 255, 255);
+	background-color: rgb(51, 51, 51);
+	border-style: solid;
+	border-color: rgb(51, 51, 51);
+	border-width: 3px;
+}
+
+QProgressBar::chunk 
+{
+    background: rgb(49, 117, 52);
+}f</string>
+        </property>
         <property name="value">
          <number>0</number>
         </property>
@@ -323,11 +537,14 @@ border-width: 6px;</string>
         <property name="textVisible">
          <bool>true</bool>
         </property>
+        <property name="invertedAppearance">
+         <bool>false</bool>
+        </property>
         <property name="textDirection">
          <enum>QProgressBar::TopToBottom</enum>
         </property>
         <property name="format">
-         <string>No Tasks</string>
+         <string notr="true">No Tasks</string>
         </property>
        </widget>
       </item>
@@ -341,6 +558,28 @@ border-width: 6px;</string>
         </property>
         <property name="statusTip">
          <string notr="true"/>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton
+{
+	color: rgb(255, 255, 255);
+	background-color: rgb(51, 51, 51);
+	border-style: solid;
+	border-color: rgb(51, 51, 51);
+	border-width: 4px;
+}
+                 
+QPushButton:pressed
+{
+	background-color: rgb(80, 80, 80);
+	border-color: rgb(80, 80, 80);
+}
+                 
+QPushButton:hover
+{
+	background-color: rgb(80, 80, 80);
+	border-color: rgb(80, 80, 80);
+}</string>
         </property>
         <property name="text">
          <string notr="true"/>
@@ -372,12 +611,34 @@ border-width: 6px;</string>
         <property name="statusTip">
          <string notr="true"/>
         </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton
+{
+	color: rgb(255, 255, 255);
+	background-color: rgb(51, 51, 51);
+	border-style: solid;
+	border-color: rgb(51, 51, 51);
+	border-width: 4px;
+}
+                 
+QPushButton:pressed
+{
+	background-color: rgb(80, 80, 80);
+	border-color: rgb(80, 80, 80);
+}
+                 
+QPushButton:hover
+{
+	background-color: rgb(80, 80, 80);
+	border-color: rgb(80, 80, 80);
+}</string>
+        </property>
         <property name="text">
          <string notr="true"/>
         </property>
         <property name="icon">
          <iconset>
-          <normalon>:/icons/cancel.png</normalon>
+          <normalon>:/icons/stop.png</normalon>
          </iconset>
         </property>
         <property name="iconSize">
@@ -417,10 +678,40 @@ border-width: 6px;</string>
      <x>0</x>
      <y>0</y>
      <width>440</width>
-     <height>21</height>
+     <height>29</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">padding: 4px 1px 4px 1px;</string>
+   </property>
    <widget class="QMenu" name="menuFile">
+    <property name="styleSheet">
+     <string notr="true">QMenu
+{
+	background-color: rgb(37, 37, 38);
+	color: rgb(255, 255, 255);
+}
+
+QMenu::separator
+{
+	background-color: rgb(97, 97, 98);
+	border-color: rgb(37, 37, 38);
+	height: 1px;
+	border-style: solid;
+	margin: 4px 8px 4px 8px;
+}
+
+QMenu::item
+{
+	border-style: solid;
+	border-width: 4px 12px 4px 12px;
+}
+
+QMenu::item::selected
+{
+	background-color: rgb(9, 71, 113);
+}</string>
+    </property>
     <property name="title">
      <string>File</string>
     </property>
@@ -437,12 +728,10 @@ border-width: 6px;</string>
    </property>
   </widget>
   <action name="actionClearTempFolder">
-   <property name="icon">
-    <iconset>
-     <normalon>:/icons/clear.png</normalon>
-    </iconset>
-   </property>
    <property name="text">
+    <string notr="true">Clear Temp Folder</string>
+   </property>
+   <property name="iconText">
     <string notr="true">Clear Temp Folder</string>
    </property>
    <property name="toolTip">
@@ -450,17 +739,17 @@ border-width: 6px;</string>
    </property>
    <property name="statusTip">
     <string notr="true"/>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
    </property>
   </action>
   <action name="actionMinimizeToTray">
    <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="icon">
-    <iconset>
-     <normalon>:/icons/tray.png</normalon>
-    </iconset>
-   </property>
    <property name="text">
     <string notr="true">Minimize to Tray</string>
    </property>
@@ -469,14 +758,14 @@ border-width: 6px;</string>
    </property>
    <property name="statusTip">
     <string notr="true"/>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
    </property>
   </action>
   <action name="actionQuit">
-   <property name="icon">
-    <iconset>
-     <normalon>:/icons/quit.png</normalon>
-    </iconset>
-   </property>
    <property name="text">
     <string notr="true">Quit</string>
    </property>
@@ -485,6 +774,11 @@ border-width: 6px;</string>
    </property>
    <property name="statusTip">
     <string notr="true"/>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>

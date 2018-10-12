@@ -18,6 +18,9 @@ class B3dItemLayout(QHBoxLayout):
         self.version = version
         self.parent = parent
 
+        self.setContentsMargins(6, 0, 6, 0)
+        self.setSpacing(0)
+
         ctime = os.path.getctime(os.path.join(
             root_folder, version, "blender.exe"))
         fctime = time.strftime("%d-%b-%Y", time.gmtime(ctime))
@@ -29,15 +32,61 @@ class B3dItemLayout(QHBoxLayout):
 
         if (is_latest):
             self.btnOpen.setIcon(parent.star_icon)
+        else:
+            self.btnOpen.setIcon(parent.fake_icon)
+
         self.btnOpen.setFont(QFont("MS Shell Dlg 2", 10))
 
+        style1 = ("""QPushButton
+                 {
+                     color: rgb(255, 255, 255);
+                     background-color: rgb(51, 51, 51);
+                     border-style: solid;
+                     border-color: rgb(51, 51, 51);
+                     border-width: 6px;
+                 }
+                 
+                 QPushButton:pressed
+                 {
+                     background-color: rgb(80, 80, 80);
+                     border-color: rgb(80, 80, 80);
+                 }
+                 
+                 QPushButton:hover
+                 {
+                     background-color: rgb(80, 80, 80);
+                     border-color: rgb(80, 80, 80);
+                 }""")
+        style2 = ("""QPushButton
+                 {
+                     color: rgb(255, 255, 255);
+                     background-color: rgb(51, 51, 51);
+                     border-style: solid;
+                     border-color: rgb(51, 51, 51);
+                     border-width: 0px 4px 0px 4px;
+                 }
+                 
+                 QPushButton:pressed
+                 {
+                     background-color: rgb(80, 80, 80);
+                     border-color: rgb(80, 80, 80);
+                 }
+                 
+                 QPushButton:hover
+                 {
+                     background-color: rgb(80, 80, 80);
+                     border-color: rgb(80, 80, 80);
+                 }""")
         self.btnDelete = QPushButton(parent.trash_icon, "")
+        self.btnDelete.setStyleSheet(style2)
+        self.btnOpen.setStyleSheet(style1)
         self.btnDelete.setIconSize(QtCore.QSize(20, 20))
         self.btnDelete.setFlat(True)
         self.btnDelete.setToolTip("Delete From Drive")
         self.btnDelete.setSizePolicy(
             QSizePolicy.Maximum, QSizePolicy.Preferred)
         self.btnDelete.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
+        self.btnOpen.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
         self.btnDelete.clicked.connect(lambda: self.delete())
 
         self.addWidget(self.btnOpen)

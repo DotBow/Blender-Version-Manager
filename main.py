@@ -12,7 +12,6 @@ def main():
 
     app = QApplication(sys.argv)
     window = B3dVersionMangerMainWindow(app)
-    # window.setWindowFlags(Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint)
     window.setWindowFlags(Qt.FramelessWindowHint)
     window.show()
     app.exec_()

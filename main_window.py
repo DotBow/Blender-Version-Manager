@@ -32,6 +32,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.star_icon = QIcon(QPixmap(":/icons/star.png"))
         self.trash_icon = QIcon(QPixmap(":/icons/trash.png"))
         self.quit_icon = QIcon(QPixmap(":/icons/quit.png"))
+        self.fake_icon = QIcon(QPixmap(":/icons/fake.png"))
         self.menubar.hide()
         self.settings = QSettings('b3d_version_manager', 'settings')
         root_folder = self.settings.value('root_folder')
@@ -39,6 +40,9 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         if (not root_folder) or (not os.path.isdir(root_folder)):
             self.settings.setValue(
                 'root_folder', os.path.dirname(sys.executable))
+
+        self.btnClose.clicked.connect(self.close)
+        self.btnMinimize.clicked.connect(self.showMinimized)
 
         self.actionClearTempFolder.triggered.connect(self.clear_temp_folder)
         minimize_to_tray = self.settings.value('minimize_to_tray', type=bool)
@@ -66,7 +70,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         show_action.triggered.connect(self.show)
         hide_action.triggered.connect(self.hide)
         quit_action.triggered.connect(self.quit)
-
+        self.btnFile.setMenu(self.menuFile)
         self.tray_menu = QMenu()
         self.tray_menu.addAction(self.blender_action)
         self.tray_menu.addSeparator()
