@@ -66,7 +66,7 @@
      <number>0</number>
     </property>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <layout class="QHBoxLayout" name="layoutTitleBar">
       <property name="spacing">
        <number>0</number>
       </property>
@@ -88,7 +88,7 @@
          <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="toolTip">
-         <string notr="true">Cancel Downloading</string>
+         <string notr="true">File Menu</string>
         </property>
         <property name="statusTip">
          <string notr="true"/>
@@ -101,7 +101,7 @@
 {
 	background-color: rgb(60, 60, 60);
 	border-style: solid;
-	border-width: 6px;
+	border-width: 6px 0px 6px 0px;
 }
 
 QPushButton:pressed
@@ -112,6 +112,11 @@ QPushButton:pressed
 QPushButton:hover
 {
 	background-color: rgb(80, 80, 80);
+}
+
+QPushButton::menu-indicator 
+{
+	image: none;
 }</string>
         </property>
         <property name="text">
@@ -131,7 +136,7 @@ QPushButton:hover
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="title">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -183,7 +188,7 @@ padding: 0px 0px 0px 20px;</string>
          <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="toolTip">
-         <string notr="true">Cancel Downloading</string>
+         <string notr="true"/>
         </property>
         <property name="statusTip">
          <string notr="true"/>
@@ -236,7 +241,7 @@ QPushButton:hover
          <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="toolTip">
-         <string notr="true">Cancel Downloading</string>
+         <string notr="true"/>
         </property>
         <property name="statusTip">
          <string notr="true"/>
@@ -282,6 +287,9 @@ QPushButton:hover
     </item>
     <item>
      <layout class="QHBoxLayout" name="layoutRootFolderSettings">
+      <property name="spacing">
+       <number>0</number>
+      </property>
       <property name="leftMargin">
        <number>6</number>
       </property>
@@ -526,7 +534,7 @@ color:  rgb(97, 97, 98);</string>
 QProgressBar::chunk 
 {
     background: rgb(49, 117, 52);
-}f</string>
+}</string>
         </property>
         <property name="value">
          <number>0</number>
@@ -662,6 +670,9 @@ QPushButton:hover
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::MinimumExpanding</enum>
+      </property>
       <property name="sizeHint" stdset="0">
        <size>
         <width>20</width>
@@ -678,11 +689,14 @@ QPushButton:hover
      <x>0</x>
      <y>0</y>
      <width>440</width>
-     <height>29</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">padding: 4px 1px 4px 1px;</string>
+    <string notr="true"/>
+   </property>
+   <property name="nativeMenuBar">
+    <bool>false</bool>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="styleSheet">
@@ -690,26 +704,35 @@ QPushButton:hover
 {
 	background-color: rgb(37, 37, 38);
 	color: rgb(255, 255, 255);
+	padding: 4px 1px 4px 1px;
 }
 
 QMenu::separator
 {
 	background-color: rgb(97, 97, 98);
-	border-color: rgb(37, 37, 38);
 	height: 1px;
-	border-style: solid;
-	margin: 4px 8px 4px 8px;
+	margin: 4px 8px 4px 32px;
 }
 
 QMenu::item
 {
-	border-style: solid;
-	border-width: 4px 12px 4px 12px;
+	padding: 4px 12px 4px 32px;
 }
 
 QMenu::item::selected
 {
 	background-color: rgb(9, 71, 113);
+}
+
+QMenu::icon 
+{
+	padding: 6px;
+}
+
+
+QMenu::icon:checked 
+{
+	background-color: rgb(49, 117, 52);
 }</string>
     </property>
     <property name="title">
@@ -726,8 +749,16 @@ QMenu::item::selected
    <property name="statusTip">
     <string/>
    </property>
+   <property name="sizeGripEnabled">
+    <bool>true</bool>
+   </property>
   </widget>
   <action name="actionClearTempFolder">
+   <property name="icon">
+    <iconset>
+     <normalon>:/icons/clear.png</normalon>
+    </iconset>
+   </property>
    <property name="text">
     <string notr="true">Clear Temp Folder</string>
    </property>
@@ -750,6 +781,11 @@ QMenu::item::selected
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset>
+     <normalon>:/icons/tray.png</normalon>
+    </iconset>
+   </property>
    <property name="text">
     <string notr="true">Minimize to Tray</string>
    </property>
@@ -766,8 +802,13 @@ QMenu::item::selected
    </property>
   </action>
   <action name="actionQuit">
+   <property name="icon">
+    <iconset>
+     <normalon>:/icons/quit.png</normalon>
+    </iconset>
+   </property>
    <property name="text">
-    <string notr="true">Quit</string>
+    <string notr="true">Quit                        Ctrl+Q</string>
    </property>
    <property name="toolTip">
     <string notr="true">Quit</string>

@@ -14,6 +14,7 @@
     <file>clear.png</file>
     <file>quit.png</file>
     <file>tray.png</file>
-    <file>app_inv.ico</file>
+    <file>quit_inv.png</file>
+    <file>star_inv.png</file>
   </qresource>
 </RCC>

@@ -28,12 +28,16 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         super().__init__()
         self.app = app
         self.setupUi(self)
+
         self.app_icon = QIcon(QPixmap(":/icons/app.ico"))
         self.star_icon = QIcon(QPixmap(":/icons/star.png"))
+        self.star_inv_icon = QIcon(QPixmap(":/icons/star_inv.png"))
         self.trash_icon = QIcon(QPixmap(":/icons/trash.png"))
-        self.quit_icon = QIcon(QPixmap(":/icons/quit.png"))
+        self.quit_icon = QIcon(QPixmap(":/icons/quit_inv.png"))
         self.fake_icon = QIcon(QPixmap(":/icons/fake.png"))
+
         self.menubar.hide()
+
         self.settings = QSettings('b3d_version_manager', 'settings')
         root_folder = self.settings.value('root_folder')
 
@@ -61,7 +65,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
         self.tray_icon = QSystemTrayIcon(self.app_icon, self)
 
-        self.blender_action = QAction(self.star_icon, "Blender", self)
+        self.blender_action = QAction(self.star_inv_icon, "Blender", self)
         show_action = QAction("Show", self)
         hide_action = QAction("Hide", self)
         quit_action = QAction(self.quit_icon, "Quit", self)
@@ -206,6 +210,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         else:
             self.latest_local = None
             label = QLabel("No Local Versions Found!")
+            label.setStyleSheet("color: white; font-size: 10pt;")
             label.setAlignment(Qt.AlignCenter)
             label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
             self.layoutListVersions.addWidget(label)

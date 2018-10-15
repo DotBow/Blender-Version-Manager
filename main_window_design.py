@@ -40,21 +40,21 @@ class Ui_MainWindow(object):
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setContentsMargins(0, 0, -1, -1)
-        self.horizontalLayout.setSpacing(0)
-        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.layoutTitleBar = QtWidgets.QHBoxLayout()
+        self.layoutTitleBar.setContentsMargins(0, 0, -1, -1)
+        self.layoutTitleBar.setSpacing(0)
+        self.layoutTitleBar.setObjectName("layoutTitleBar")
         self.btnFile = QtWidgets.QPushButton(self.centralwidget)
         self.btnFile.setSizeIncrement(QtCore.QSize(0, 0))
         self.btnFile.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.btnFile.setToolTip("Cancel Downloading")
+        self.btnFile.setToolTip("File Menu")
         self.btnFile.setStatusTip("")
         self.btnFile.setAutoFillBackground(False)
         self.btnFile.setStyleSheet("QPushButton\n"
 "{\n"
 "    background-color: rgb(60, 60, 60);\n"
 "    border-style: solid;\n"
-"    border-width: 6px;\n"
+"    border-width: 6px 0px 6px 0px;\n"
 "}\n"
 "\n"
 "QPushButton:pressed\n"
@@ -65,6 +65,11 @@ class Ui_MainWindow(object):
 "QPushButton:hover\n"
 "{\n"
 "    background-color: rgb(80, 80, 80);\n"
+"}\n"
+"\n"
+"QPushButton::menu-indicator \n"
+"{\n"
+"    image: none;\n"
 "}")
         self.btnFile.setText("")
         icon1 = QtGui.QIcon()
@@ -72,30 +77,30 @@ class Ui_MainWindow(object):
         self.btnFile.setIcon(icon1)
         self.btnFile.setIconSize(QtCore.QSize(20, 20))
         self.btnFile.setObjectName("btnFile")
-        self.horizontalLayout.addWidget(self.btnFile)
-        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.layoutTitleBar.addWidget(self.btnFile)
+        self.title = QtWidgets.QLabel(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
-        self.label.setSizePolicy(sizePolicy)
-        self.label.setSizeIncrement(QtCore.QSize(0, 0))
+        sizePolicy.setHeightForWidth(self.title.sizePolicy().hasHeightForWidth())
+        self.title.setSizePolicy(sizePolicy)
+        self.title.setSizeIncrement(QtCore.QSize(0, 0))
         font = QtGui.QFont()
         font.setPointSize(10)
-        self.label.setFont(font)
-        self.label.setAutoFillBackground(False)
-        self.label.setStyleSheet("background-color: rgb(60, 60, 60);\n"
+        self.title.setFont(font)
+        self.title.setAutoFillBackground(False)
+        self.title.setStyleSheet("background-color: rgb(60, 60, 60);\n"
 "color: rgb(204, 204, 204);\n"
 "padding: 0px 0px 0px 20px;")
-        self.label.setText("Blender Version Manager 1.2")
-        self.label.setAlignment(QtCore.Qt.AlignCenter)
-        self.label.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
-        self.label.setObjectName("label")
-        self.horizontalLayout.addWidget(self.label)
+        self.title.setText("Blender Version Manager 1.2")
+        self.title.setAlignment(QtCore.Qt.AlignCenter)
+        self.title.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
+        self.title.setObjectName("title")
+        self.layoutTitleBar.addWidget(self.title)
         self.btnMinimize = QtWidgets.QPushButton(self.centralwidget)
         self.btnMinimize.setSizeIncrement(QtCore.QSize(0, 0))
         self.btnMinimize.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.btnMinimize.setToolTip("Cancel Downloading")
+        self.btnMinimize.setToolTip("")
         self.btnMinimize.setStatusTip("")
         self.btnMinimize.setAutoFillBackground(False)
         self.btnMinimize.setStyleSheet("QPushButton\n"
@@ -120,11 +125,11 @@ class Ui_MainWindow(object):
         self.btnMinimize.setIcon(icon2)
         self.btnMinimize.setIconSize(QtCore.QSize(20, 20))
         self.btnMinimize.setObjectName("btnMinimize")
-        self.horizontalLayout.addWidget(self.btnMinimize)
+        self.layoutTitleBar.addWidget(self.btnMinimize)
         self.btnClose = QtWidgets.QPushButton(self.centralwidget)
         self.btnClose.setSizeIncrement(QtCore.QSize(0, 0))
         self.btnClose.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.btnClose.setToolTip("Cancel Downloading")
+        self.btnClose.setToolTip("")
         self.btnClose.setStatusTip("")
         self.btnClose.setAutoFillBackground(False)
         self.btnClose.setStyleSheet("QPushButton\n"
@@ -149,10 +154,11 @@ class Ui_MainWindow(object):
         self.btnClose.setIcon(icon3)
         self.btnClose.setIconSize(QtCore.QSize(20, 20))
         self.btnClose.setObjectName("btnClose")
-        self.horizontalLayout.addWidget(self.btnClose)
-        self.verticalLayout.addLayout(self.horizontalLayout)
+        self.layoutTitleBar.addWidget(self.btnClose)
+        self.verticalLayout.addLayout(self.layoutTitleBar)
         self.layoutRootFolderSettings = QtWidgets.QHBoxLayout()
         self.layoutRootFolderSettings.setContentsMargins(6, -1, 6, -1)
+        self.layoutRootFolderSettings.setSpacing(0)
         self.layoutRootFolderSettings.setObjectName("layoutRootFolderSettings")
         self.labelRootFolder = QtWidgets.QLabel(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
@@ -291,7 +297,7 @@ class Ui_MainWindow(object):
 "QProgressBar::chunk \n"
 "{\n"
 "    background: rgb(49, 117, 52);\n"
-"}f")
+"}")
         self.progressBar.setProperty("value", 0)
         self.progressBar.setAlignment(QtCore.Qt.AlignCenter)
         self.progressBar.setTextVisible(True)
@@ -368,46 +374,60 @@ class Ui_MainWindow(object):
         self.layoutListVersions = QtWidgets.QVBoxLayout()
         self.layoutListVersions.setObjectName("layoutListVersions")
         self.verticalLayout.addLayout(self.layoutListVersions)
-        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.MinimumExpanding)
         self.verticalLayout.addItem(spacerItem)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 440, 29))
-        self.menubar.setStyleSheet("padding: 4px 1px 4px 1px;")
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 440, 21))
+        self.menubar.setStyleSheet("")
+        self.menubar.setNativeMenuBar(False)
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setStyleSheet("QMenu\n"
 "{\n"
 "    background-color: rgb(37, 37, 38);\n"
 "    color: rgb(255, 255, 255);\n"
+"    padding: 4px 1px 4px 1px;\n"
 "}\n"
 "\n"
 "QMenu::separator\n"
 "{\n"
 "    background-color: rgb(97, 97, 98);\n"
-"    border-color: rgb(37, 37, 38);\n"
 "    height: 1px;\n"
-"    border-style: solid;\n"
-"    margin: 4px 8px 4px 8px;\n"
+"    margin: 4px 8px 4px 32px;\n"
 "}\n"
 "\n"
 "QMenu::item\n"
 "{\n"
-"    border-style: solid;\n"
-"    border-width: 4px 12px 4px 12px;\n"
+"    padding: 4px 12px 4px 32px;\n"
 "}\n"
 "\n"
 "QMenu::item::selected\n"
 "{\n"
 "    background-color: rgb(9, 71, 113);\n"
+"}\n"
+"\n"
+"QMenu::icon \n"
+"{\n"
+"    padding: 6px;\n"
+"}\n"
+"\n"
+"\n"
+"QMenu::icon:checked \n"
+"{\n"
+"    background-color: rgb(49, 117, 52);\n"
 "}")
         self.menuFile.setObjectName("menuFile")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setStatusTip("")
+        self.statusbar.setSizeGripEnabled(True)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
         self.actionClearTempFolder = QtWidgets.QAction(MainWindow)
+        icon8 = QtGui.QIcon()
+        icon8.addPixmap(QtGui.QPixmap(":/icons/clear.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.actionClearTempFolder.setIcon(icon8)
         self.actionClearTempFolder.setText("Clear Temp Folder")
         self.actionClearTempFolder.setIconText("Clear Temp Folder")
         self.actionClearTempFolder.setToolTip("Clear Temp Folder")
@@ -418,6 +438,9 @@ class Ui_MainWindow(object):
         self.actionClearTempFolder.setObjectName("actionClearTempFolder")
         self.actionMinimizeToTray = QtWidgets.QAction(MainWindow)
         self.actionMinimizeToTray.setCheckable(True)
+        icon9 = QtGui.QIcon()
+        icon9.addPixmap(QtGui.QPixmap(":/icons/tray.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.actionMinimizeToTray.setIcon(icon9)
         self.actionMinimizeToTray.setText("Minimize to Tray")
         self.actionMinimizeToTray.setToolTip("Minimize to Tray")
         self.actionMinimizeToTray.setStatusTip("")
@@ -426,7 +449,10 @@ class Ui_MainWindow(object):
         self.actionMinimizeToTray.setFont(font)
         self.actionMinimizeToTray.setObjectName("actionMinimizeToTray")
         self.actionQuit = QtWidgets.QAction(MainWindow)
-        self.actionQuit.setText("Quit")
+        icon10 = QtGui.QIcon()
+        icon10.addPixmap(QtGui.QPixmap(":/icons/quit.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.actionQuit.setIcon(icon10)
+        self.actionQuit.setText("Quit                        Ctrl+Q")
         self.actionQuit.setToolTip("Quit")
         self.actionQuit.setStatusTip("")
         font = QtGui.QFont()
