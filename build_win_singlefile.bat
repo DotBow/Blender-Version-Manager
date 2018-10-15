@@ -1,5 +1,6 @@
 python -OO -m PyInstaller ^
 --noconsole ^
+--noupx ^
 --onefile ^
 --windowed ^
 --icon="icons\app_inv.ico" ^
