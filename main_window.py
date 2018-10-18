@@ -7,11 +7,12 @@ import subprocess
 import sys
 import threading
 import time
+import urllib
 from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import QSettings, Qt, QThread, QPoint
+from PyQt5.QtCore import QPoint, QSettings, Qt, QThread
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import (QAction, QApplication, QFileDialog, QLabel,
                              QMainWindow, QMenu, QMessageBox, QSizePolicy,
@@ -102,35 +103,38 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         if self.uptodate_thread:
             self.uptodate_thread.finished.set()
 
-        url = self.get_download_url()
-        version = self.get_download_url().split('-',)[-2]
-        new_version = True
+        try:
+            url = self.get_download_url()
+            version = self.get_download_url().split('-',)[-2]
+            new_version = True
 
-        if self.latest_local:
-            if version in self.latest_local:
-                new_version = False
+            if self.latest_local:
+                if version in self.latest_local:
+                    new_version = False
 
-        if new_version:
-            info = urlopen(url).info()
-            ctime = info['last-modified']
-            size = str(int(info['content-length']) // 1048576) + " MB"
+            if new_version:
+                info = urlopen(url).info()
+                ctime = info['last-modified']
+                size = str(int(info['content-length']) // 1048576) + " MB"
 
-            self.set_task_visible(True)
-            self.set_progress_bar(0, "Git-" + version +
-                                  " | " + ctime + " | " + size)
+                self.set_task_visible(True)
+                self.set_progress_bar(0, "Git-" + version +
+                                      " | " + ctime + " | " + size)
 
-            if self.isHidden() and not self.uptodate_silent:
-                self.tray_icon.showMessage(
-                    "Blender Version Manager",
-                    "New version of Blender 2.8 is avaliable!",
-                    QSystemTrayIcon.Information, 2000)
+                if self.isHidden() and not self.uptodate_silent:
+                    self.tray_icon.showMessage(
+                        "Blender Version Manager",
+                        "New version of Blender 2.8 is avaliable!",
+                        QSystemTrayIcon.Information, 2000)
 
-            self.uptodate_silent = True
-        else:
-            if self.progressBar.isVisible():
-                self.set_task_visible(False)
+                self.uptodate_silent = True
+            else:
+                if self.progressBar.isVisible():
+                    self.set_task_visible(False)
+        except urllib.error.URLError as e:
+            print(e)
 
-        self.uptodate_thread = threading.Timer(5.0, self.uptodate_task)
+        self.uptodate_thread = threading.Timer(60.0, self.uptodate_task)
         self.uptodate_thread.setDaemon(True)
         self.uptodate_thread.start()
 
@@ -309,7 +313,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
     def mouseMoveEvent(self, event):
         if self.pressing:
-            delta = QPoint (event.globalPos() - self.oldPos)
+            delta = QPoint(event.globalPos() - self.oldPos)
             self.move(self.x() + delta.x(), self.y() + delta.y())
             self.oldPos = event.globalPos()
 
