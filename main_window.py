@@ -12,11 +12,10 @@ from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import QPoint, QSettings, Qt, QThread
+from PyQt5.QtCore import QPoint, QSettings, Qt
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtWidgets import (QAction, QApplication, QFileDialog, QLabel,
-                             QMainWindow, QMenu, QMessageBox, QSizePolicy,
-                             QSystemTrayIcon)
+from PyQt5.QtWidgets import (QAction, QFileDialog, QLabel, QMainWindow, QMenu,
+                             QMessageBox, QSizePolicy, QSystemTrayIcon)
 
 import main_window_design
 import resources_rc
@@ -249,22 +248,19 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.btnUpdate.hide()
         self.btnCancel.show()
         self.btnSetRootFolder.setEnabled(False)
+        self.set_progress_bar(0, "Downloading: %p%")
 
-        self.loader_thread = QThread()
         self.build_loader = BuildLoader(
             self.settings.value('root_folder'), self.get_download_url())
         self.build_loader.finished.connect(self.finished)
         self.build_loader.progress_changed.connect(self.set_progress_bar)
-        self.loader_thread.started.connect(self.build_loader.run)
         self.btnCancel.clicked.connect(self.build_loader.stop)
-
-        self.build_loader.moveToThread(self.loader_thread)
-        self.loader_thread.start()
+        self.build_loader.start()
 
     def finished(self, success):
-        self.loader_thread.quit()
-        self.loader_thread.terminate()
-        self.loader_thread.wait()
+        self.build_loader.quit()
+        self.build_loader.terminate()
+        self.build_loader.wait()
 
         self.btnSetRootFolder.setEnabled(True)
         self.set_task_visible(False)
@@ -282,7 +278,6 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
     def set_progress_bar(self, val, format):
         self.progressBar.setFormat(format)
         self.progressBar.setValue(val * 100)
-        QApplication.processEvents()
 
     def get_download_url(self):
         builder_url = "https://builder.blender.org"

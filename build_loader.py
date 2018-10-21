@@ -3,15 +3,15 @@ import shutil
 import zipfile
 from urllib.request import urlopen
 
-from PyQt5.QtCore import QObject, pyqtSignal
+from PyQt5.QtCore import QThread, pyqtSignal
 
 
-class BuildLoader(QObject):
+class BuildLoader(QThread):
     finished = pyqtSignal('PyQt_PyObject')
     progress_changed = pyqtSignal('PyQt_PyObject', 'PyQt_PyObject')
 
     def __init__(self, root_folder, download_url):
-        QObject.__init__(self)
+        QThread.__init__(self)
         self.download_url = download_url
         self.root_folder = root_folder
         self.is_running = False
