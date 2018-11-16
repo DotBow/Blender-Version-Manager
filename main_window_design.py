@@ -383,6 +383,7 @@ class Ui_MainWindow(object):
         self.menubar.setNativeMenuBar(False)
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
+        self.menuFile.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.menuFile.setStyleSheet("QMenu\n"
 "{\n"
 "    background-color: rgb(37, 37, 38);\n"
@@ -409,13 +410,12 @@ class Ui_MainWindow(object):
 "\n"
 "QMenu::icon \n"
 "{\n"
-"    padding: 6px;\n"
+"    margin: 6px;\n"
 "}\n"
-"\n"
 "\n"
 "QMenu::icon:checked \n"
 "{\n"
-"    background-color: rgb(49, 117, 52);\n"
+"    image: url(:/icons/tick.png);\n"
 "}")
         self.menuFile.setObjectName("menuFile")
         MainWindow.setMenuBar(self.menubar)
@@ -439,9 +439,9 @@ class Ui_MainWindow(object):
         self.actionMinimizeToTray = QtWidgets.QAction(MainWindow)
         self.actionMinimizeToTray.setCheckable(True)
         icon9 = QtGui.QIcon()
-        icon9.addPixmap(QtGui.QPixmap(":/icons/tray.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        icon9.addPixmap(QtGui.QPixmap(":/icons/fake.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.actionMinimizeToTray.setIcon(icon9)
-        self.actionMinimizeToTray.setText("Minimize to Tray")
+        self.actionMinimizeToTray.setText("Toggle Minimize to Tray")
         self.actionMinimizeToTray.setToolTip("Minimize to Tray")
         self.actionMinimizeToTray.setStatusTip("")
         font = QtGui.QFont()
@@ -459,8 +459,19 @@ class Ui_MainWindow(object):
         font.setPointSize(10)
         self.actionQuit.setFont(font)
         self.actionQuit.setObjectName("actionQuit")
+        self.actionRunOnStartup = QtWidgets.QAction(MainWindow)
+        self.actionRunOnStartup.setCheckable(True)
+        self.actionRunOnStartup.setIcon(icon9)
+        self.actionRunOnStartup.setToolTip("Run on Startup")
+        self.actionRunOnStartup.setStatusTip("")
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.actionRunOnStartup.setFont(font)
+        self.actionRunOnStartup.setObjectName("actionRunOnStartup")
         self.menuFile.addAction(self.actionClearTempFolder)
+        self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionMinimizeToTray)
+        self.menuFile.addAction(self.actionRunOnStartup)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionQuit)
         self.menubar.addAction(self.menuFile.menuAction())
@@ -473,5 +484,6 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "Blender Version Manager 1.2"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.actionQuit.setShortcut(_translate("MainWindow", "Ctrl+Q"))
+        self.actionRunOnStartup.setText(_translate("MainWindow", "Toggle Run on Startup"))
 
 import resources_rc

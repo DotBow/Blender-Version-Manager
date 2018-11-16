@@ -8,6 +8,7 @@ import sys
 import threading
 import time
 import urllib
+import winreg
 from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
@@ -49,9 +50,15 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.btnMinimize.clicked.connect(self.showMinimized)
 
         self.actionClearTempFolder.triggered.connect(self.clear_temp_folder)
+
         minimize_to_tray = self.settings.value('minimize_to_tray', type=bool)
         self.actionMinimizeToTray.setChecked(minimize_to_tray)
         self.actionMinimizeToTray.triggered.connect(self.minimize_to_tray)
+
+        add_to_startup = self.settings.value('add_to_startup', type=bool)
+        self.actionRunOnStartup.setChecked(add_to_startup)
+        self.actionRunOnStartup.triggered.connect(self.add_to_startup)
+
         self.actionQuit.triggered.connect(self.quit)
 
         self.btnSetRootFolder.clicked.connect(self.set_root_folder)
@@ -160,8 +167,8 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             return False
 
     def minimize_to_tray(self, is_checked):
-        self.settings.setValue('minimize_to_tray', is_checked)
         self.tray_icon.show() if is_checked else self.tray_icon.hide()
+        self.settings.setValue('minimize_to_tray', is_checked)
 
     def clear_temp_folder(self):
         if not self.is_running_task():
@@ -314,3 +321,19 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
     def mouseReleaseEvent(self, QMouseEvent):
         self.pressing = False
+
+    def add_to_startup(self, is_checked):
+        path = sys.executable
+        key = winreg.OpenKey(winreg.HKEY_CURRENT_USER,
+                             r'SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run', 0, winreg.KEY_SET_VALUE)
+
+        if (is_checked):
+            winreg.SetValueEx(key, 'B3DVersionManager', 0, winreg.REG_SZ, path)
+        else:
+            try:
+                winreg.DeleteValue(key, 'B3DVersionManager')
+            except:
+                pass
+
+        key.Close()
+        self.settings.setValue('add_to_startup', is_checked)

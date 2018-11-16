@@ -699,6 +699,9 @@ QPushButton:hover
     <bool>false</bool>
    </property>
    <widget class="QMenu" name="menuFile">
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="styleSheet">
      <string notr="true">QMenu
 {
@@ -726,20 +729,21 @@ QMenu::item::selected
 
 QMenu::icon 
 {
-	padding: 6px;
+	margin: 6px;
 }
-
 
 QMenu::icon:checked 
 {
-	background-color: rgb(49, 117, 52);
+	image: url(:/icons/tick.png);
 }</string>
     </property>
     <property name="title">
      <string>File</string>
     </property>
     <addaction name="actionClearTempFolder"/>
+    <addaction name="separator"/>
     <addaction name="actionMinimizeToTray"/>
+    <addaction name="actionRunOnStartup"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -783,11 +787,11 @@ QMenu::icon:checked
    </property>
    <property name="icon">
     <iconset>
-     <normalon>:/icons/tray.png</normalon>
+     <normalon>:/icons/fake.png</normalon>
     </iconset>
    </property>
    <property name="text">
-    <string notr="true">Minimize to Tray</string>
+    <string notr="true">Toggle Minimize to Tray</string>
    </property>
    <property name="toolTip">
     <string notr="true">Minimize to Tray</string>
@@ -823,6 +827,30 @@ QMenu::icon:checked
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionRunOnStartup">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normalon>:/icons/fake.png</normalon>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>Toggle Run on Startup</string>
+   </property>
+   <property name="toolTip">
+    <string notr="true">Run on Startup</string>
+   </property>
+   <property name="statusTip">
+    <string notr="true"/>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
    </property>
   </action>
  </widget>
