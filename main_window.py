@@ -30,6 +30,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.app = app
         self.setupUi(self)
 
+        # Read Icons
         self.app_icon = QIcon(QPixmap(":/icons/app.ico"))
         self.star_icon = QIcon(QPixmap(":/icons/star.png"))
         self.star_inv_icon = QIcon(QPixmap(":/icons/star_inv.png"))
@@ -37,41 +38,49 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.quit_icon = QIcon(QPixmap(":/icons/quit_inv.png"))
         self.fake_icon = QIcon(QPixmap(":/icons/fake.png"))
 
-        self.menubar.hide()
-
+        # Read Settings
         self.settings = QSettings('b3d_version_manager', 'settings')
+
+        self.is_run_minimized = self.settings.value(
+            'is_run_minimized', type=bool)
+        is_run_on_startup = self.settings.value(
+            'is_run_on_startup', type=bool)
         root_folder = self.settings.value('root_folder')
+        if not os.path.isdir(root_folder):
+            exe_path = os.path.dirname(sys.executable)
+            self.settings.setValue('root_folder', exe_path)
 
-        if (not root_folder) or (not os.path.isdir(root_folder)):
-            self.settings.setValue(
-                'root_folder', os.path.dirname(sys.executable))
-
+        # Custom Title Bar
         self.btnClose.clicked.connect(self.close)
         self.btnMinimize.clicked.connect(self.showMinimized)
 
-        self.actionClearTempFolder.triggered.connect(self.clear_temp_folder)
-
-        self.is_run_minimized = self.settings.value('is_run_minimized', type=bool)
+        # Custom Menu Bar
         self.actionToggleRunMinimized.setChecked(self.is_run_minimized)
-        self.actionToggleRunMinimized.triggered.connect(self.toggle_run_minimized)
+        self.actionToggleRunMinimized.triggered.connect(
+            self.toggle_run_minimized)
 
-        is_run_on_startup = self.settings.value('is_run_on_startup', type=bool)
         self.actionToggleRunOnStartup.setChecked(is_run_on_startup)
-        self.actionToggleRunOnStartup.triggered.connect(self.toggle_run_on_startup)
+        self.actionToggleRunOnStartup.triggered.connect(
+            self.toggle_run_on_startup)
 
+        self.actionClearTempFolder.triggered.connect(self.clear_temp_folder)
         self.actionQuit.triggered.connect(self.quit)
 
+        self.menubar.hide()
+        self.btnFile.setMenu(self.menuFile)
+
+        # Root Folder Layout
+        self.labelRootFolder.setText(self.settings.value('root_folder'))
         self.btnSetRootFolder.clicked.connect(self.set_root_folder)
         self.btnOpenRootFolder.clicked.connect(
             lambda: os.startfile(self.settings.value('root_folder')))
 
+        # Version Layout
         self.btnUpdate.clicked.connect(self.update)
+        self.set_task_visible(False)
+        self.draw_list_versions()
 
-        self.labelRootFolder.setText(self.settings.value('root_folder'))
-        self.is_update_running = False
-
-        self.tray_icon = QSystemTrayIcon(self.app_icon, self)
-
+        # Tray Layout
         self.blender_action = QAction(self.star_inv_icon, "Blender", self)
         show_action = QAction("Show", self)
         hide_action = QAction("Hide", self)
@@ -81,7 +90,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         show_action.triggered.connect(self.show)
         hide_action.triggered.connect(self.hide)
         quit_action.triggered.connect(self.quit)
-        self.btnFile.setMenu(self.menuFile)
+
         self.tray_menu = QMenu()
         self.tray_menu.addAction(self.blender_action)
         self.tray_menu.addSeparator()
@@ -89,21 +98,23 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.tray_menu.addAction(hide_action)
         self.tray_menu.addAction(quit_action)
 
+        self.tray_icon = QSystemTrayIcon(self.app_icon, self)
         self.tray_icon.setContextMenu(self.tray_menu)
         self.tray_icon.messageClicked.connect(self.show)
         self.tray_icon.activated.connect(
             lambda btn: self.show() if btn == 3 else False)
-
         self.tray_icon.show()
 
-        self.draw_list_versions()
-        self.set_task_visible(False)
+        # Custom Drag Behaviour
+        self.old_pos = self.pos()
+        self.pressed = False
+
+        #
+        self.is_update_running = False
         self.uptodate_thread = None
         self.uptodate_silent = False
         self.uptodate_task()
 
-        self.pressed = False
-        self.oldPos = self.pos()
 
     def uptodate_task(self):
         if self.uptodate_thread:
@@ -309,24 +320,24 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             event.accept()
 
     def mousePressEvent(self, event):
-        self.oldPos = event.globalPos()
+        self.old_pos = event.globalPos()
         self.pressing = True
 
     def mouseMoveEvent(self, event):
         if self.pressing:
-            delta = QPoint(event.globalPos() - self.oldPos)
+            delta = QPoint(event.globalPos() - self.old_pos)
             self.move(self.x() + delta.x(), self.y() + delta.y())
-            self.oldPos = event.globalPos()
+            self.old_pos = event.globalPos()
 
     def mouseReleaseEvent(self, QMouseEvent):
         self.pressing = False
 
     def toggle_run_on_startup(self, is_checked):
-        path = sys.executable
         key = winreg.OpenKey(winreg.HKEY_CURRENT_USER,
                              r'SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run', 0, winreg.KEY_SET_VALUE)
 
         if (is_checked):
+            path = sys.executable
             winreg.SetValueEx(key, 'B3DVersionManager', 0, winreg.REG_SZ, path)
         else:
             try:

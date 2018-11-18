@@ -37,7 +37,8 @@ class B3dItemLayout(QHBoxLayout):
 
         self.btnOpen.setFont(QFont("MS Shell Dlg 2", 10))
 
-        style1 = ("""QPushButton
+        btn_open_style = \
+                ("""QPushButton
                  {
                      color: rgb(255, 255, 255);
                      background-color: rgb(51, 51, 51);
@@ -57,7 +58,8 @@ class B3dItemLayout(QHBoxLayout):
                      background-color: rgb(80, 80, 80);
                      border-color: rgb(80, 80, 80);
                  }""")
-        style2 = ("""QPushButton
+        btn_delete_style = \
+                ("""QPushButton
                  {
                      color: rgb(255, 255, 255);
                      background-color: rgb(51, 51, 51);
@@ -78,8 +80,8 @@ class B3dItemLayout(QHBoxLayout):
                      border-color: rgb(80, 80, 80);
                  }""")
         self.btnDelete = QPushButton(parent.trash_icon, "")
-        self.btnDelete.setStyleSheet(style2)
-        self.btnOpen.setStyleSheet(style1)
+        self.btnDelete.setStyleSheet(btn_delete_style)
+        self.btnOpen.setStyleSheet(btn_open_style)
         self.btnDelete.setIconSize(QtCore.QSize(20, 20))
         self.btnDelete.setFlat(True)
         self.btnDelete.setToolTip("Delete From Drive")
@@ -100,6 +102,7 @@ class B3dItemLayout(QHBoxLayout):
             QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
         if delete == QMessageBox.Yes:
+            self.btnOpen.setText("Deleting...")
             self.btnOpen.setEnabled(False)
             self.btnDelete.setEnabled(False)
             QApplication.processEvents()
