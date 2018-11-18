@@ -75,11 +75,6 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.btnOpenRootFolder.clicked.connect(
             lambda: os.startfile(self.settings.value('root_folder')))
 
-        # Version Layout
-        self.btnUpdate.clicked.connect(self.update)
-        self.set_task_visible(False)
-        self.draw_list_versions()
-
         # Tray Layout
         self.blender_action = QAction(self.star_inv_icon, "Blender", self)
         show_action = QAction("Show", self)
@@ -105,11 +100,16 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             lambda btn: self.show() if btn == 3 else False)
         self.tray_icon.show()
 
+        # Version Layout
+        self.btnUpdate.clicked.connect(self.update)
+        self.set_task_visible(False)
+        self.draw_list_versions()
+
         # Custom Drag Behaviour
         self.old_pos = self.pos()
         self.pressed = False
 
-        #
+        # Update Task
         self.is_update_running = False
         self.uptodate_thread = None
         self.uptodate_silent = False
