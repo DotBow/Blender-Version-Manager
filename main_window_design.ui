@@ -742,8 +742,8 @@ QMenu::icon:checked
     </property>
     <addaction name="actionClearTempFolder"/>
     <addaction name="separator"/>
-    <addaction name="actionMinimizeToTray"/>
-    <addaction name="actionRunOnStartup"/>
+    <addaction name="actionToggleRunMinimized"/>
+    <addaction name="actionToggleRunOnStartup"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -781,7 +781,7 @@ QMenu::icon:checked
     </font>
    </property>
   </action>
-  <action name="actionMinimizeToTray">
+  <action name="actionToggleRunMinimized">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -791,7 +791,7 @@ QMenu::icon:checked
     </iconset>
    </property>
    <property name="text">
-    <string notr="true">Toggle Minimize to Tray</string>
+    <string>Toggle Run Minimized</string>
    </property>
    <property name="toolTip">
     <string notr="true">Minimize to Tray</string>
@@ -829,7 +829,7 @@ QMenu::icon:checked
     <string>Ctrl+Q</string>
    </property>
   </action>
-  <action name="actionRunOnStartup">
+  <action name="actionToggleRunOnStartup">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -851,6 +851,11 @@ QMenu::icon:checked
     <font>
      <pointsize>10</pointsize>
     </font>
+   </property>
+  </action>
+  <action name="actionasd_as_sa_da">
+   <property name="text">
+    <string>asd as sa da </string>
    </property>
   </action>
  </widget>

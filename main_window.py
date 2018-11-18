@@ -51,13 +51,13 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
         self.actionClearTempFolder.triggered.connect(self.clear_temp_folder)
 
-        minimize_to_tray = self.settings.value('minimize_to_tray', type=bool)
-        self.actionMinimizeToTray.setChecked(minimize_to_tray)
-        self.actionMinimizeToTray.triggered.connect(self.minimize_to_tray)
+        self.is_run_minimized = self.settings.value('is_run_minimized', type=bool)
+        self.actionToggleRunMinimized.setChecked(self.is_run_minimized)
+        self.actionToggleRunMinimized.triggered.connect(self.toggle_run_minimized)
 
-        add_to_startup = self.settings.value('add_to_startup', type=bool)
-        self.actionRunOnStartup.setChecked(add_to_startup)
-        self.actionRunOnStartup.triggered.connect(self.add_to_startup)
+        is_run_on_startup = self.settings.value('is_run_on_startup', type=bool)
+        self.actionToggleRunOnStartup.setChecked(is_run_on_startup)
+        self.actionToggleRunOnStartup.triggered.connect(self.toggle_run_on_startup)
 
         self.actionQuit.triggered.connect(self.quit)
 
@@ -94,7 +94,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.tray_icon.activated.connect(
             lambda btn: self.show() if btn == 3 else False)
 
-        self.tray_icon.show() if minimize_to_tray else self.tray_icon.hide()
+        self.tray_icon.show()
 
         self.draw_list_versions()
         self.set_task_visible(False)
@@ -166,9 +166,8 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         else:
             return False
 
-    def minimize_to_tray(self, is_checked):
-        self.tray_icon.show() if is_checked else self.tray_icon.hide()
-        self.settings.setValue('minimize_to_tray', is_checked)
+    def toggle_run_minimized(self, is_checked):
+        self.settings.setValue('is_run_minimized', is_checked)
 
     def clear_temp_folder(self):
         if not self.is_running_task():
@@ -300,7 +299,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             self.app.quit()
 
     def closeEvent(self, event):
-        if self.actionMinimizeToTray.isChecked():
+        if self.actionToggleRunMinimized.isChecked():
             event.ignore()
             self.hide()
         elif self.is_running_task():
@@ -322,7 +321,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
     def mouseReleaseEvent(self, QMouseEvent):
         self.pressing = False
 
-    def add_to_startup(self, is_checked):
+    def toggle_run_on_startup(self, is_checked):
         path = sys.executable
         key = winreg.OpenKey(winreg.HKEY_CURRENT_USER,
                              r'SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run', 0, winreg.KEY_SET_VALUE)
@@ -336,4 +335,4 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
                 pass
 
         key.Close()
-        self.settings.setValue('add_to_startup', is_checked)
+        self.settings.setValue('is_run_on_startup', is_checked)

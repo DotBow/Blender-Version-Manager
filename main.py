@@ -13,7 +13,8 @@ def main():
     app = QApplication(sys.argv)
     window = B3dVersionMangerMainWindow(app)
     window.setWindowFlags(Qt.FramelessWindowHint)
-    window.show()
+    if not window.is_run_minimized:
+        window.show()
     app.exec_()
 
 
