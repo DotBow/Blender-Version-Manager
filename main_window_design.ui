@@ -314,9 +314,6 @@ QPushButton:hover
           <kerning>true</kerning>
          </font>
         </property>
-        <property name="toolTip">
-         <string notr="true">Root Folder Path</string>
-        </property>
         <property name="statusTip">
          <string notr="true"/>
         </property>

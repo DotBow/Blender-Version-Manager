@@ -174,7 +174,6 @@ class Ui_MainWindow(object):
         font.setStrikeOut(False)
         font.setKerning(True)
         self.labelRootFolder.setFont(font)
-        self.labelRootFolder.setToolTip("Root Folder Path")
         self.labelRootFolder.setStatusTip("")
         self.labelRootFolder.setStyleSheet("color: rgb(255, 255, 255);")
         self.labelRootFolder.setText("C:/Blender/2.8")
