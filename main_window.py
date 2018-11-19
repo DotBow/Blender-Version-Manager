@@ -82,7 +82,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         quit_action = QAction(self.quit_icon, "Quit", self)
 
         self.blender_action.triggered.connect(self.exec_blender)
-        show_action.triggered.connect(self.show)
+        show_action.triggered.connect(self.bring_to_front)
         hide_action.triggered.connect(self.hide)
         quit_action.triggered.connect(self.quit)
 
@@ -95,9 +95,9 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
         self.tray_icon = QSystemTrayIcon(self.app_icon, self)
         self.tray_icon.setContextMenu(self.tray_menu)
-        self.tray_icon.messageClicked.connect(self.show)
+        self.tray_icon.messageClicked.connect(self.bring_to_front)
         self.tray_icon.activated.connect(
-            lambda btn: self.show() if btn == 3 else False)
+            lambda btn: self.bring_to_front() if btn == 3 else False)
         self.tray_icon.show()
 
         # Version Layout
@@ -114,7 +114,6 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.uptodate_thread = None
         self.uptodate_silent = False
         self.uptodate_task()
-
 
     def uptodate_task(self):
         if self.uptodate_thread:
@@ -164,10 +163,6 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             self.progressBar.hide()
             self.btnUpdate.hide()
             self.btnCancel.hide()
-
-    def tray_icon_clicked(self, button):
-        if button == 3:
-            self.show()
 
     def is_running_task(self):
         if self.is_update_running:
@@ -347,3 +342,9 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
         key.Close()
         self.settings.setValue('is_run_on_startup', is_checked)
+
+    def bring_to_front(self):
+        self.setWindowState(self.windowState() & ~
+                            Qt.WindowMinimized | Qt.WindowActive)
+        self.activateWindow()
+        self.show()
