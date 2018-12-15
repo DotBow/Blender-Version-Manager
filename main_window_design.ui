@@ -30,7 +30,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normalon>:/icons/app.ico</normalon>
+    <normalon>:/icons/app.svg</normalon>
    </iconset>
   </property>
   <property name="accessibleDescription">
@@ -124,7 +124,7 @@ QPushButton::menu-indicator
         </property>
         <property name="icon">
          <iconset>
-          <normalon>:/icons/app.png</normalon>
+          <normalon>:/icons/app.svg</normalon>
          </iconset>
         </property>
         <property name="iconSize">
@@ -218,8 +218,9 @@ QPushButton:hover
          <string notr="true"/>
         </property>
         <property name="icon">
-         <iconset resource="icons/resources.qrc">
-          <normaloff>:/icons/minimize.png</normaloff>:/icons/minimize.png</iconset>
+         <iconset>
+          <normaloff>:/icons/minimize.png</normaloff>
+          <normalon>:/icons/minimize.svg</normalon>:/icons/minimize.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -272,7 +273,7 @@ QPushButton:hover
         </property>
         <property name="icon">
          <iconset>
-          <normalon>:/icons/close.png</normalon>
+          <normalon>:/icons/close.svg</normalon>
          </iconset>
         </property>
         <property name="iconSize">
@@ -383,7 +384,7 @@ QPushButton:hover
         </property>
         <property name="icon">
          <iconset>
-          <normalon>:/icons/folder_add.png</normalon>
+          <normalon>:/icons/folder_add.svg</normalon>
          </iconset>
         </property>
         <property name="iconSize">
@@ -443,7 +444,7 @@ QPushButton:hover
         </property>
         <property name="icon">
          <iconset>
-          <normalon>:/icons/folder.png</normalon>
+          <normalon>:/icons/folder_open.svg</normalon>
          </iconset>
         </property>
         <property name="iconSize">
@@ -591,7 +592,7 @@ QPushButton:hover
         </property>
         <property name="icon">
          <iconset>
-          <normalon>:/icons/download.png</normalon>
+          <normalon>:/icons/download.svg</normalon>
          </iconset>
         </property>
         <property name="iconSize">
@@ -643,7 +644,7 @@ QPushButton:hover
         </property>
         <property name="icon">
          <iconset>
-          <normalon>:/icons/stop.png</normalon>
+          <normalon>:/icons/stop.svg</normalon>
          </iconset>
         </property>
         <property name="iconSize">
@@ -731,7 +732,7 @@ QMenu::icon
 
 QMenu::icon:checked 
 {
-	image: url(:/icons/tick.png);
+	image: url(:/icons/tick.svg);
 }</string>
     </property>
     <property name="title">
@@ -757,7 +758,7 @@ QMenu::icon:checked
   <action name="actionClearTempFolder">
    <property name="icon">
     <iconset>
-     <normalon>:/icons/clear.png</normalon>
+     <normalon>:/icons/clear.svg</normalon>
     </iconset>
    </property>
    <property name="text">
@@ -784,7 +785,7 @@ QMenu::icon:checked
    </property>
    <property name="icon">
     <iconset>
-     <normalon>:/icons/fake.png</normalon>
+     <normalon>:/icons/fake.svg</normalon>
     </iconset>
    </property>
    <property name="text">
@@ -805,7 +806,7 @@ QMenu::icon:checked
   <action name="actionQuit">
    <property name="icon">
     <iconset>
-     <normalon>:/icons/quit.png</normalon>
+     <normalon>:/icons/quit.svg</normalon>
     </iconset>
    </property>
    <property name="text">
@@ -832,7 +833,7 @@ QMenu::icon:checked
    </property>
    <property name="icon">
     <iconset>
-     <normalon>:/icons/fake.png</normalon>
+     <normalon>:/icons/fake.svg</normalon>
     </iconset>
    </property>
    <property name="text">

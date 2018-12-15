@@ -31,12 +31,12 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.setupUi(self)
 
         # Read Icons
-        self.app_icon = QIcon(QPixmap(":/icons/app.ico"))
-        self.star_icon = QIcon(QPixmap(":/icons/star.png"))
-        self.star_inv_icon = QIcon(QPixmap(":/icons/star_inv.png"))
-        self.trash_icon = QIcon(QPixmap(":/icons/trash.png"))
-        self.quit_icon = QIcon(QPixmap(":/icons/quit_inv.png"))
-        self.fake_icon = QIcon(QPixmap(":/icons/fake.png"))
+        self.app_icon = QIcon(":/icons/app.svg")
+        self.star_icon = QIcon(":/icons/star.svg")
+        self.star_inv_icon = QIcon(":/icons/star_inv.svg")
+        self.trash_icon = QIcon(":/icons/delete.svg")
+        self.quit_icon = QIcon(":/icons/quit_inv.svg")
+        self.fake_icon = QIcon(":/icons/fake.svg")
 
         # Read Settings
         self.settings = QSettings('b3d_version_manager', 'settings')
