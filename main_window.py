@@ -81,7 +81,6 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         hide_action = QAction("Hide", self)
         quit_action = QAction(self.quit_icon, "Quit", self)
 
-        self.blender_action.triggered.connect(self.exec_blender)
         show_action.triggered.connect(self.bring_to_front)
         hide_action.triggered.connect(self.hide)
         quit_action.triggered.connect(self.quit)
@@ -230,11 +229,6 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
             self.layoutListVersions.addWidget(label)
             self.blender_action.setVisible(False)
-
-    def exec_blender(self):
-        latest_ver = self.collect_versions()[0]
-        root_folder = self.settings.value('root_folder')
-        subprocess.Popen(os.path.join(root_folder, latest_ver, "blender.exe"))
 
     def set_root_folder(self):
         dir = QFileDialog.getExistingDirectory(
