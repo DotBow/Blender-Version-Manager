@@ -123,9 +123,9 @@ class B3dItemLayout(QHBoxLayout):
         self.addWidget(self.btnOpen)
         self.addWidget(self.btnDelete)
 
-    async def exit_callback(self):
+    async def wait_for_exit(self):
         loop = asyncio.get_running_loop()
-        end_time = loop.time() + 5.0
+
         while True:
             if not psutil.pid_exists(self.pid):
                 self.btnOpen.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
@@ -133,6 +133,7 @@ class B3dItemLayout(QHBoxLayout):
                 self.btnDelete.show()
                 self.btnOpen.setEnabled(True)
                 break
+
             await asyncio.sleep(1)
 
     def open(self):
@@ -143,7 +144,7 @@ class B3dItemLayout(QHBoxLayout):
         self.btnOpen.setCursor(QCursor(QtCore.Qt.ArrowCursor))
         self.btnOpen.setStyleSheet(self.btn_running_style)
         self.btnDelete.hide()
-        threading.Thread(target=lambda: asyncio.run(self.exit_callback())).start()
+        threading.Thread(target=lambda: asyncio.run(self.wait_for_exit())).start()
 
     def delete(self):
         delete = QMessageBox.warning(
@@ -160,4 +161,4 @@ class B3dItemLayout(QHBoxLayout):
         self.btnOpen.setEnabled(False)
         self.btnDelete.hide()
         shutil.rmtree(os.path.join(self.root_folder, self.version))
-        self.parent.draw_list_versions()
+        self.parent.cleanup_layout(self.layout())

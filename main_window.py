@@ -1,3 +1,4 @@
+import asyncio
 import json
 import operator
 import os
@@ -22,6 +23,7 @@ import main_window_design
 import resources_rc
 from build_loader import BuildLoader
 from version_layout import B3dItemLayout
+from check_for_updates import CheckForUpdates
 
 
 class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
@@ -110,48 +112,21 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
         # Update Task
         self.is_update_running = False
-        self.uptodate_thread = None
         self.uptodate_silent = False
-        self.uptodate_task()
-
-    def uptodate_task(self):
-        if self.uptodate_thread:
-            self.uptodate_thread.finished.set()
-
-        try:
-            url = self.get_download_url()
-            version = self.get_download_url().split('-',)[-2]
-            new_version = True
-
-            if self.latest_local:
-                if version in self.latest_local:
-                    new_version = False
-
-            if new_version:
-                info = urlopen(url).info()
-                ctime = info['last-modified']
-                size = str(int(info['content-length']) // 1048576) + " MB"
-
-                self.set_task_visible(True)
-                self.set_progress_bar(0, "Git-" + version +
-                                      " | " + ctime + " | " + size)
-
-                if self.isHidden() and not self.uptodate_silent:
-                    self.tray_icon.showMessage(
-                        "Blender Version Manager",
-                        "New version of Blender 2.8 is avaliable!",
-                        QSystemTrayIcon.Information, 2000)
-
-                self.uptodate_silent = True
-            else:
-                if self.progressBar.isVisible():
-                    self.set_task_visible(False)
-        except urllib.error.URLError as e:
-            print(e)
-
-        self.uptodate_thread = threading.Timer(60.0, self.uptodate_task)
-        self.uptodate_thread.setDaemon(True)
+        self.uptodate_thread = CheckForUpdates(self)
+        self.is_uptodate_task_running = True
+        self.uptodate_thread.new_version_obtained.connect(self.show_new_version)
         self.uptodate_thread.start()
+
+    def show_new_version(self, display_name):
+        self.set_task_visible(True)
+        self.set_progress_bar(0, display_name)
+
+        if self.isHidden() and not self.uptodate_silent:
+            self.tray_icon.showMessage(
+                "Blender Version Manager",
+                "New version of Blender 2.8 is avaliable!",
+                QSystemTrayIcon.Information, 4000)
 
     def set_task_visible(self, is_visible):
         if is_visible:
@@ -208,9 +183,9 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         return versions
 
     def draw_list_versions(self):
+        versions = self.collect_versions()
         self.cleanup_layout(self.layoutListVersions)
         root_folder = self.settings.value('root_folder')
-        versions = self.collect_versions()
 
         if versions:
             self.blender_action.setVisible(True)
@@ -246,10 +221,9 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
     def update(self):
         self.is_update_running = True
 
-        while self.uptodate_thread.finished.isSet():
-            pass
-
-        self.uptodate_thread.cancel()
+        self.is_uptodate_task_running = False
+        self.uptodate_thread.terminate()
+        self.uptodate_thread.wait()
 
         self.btnUpdate.hide()
         self.btnCancel.show()
@@ -264,7 +238,6 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.build_loader.start()
 
     def finished(self, success):
-        self.build_loader.quit()
         self.build_loader.terminate()
         self.build_loader.wait()
 
@@ -277,21 +250,16 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             self.tray_icon.showMessage(
                 "Blender Version Manager",
                 "Update finished!",
-                QSystemTrayIcon.Information, 2000)
+                QSystemTrayIcon.Information, 4000)
 
-        self.uptodate_task()
+        self.uptodate_thread = threading.Thread(
+            target=lambda: asyncio.run(self.uptodate_task()))
+        self.is_uptodate_task_running = True
+        self.uptodate_thread.start()
 
     def set_progress_bar(self, val, format):
         self.progressBar.setFormat(format)
         self.progressBar.setValue(val * 100)
-
-    def get_download_url(self):
-        builder_url = "https://builder.blender.org"
-        builder_content = urlopen(builder_url + "/download").read()
-        builder_soup = BeautifulSoup(builder_content, 'html.parser')
-        version_url = builder_soup.find(
-            href=re.compile("blender-2.80"))['href']
-        return builder_url + version_url
 
     def quit(self):
         if not self.is_running_task():
