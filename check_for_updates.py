@@ -14,12 +14,17 @@ class CheckForUpdates(QThread):
     def __init__(self, parent):
         QThread.__init__(self)
         self.parent = parent
+        self.is_running = False
+        self.download_url = None
+        self.test = True
 
     def run(self):
-        while True:
+        while self.test:
+            self.is_running = True
+
             try:
-                url = self.get_download_url()
-                version = url.split('-',)[-2]
+                self.download_url = self.get_download_url()
+                version = self.download_url.split('-',)[-2]
                 new_version = True
 
                 if self.parent.latest_local:
@@ -27,7 +32,7 @@ class CheckForUpdates(QThread):
                         new_version = False
 
                 if new_version:
-                    info = urlopen(url).info()
+                    info = urlopen(self.download_url).info()
                     ctime = info['last-modified']
                     size = str(int(info['content-length']) // 1048576) + " MB"
                     display_name = "Git-" + version + " | " + ctime + " | " + size
@@ -36,7 +41,10 @@ class CheckForUpdates(QThread):
                 print(e)
 
             print("Check For Updates")
+            self.is_running = False
             QThread.sleep(5)
+
+        self.terminate()
 
     def get_download_url(self):
         builder_url = "https://builder.blender.org"
@@ -45,3 +53,6 @@ class CheckForUpdates(QThread):
         version_url = builder_soup.find(
             href=re.compile("blender-2.80"))['href']
         return builder_url + version_url
+
+    def stop(self):
+        self.test = False

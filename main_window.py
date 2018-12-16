@@ -114,7 +114,6 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.is_update_running = False
         self.uptodate_silent = False
         self.uptodate_thread = CheckForUpdates(self)
-        self.is_uptodate_task_running = True
         self.uptodate_thread.new_version_obtained.connect(self.show_new_version)
         self.uptodate_thread.start()
 
@@ -220,10 +219,13 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
     def update(self):
         self.is_update_running = True
+        self.uptodate_thread.stop()
 
-        self.is_uptodate_task_running = False
-        self.uptodate_thread.terminate()
+        while self.uptodate_thread.is_running:
+            pass
+
         self.uptodate_thread.wait()
+        print(self.uptodate_thread.isRunning())
 
         self.btnUpdate.hide()
         self.btnCancel.show()
@@ -231,7 +233,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.set_progress_bar(0, "Downloading: %p%")
 
         self.build_loader = BuildLoader(
-            self.settings.value('root_folder'), self.get_download_url())
+            self.settings.value('root_folder'), self.uptodate_thread.download_url)
         self.build_loader.finished.connect(self.finished)
         self.build_loader.progress_changed.connect(self.set_progress_bar)
         self.btnCancel.clicked.connect(self.build_loader.stop)
@@ -252,9 +254,8 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
                 "Update finished!",
                 QSystemTrayIcon.Information, 4000)
 
-        self.uptodate_thread = threading.Thread(
-            target=lambda: asyncio.run(self.uptodate_task()))
-        self.is_uptodate_task_running = True
+        self.uptodate_thread = CheckForUpdates(self)
+        self.uptodate_thread.new_version_obtained.connect(self.show_new_version)
         self.uptodate_thread.start()
 
     def set_progress_bar(self, val, format):
