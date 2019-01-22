@@ -144,7 +144,8 @@ class B3dItemLayout(QHBoxLayout):
         self.btnOpen.setCursor(QCursor(QtCore.Qt.ArrowCursor))
         self.btnOpen.setStyleSheet(self.btn_running_style)
         self.btnDelete.hide()
-        threading.Thread(target=lambda: asyncio.run(self.wait_for_exit())).start()
+        threading.Thread(target=lambda: asyncio.run(
+            self.wait_for_exit()), daemon=True).start()
 
     def delete(self):
         delete = QMessageBox.warning(
@@ -154,7 +155,8 @@ class B3dItemLayout(QHBoxLayout):
             QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
         if delete == QMessageBox.Yes:
-            threading.Thread(target=lambda: asyncio.run(self.delete_tread())).start()
+            threading.Thread(target=lambda: asyncio.run(
+                self.delete_tread())).start()
 
     async def delete_tread(self):
         self.btnOpen.setText("Deleting...")
