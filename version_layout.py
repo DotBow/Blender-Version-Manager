@@ -1,10 +1,10 @@
+import asyncio
 import os
 import shutil
 import subprocess
-import time
 import threading
+import time
 
-import asyncio
 import psutil
 from PyQt5 import QtCore
 from PyQt5.QtGui import QCursor, QFont, QIcon, QPixmap

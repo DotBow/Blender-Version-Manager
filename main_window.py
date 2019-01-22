@@ -22,8 +22,8 @@ from PyQt5.QtWidgets import (QAction, QFileDialog, QLabel, QMainWindow, QMenu,
 import main_window_design
 import resources_rc
 from build_loader import BuildLoader
-from version_layout import B3dItemLayout
 from check_for_updates import CheckForUpdates
+from version_layout import B3dItemLayout
 
 
 class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
@@ -114,7 +114,8 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.is_update_running = False
         self.uptodate_silent = False
         self.uptodate_thread = CheckForUpdates(self)
-        self.uptodate_thread.new_version_obtained.connect(self.show_new_version)
+        self.uptodate_thread.new_version_obtained.connect(
+            self.show_new_version)
         self.uptodate_thread.start()
 
     def show_new_version(self, display_name):
@@ -255,7 +256,8 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
                 QSystemTrayIcon.Information, 4000)
 
         self.uptodate_thread = CheckForUpdates(self)
-        self.uptodate_thread.new_version_obtained.connect(self.show_new_version)
+        self.uptodate_thread.new_version_obtained.connect(
+            self.show_new_version)
         self.uptodate_thread.start()
 
     def set_progress_bar(self, val, format):
