@@ -48,7 +48,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         is_run_on_startup = self.settings.value(
             'is_run_on_startup', type=bool)
         root_folder = self.settings.value('root_folder')
-        if not os.path.isdir(root_folder):
+        if (not root_folder) or (not os.path.isdir(root_folder)):
             exe_path = os.path.dirname(sys.executable)
             self.settings.setValue('root_folder', exe_path)
 
