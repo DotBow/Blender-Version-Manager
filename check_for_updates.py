@@ -14,14 +14,11 @@ class CheckForUpdates(QThread):
     def __init__(self, parent):
         QThread.__init__(self)
         self.parent = parent
-        self.is_running = False
+        self.is_running = True
         self.download_url = None
-        self.test = True
 
     def run(self):
-        while self.test:
-            self.is_running = True
-
+        while self.is_running:
             try:
                 self.download_url = self.get_download_url()
                 version = self.download_url.split('-',)[-2]
@@ -41,8 +38,7 @@ class CheckForUpdates(QThread):
                 print(e)
 
             print("Check For Updates")
-            self.is_running = False
-            QThread.sleep(5)
+            QThread.sleep(60)
 
         self.terminate()
 

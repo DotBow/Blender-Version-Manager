@@ -119,6 +119,9 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.uptodate_thread.start()
 
     def show_new_version(self, display_name):
+        if (display_name == self.progressBar.text()):
+            return
+
         self.set_task_visible(True)
         self.set_progress_bar(0, display_name)
 
@@ -220,13 +223,9 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
     def update(self):
         self.is_update_running = True
-        self.uptodate_thread.stop()
-
-        while self.uptodate_thread.is_running:
-            pass
-
+        self.uptodate_thread.is_running = False
+        self.uptodate_thread.terminate()
         self.uptodate_thread.wait()
-        print(self.uptodate_thread.isRunning())
 
         self.btnUpdate.hide()
         self.btnCancel.show()
@@ -258,6 +257,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.uptodate_thread = CheckForUpdates(self)
         self.uptodate_thread.new_version_obtained.connect(
             self.show_new_version)
+        self.set_progress_bar(0, "")
         self.uptodate_thread.start()
 
     def set_progress_bar(self, val, format):
