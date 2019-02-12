@@ -26,13 +26,13 @@ class B3dItemLayout(QHBoxLayout):
                         border-color: rgb(51, 51, 51);
                         border-width: 6px;
                     }
-                    
+
                     QPushButton:pressed
                     {
                         background-color: rgb(80, 80, 80);
                         border-color: rgb(80, 80, 80);
                     }
-                    
+
                     QPushButton:hover
                     {
                         background-color: rgb(80, 80, 80);
@@ -47,21 +47,23 @@ class B3dItemLayout(QHBoxLayout):
                         border-style: solid;
                         border-color: rgb(51, 51, 51);
                         border-width: 0px 4px 0px 4px;
+                        qproperty-icon: url(:/icons/delete.svg);
+                        qproperty-iconSize: 20px;
                     }
-                    
+
                     QPushButton:pressed
                     {
                         background-color: rgb(80, 80, 80);
                         border-color: rgb(80, 80, 80);
                     }
-                    
+
                     QPushButton:hover
                     {
                         background-color: rgb(80, 80, 80);
                         border-color: rgb(80, 80, 80);
                     }""")
 
-        self.btn_running_style = \
+        self.btn_open_running_style = \
             ("""QPushButton
                     {
                         color: rgb(255, 255, 255);
@@ -69,22 +71,38 @@ class B3dItemLayout(QHBoxLayout):
                         border-style: solid;
                         border-color: rgb(204, 102, 51);
                         border-width: 6px;
-                        padding: 0px 32px 0px 0px;
                     }
-                    
+
                     QPushButton:pressed
                     {
                         background-color: rgb(204, 102, 51);
                         border-color: rgb(204, 102, 51);
                     }
-                    
+
                     QPushButton:hover
                     {
                         background-color: rgb(204, 102, 51);
                         border-color: rgb(204, 102, 51);
                     }""")
 
-        self.pid = -1
+        self.btn_delete_running_style = \
+            ("""QPushButton
+                    {
+                        color: rgb(255, 255, 255);
+                        background-color: rgb(0, 122, 204);
+                        border-style: solid;
+                        border-color: rgb(0, 122, 204);
+                        border-width: 0px 13px 0px 13px;
+                        qproperty-icon: none;
+                    }
+
+                    QPushButton:hover
+                    {
+                        background-color: rgb(80, 80, 80);
+                        border-color: rgb(80, 80, 80);
+                    }""")
+
+        self.pids = []
         self.root_folder = root_folder
         self.version = version
         self.parent = parent
@@ -108,10 +126,9 @@ class B3dItemLayout(QHBoxLayout):
             self.btnOpen.setIcon(parent.fake_icon)
 
         self.btnOpen.setFont(QFont("MS Shell Dlg 2", 10))
-        self.btnDelete = QPushButton(parent.trash_icon, "")
+        self.btnDelete = QPushButton("")
         self.btnDelete.setStyleSheet(self.btn_delete_style)
         self.btnOpen.setStyleSheet(self.btn_open_style)
-        self.btnDelete.setIconSize(QtCore.QSize(20, 20))
         self.btnDelete.setFlat(True)
         self.btnDelete.setToolTip("Delete From Drive")
         self.btnDelete.setSizePolicy(
@@ -127,25 +144,37 @@ class B3dItemLayout(QHBoxLayout):
         loop = asyncio.get_running_loop()
 
         while True:
-            if not psutil.pid_exists(self.pid):
-                self.btnOpen.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
-                self.btnOpen.setStyleSheet(self.btn_open_style)
-                self.btnDelete.show()
-                self.btnOpen.setEnabled(True)
-                break
+            for pid in self.pids:
+                if not psutil.pid_exists(pid):
+                    self.pids.remove(pid)
+                    self.btnDelete.setText(str(len(self.pids)))
+
+                    if len(self.pids) == 0:
+                        self.btnOpen.setStyleSheet(self.btn_open_style)
+                        self.btnOpen.setCursor(
+                            QCursor(QtCore.Qt.PointingHandCursor))
+                        self.btnOpen.setEnabled(True)
+
+                        self.btnDelete.setStyleSheet(self.btn_delete_style)
+                        self.btnDelete.setText("")
+                        self.btnDelete.setEnabled(True)
+
+                        break
 
             await asyncio.sleep(1)
 
     def open(self):
         proc = subprocess.Popen(os.path.join(
             self.root_folder, self.version, "blender.exe"))
-        self.pid = proc.pid
-        self.btnOpen.setEnabled(False)
-        self.btnOpen.setCursor(QCursor(QtCore.Qt.ArrowCursor))
-        self.btnOpen.setStyleSheet(self.btn_running_style)
-        self.btnDelete.hide()
-        threading.Thread(target=lambda: asyncio.run(
-            self.wait_for_exit()), daemon=True).start()
+        self.pids.append(proc.pid)
+        self.btnDelete.setText(str(len(self.pids)))
+
+        if len(self.pids) == 1:
+            self.btnOpen.setStyleSheet(self.btn_open_running_style)
+            self.btnDelete.setStyleSheet(self.btn_delete_running_style)
+            self.btnDelete.setEnabled(False)
+            threading.Thread(target=lambda: asyncio.run(
+                self.wait_for_exit()), daemon=True).start()
 
     def delete(self):
         delete = QMessageBox.warning(
