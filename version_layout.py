@@ -151,11 +151,10 @@ class B3dItemLayout(QHBoxLayout):
 
                     if len(self.pids) == 0:
                         self.btnOpen.setStyleSheet(self.btn_open_style)
-                        self.btnOpen.setCursor(
-                            QCursor(QtCore.Qt.PointingHandCursor))
                         self.btnOpen.setEnabled(True)
 
                         self.btnDelete.setStyleSheet(self.btn_delete_style)
+                        self.btnDelete.setIcon(self.parent.trash_icon)
                         self.btnDelete.setText("")
                         self.btnDelete.setEnabled(True)
 
