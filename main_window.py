@@ -13,7 +13,6 @@ import winreg
 from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
-from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import QPoint, QSettings, Qt
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import (QAction, QFileDialog, QLabel, QMainWindow, QMenu,
