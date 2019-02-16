@@ -1,16 +1,8 @@
-import asyncio
-import json
-import operator
 import os
 import re
 import shutil
-import subprocess
 import sys
-import threading
-import time
-import urllib
 import winreg
-from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
 from PyQt5.QtCore import QPoint, QSettings, Qt

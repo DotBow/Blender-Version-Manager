@@ -1,4 +1,3 @@
-import os
 import re
 import urllib
 from urllib.request import urlopen
