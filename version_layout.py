@@ -156,6 +156,7 @@ class B3dItemLayout(QHBoxLayout):
                         self.btnDelete.setStyleSheet(self.btn_delete_style)
                         self.btnDelete.setIcon(self.parent.trash_icon)
                         self.btnDelete.setText("")
+                        self.btnDelete.setToolTip("Delete From Drive")
                         self.btnDelete.setEnabled(True)
 
                         break
@@ -170,8 +171,10 @@ class B3dItemLayout(QHBoxLayout):
 
         if len(self.pids) == 1:
             self.btnOpen.setStyleSheet(self.btn_open_running_style)
+            self.btnDelete.setToolTip("Number of Running Instances")
             self.btnDelete.setStyleSheet(self.btn_delete_running_style)
             self.btnDelete.setEnabled(False)
+
             threading.Thread(target=lambda: asyncio.run(
                 self.wait_for_exit()), daemon=True).start()
 
