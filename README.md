@@ -6,4 +6,8 @@ Download manager for Blender 2.8 (Win x64) latest builds.
 * Automatic checking of latest builds
 * Fast access via tray icon
 
-![Blender Version Manager](https://i.imgur.com/vOZ0ENo.png)
+### Main Window
+![Blender Version Manager Main Window](https://i.imgur.com/wAYYSF7.png)
+
+### Tray Icon
+![Blender Version Manager Tray Icon](https://i.imgur.com/gHHU09Y.png)
