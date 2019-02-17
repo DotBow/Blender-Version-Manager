@@ -289,10 +289,10 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
         if (is_checked):
             path = sys.executable
-            winreg.SetValueEx(key, 'B3DVersionManager', 0, winreg.REG_SZ, path)
+            winreg.SetValueEx(key, 'Blender Version Manager', 0, winreg.REG_SZ, path)
         else:
             try:
-                winreg.DeleteValue(key, 'B3DVersionManager')
+                winreg.DeleteValue(key, 'Blender Version Manager')
             except:
                 pass
 
