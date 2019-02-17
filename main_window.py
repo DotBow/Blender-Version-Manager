@@ -204,13 +204,9 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             self, "Choose Root Folder", self.settings.value('root_folder'))
 
         if dir:
-            if self.uptodate_thread:
-                self.uptodate_thread.cancel()
-
             self.settings.setValue('root_folder', dir)
             self.labelRootFolder.setText(dir)
             self.draw_list_versions()
-            self.uptodate_task()
 
     def update(self):
         self.is_update_running = True
