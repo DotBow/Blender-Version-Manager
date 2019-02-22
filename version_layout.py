@@ -37,7 +37,7 @@ class B3dItemLayout(QHBoxLayout):
                     background-color: rgb(80, 80, 80);
                     border-color: rgb(80, 80, 80);
                 }
-                
+
                 QPushButton[IsRunning=true]
                 {
                     color: rgb(255, 255, 255);
@@ -152,8 +152,8 @@ class B3dItemLayout(QHBoxLayout):
         process = QProcess(self)
         process.started.connect(self.process_started)
         process.finished.connect(self.process_finished)
-        process.start(os.path.join(
-            self.root_folder, self.version, "blender.exe"))
+        process.start('"' + os.path.join(
+            self.root_folder, self.version, "blender.exe") + '"')
 
     def process_started(self):
         self.instances_count = self.instances_count + 1
