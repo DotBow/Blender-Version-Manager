@@ -163,7 +163,7 @@ color: rgb(204, 204, 204);
 padding: 0px 0px 0px 20px;</string>
         </property>
         <property name="text">
-         <string notr="true">Blender Version Manager 1.3</string>
+         <string notr="true">Blender Version Manager 1.3.2</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
