@@ -11,3 +11,6 @@ Minimalistic download manager for Blender 2.8 (Win x64) latest builds.
 
 ### Tray Context Menu
 ![Blender Version Manager Tray Icon](https://i.imgur.com/gHHU09Y.png)
+
+### Support
+You can buy Blender Version Manager on [Gumroad](https://gumroad.com/products/jyIzM) for 1$ or more.
