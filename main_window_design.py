@@ -90,7 +90,7 @@ class Ui_MainWindow(object):
         self.title.setStyleSheet("background-color: rgb(60, 60, 60);\n"
 "color: rgb(204, 204, 204);\n"
 "padding: 0px 0px 0px 20px;")
-        self.title.setText("Blender Version Manager 1.3.2")
+        self.title.setText("Blender Version Manager")
         self.title.setAlignment(QtCore.Qt.AlignCenter)
         self.title.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
         self.title.setObjectName("title")

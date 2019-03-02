@@ -7,8 +7,9 @@ import winreg
 from bs4 import BeautifulSoup
 from PyQt5.QtCore import QPoint, QSettings, Qt
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import (QAction, QFileDialog, QLabel, QMainWindow, QMenu,
-                             QMessageBox, QSizePolicy, QSystemTrayIcon)
+from PyQt5.QtWidgets import (QAction, QApplication, QFileDialog, QLabel,
+                             QMainWindow, QMenu, QMessageBox, QSizePolicy,
+                             QSystemTrayIcon)
 
 import main_window_design
 from build_loader import BuildLoader
@@ -43,6 +44,8 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             self.settings.setValue('root_folder', exe_path)
 
         # Custom Title Bar
+        self.title.setText(QApplication.applicationName() +
+                           ' ' + QApplication.applicationVersion())
         self.btnClose.clicked.connect(self.close)
         self.btnMinimize.clicked.connect(self.showMinimized)
 
