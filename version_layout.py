@@ -7,11 +7,8 @@ import time
 
 import psutil
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
-from PyQt5.QtGui import QCursor, QFont, QIcon, QPixmap
-from PyQt5.QtWidgets import (QApplication, QHBoxLayout, QMessageBox,
-                             QPushButton, QSizePolicy)
-
-import resources_rc
+from PyQt5.QtGui import QCursor, QFont
+from PyQt5.QtWidgets import QHBoxLayout, QMessageBox, QPushButton, QSizePolicy
 
 
 class B3dItemLayout(QHBoxLayout):
@@ -107,10 +104,10 @@ class B3dItemLayout(QHBoxLayout):
                     border-color: rgb(80, 80, 80);
                 }""")
 
-        self.pids = []
+        self.parent = parent
         self.root_folder = root_folder
         self.version = version
-        self.parent = parent
+        self.pids = []
 
         self.setContentsMargins(6, 0, 6, 0)
         self.setSpacing(0)
@@ -151,22 +148,21 @@ class B3dItemLayout(QHBoxLayout):
         self.addWidget(self.btnDelete)
 
     def open(self):
-        proc = subprocess.Popen(os.path.join(
+        process = subprocess.Popen(os.path.join(
             self.root_folder, self.version, "blender.exe"))
-        self.pids.append(proc.pid)
+        self.pids.append(process.pid)
 
         if (len(self.pids) == 1):
-            self.watch_instances = WatchInstances(self)
-            self.watch_instances.started.connect(self.process_started)
-            self.watch_instances.finished.connect(self.process_finished)
-            self.watch_instances.instances_count_changed.connect(
-                self.instances_count_changed)
-            self.watch_instances.start()
+            self.observe_instances = ObserveInstances(self)
+            self.observe_instances.started.connect(self.observe_started)
+            self.observe_instances.finished.connect(self.observe_finished)
+            self.observe_instances.count_changed.connect(self.count_changed)
+            self.observe_instances.start()
         else:
-            self.instances_count_changed()
+            self.count_changed()
 
-    def process_started(self):
-        self.instances_count_changed()
+    def observe_started(self):
+        self.count_changed()
         self.btnOpen.setProperty('IsRunning', True)
         self.btnOpen.setStyle(self.btnOpen.style())
         self.btnDelete.setToolTip("Number of Running Instances")
@@ -174,7 +170,7 @@ class B3dItemLayout(QHBoxLayout):
         self.btnDelete.setStyle(self.btnDelete.style())
         self.btnDelete.setEnabled(False)
 
-    def process_finished(self):
+    def observe_finished(self):
         self.btnOpen.setProperty('IsRunning', False)
         self.btnOpen.setStyle(self.btnOpen.style())
         self.btnDelete.setIcon(self.parent.trash_icon)
@@ -184,7 +180,7 @@ class B3dItemLayout(QHBoxLayout):
         self.btnDelete.setProperty('IsRunning', False)
         self.btnDelete.setStyle(self.btnDelete.style())
 
-    def instances_count_changed(self):
+    def count_changed(self):
         self.btnDelete.setText(str(len(self.pids)))
 
     def delete(self):
@@ -206,10 +202,10 @@ class B3dItemLayout(QHBoxLayout):
         self.parent.cleanup_layout(self.layout())
 
 
-class WatchInstances(QThread):
+class ObserveInstances(QThread):
     started = pyqtSignal()
     finished = pyqtSignal()
-    instances_count_changed = pyqtSignal()
+    count_changed = pyqtSignal()
 
     def __init__(self, parent):
         QThread.__init__(self)
@@ -224,7 +220,7 @@ class WatchInstances(QThread):
                     self.parent.pids.remove(pid)
 
                 if len(self.parent.pids) > 0:
-                    self.instances_count_changed.emit()
+                    self.count_changed.emit()
                 else:
                     self.finished.emit()
                     return

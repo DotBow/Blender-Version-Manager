@@ -4,7 +4,6 @@ from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
 from PyQt5.QtCore import QThread, pyqtSignal
-from PyQt5.QtWidgets import QSystemTrayIcon
 
 
 class CheckForUpdates(QThread):

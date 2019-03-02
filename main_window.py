@@ -6,12 +6,11 @@ import winreg
 
 from bs4 import BeautifulSoup
 from PyQt5.QtCore import QPoint, QSettings, Qt
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QAction, QFileDialog, QLabel, QMainWindow, QMenu,
                              QMessageBox, QSizePolicy, QSystemTrayIcon)
 
 import main_window_design
-import resources_rc
 from build_loader import BuildLoader
 from check_for_updates import CheckForUpdates
 from version_layout import B3dItemLayout
@@ -285,7 +284,8 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
         if (is_checked):
             path = sys.executable
-            winreg.SetValueEx(key, 'Blender Version Manager', 0, winreg.REG_SZ, path)
+            winreg.SetValueEx(key, 'Blender Version Manager',
+                              0, winreg.REG_SZ, path)
         else:
             try:
                 winreg.DeleteValue(key, 'Blender Version Manager')
