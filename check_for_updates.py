@@ -48,6 +48,3 @@ class CheckForUpdates(QThread):
         version_url = builder_soup.find(
             href=re.compile("blender-2.80"))['href']
         return builder_url + version_url
-
-    def stop(self):
-        self.test = False
