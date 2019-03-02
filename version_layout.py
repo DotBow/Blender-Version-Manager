@@ -1,10 +1,12 @@
 import asyncio
 import os
 import shutil
+import subprocess
 import threading
 import time
 
-from PyQt5.QtCore import QProcess, Qt
+import psutil
+from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from PyQt5.QtGui import QCursor, QFont, QIcon, QPixmap
 from PyQt5.QtWidgets import (QApplication, QHBoxLayout, QMessageBox,
                              QPushButton, QSizePolicy)
@@ -105,7 +107,7 @@ class B3dItemLayout(QHBoxLayout):
                     border-color: rgb(80, 80, 80);
                 }""")
 
-        self.instances_count = 0
+        self.pids = []
         self.root_folder = root_folder
         self.version = version
         self.parent = parent
@@ -149,40 +151,41 @@ class B3dItemLayout(QHBoxLayout):
         self.addWidget(self.btnDelete)
 
     def open(self):
-        process = QProcess(self)
-        process.started.connect(self.process_started)
-        process.finished.connect(self.process_finished)
-        process.start('"' + os.path.join(
-            self.root_folder, self.version, "blender.exe") + '"')
+        proc = subprocess.Popen(os.path.join(
+            self.root_folder, self.version, "blender.exe"))
+        self.pids.append(proc.pid)
+
+        if (len(self.pids) == 1):
+            self.watch_instances = WatchInstances(self)
+            self.watch_instances.started.connect(self.process_started)
+            self.watch_instances.finished.connect(self.process_finished)
+            self.watch_instances.instances_count_changed.connect(
+                self.instances_count_changed)
+            self.watch_instances.start()
+        else:
+            self.instances_count_changed()
 
     def process_started(self):
-        self.instances_count = self.instances_count + 1
-        self.btnDelete.setText(str(self.instances_count))
-
-        if self.instances_count == 1:
-            self.btnOpen.setProperty('IsRunning', True)
-            self.btnOpen.setStyle(self.btnOpen.style())
-
-            self.btnDelete.setToolTip("Number of Running Instances")
-            self.btnDelete.setProperty('IsRunning', True)
-            self.btnDelete.setStyle(self.btnDelete.style())
-            self.btnDelete.setEnabled(False)
+        self.instances_count_changed()
+        self.btnOpen.setProperty('IsRunning', True)
+        self.btnOpen.setStyle(self.btnOpen.style())
+        self.btnDelete.setToolTip("Number of Running Instances")
+        self.btnDelete.setProperty('IsRunning', True)
+        self.btnDelete.setStyle(self.btnDelete.style())
+        self.btnDelete.setEnabled(False)
 
     def process_finished(self):
-        self.instances_count = self.instances_count - 1
+        self.btnOpen.setProperty('IsRunning', False)
+        self.btnOpen.setStyle(self.btnOpen.style())
+        self.btnDelete.setIcon(self.parent.trash_icon)
+        self.btnDelete.setText("")
+        self.btnDelete.setToolTip("Delete From Drive")
+        self.btnDelete.setEnabled(True)
+        self.btnDelete.setProperty('IsRunning', False)
+        self.btnDelete.setStyle(self.btnDelete.style())
 
-        if self.instances_count == 0:
-            self.btnOpen.setProperty('IsRunning', False)
-            self.btnOpen.setStyle(self.btnOpen.style())
-
-            self.btnDelete.setIcon(self.parent.trash_icon)
-            self.btnDelete.setText("")
-            self.btnDelete.setToolTip("Delete From Drive")
-            self.btnDelete.setEnabled(True)
-            self.btnDelete.setProperty('IsRunning', False)
-            self.btnDelete.setStyle(self.btnDelete.style())
-        else:
-            self.btnDelete.setText(str(self.instances_count))
+    def instances_count_changed(self):
+        self.btnDelete.setText(str(len(self.pids)))
 
     def delete(self):
         delete = QMessageBox.warning(
@@ -201,3 +204,29 @@ class B3dItemLayout(QHBoxLayout):
         self.btnDelete.hide()
         shutil.rmtree(os.path.join(self.root_folder, self.version))
         self.parent.cleanup_layout(self.layout())
+
+
+class WatchInstances(QThread):
+    started = pyqtSignal()
+    finished = pyqtSignal()
+    instances_count_changed = pyqtSignal()
+
+    def __init__(self, parent):
+        QThread.__init__(self)
+        self.parent = parent
+
+    def run(self):
+        self.started.emit()
+
+        while True:
+            for pid in self.parent.pids:
+                if not psutil.pid_exists(pid):
+                    self.parent.pids.remove(pid)
+
+                if len(self.parent.pids) > 0:
+                    self.instances_count_changed.emit()
+                else:
+                    self.finished.emit()
+                    return
+
+            QThread.sleep(1)
