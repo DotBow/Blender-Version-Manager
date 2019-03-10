@@ -1,5 +1,6 @@
 import os
 import shutil
+import subprocess
 import zipfile
 from urllib.request import urlopen
 
@@ -46,6 +47,7 @@ class BuildLoader(QThread):
                     return
 
         zf = zipfile.ZipFile(download_path)
+        version = zf.infolist()[0].filename.split('/')[0]
         uncompress_size = sum((file.file_size for file in zf.infolist()))
         extracted_size = 0
 
@@ -56,13 +58,15 @@ class BuildLoader(QThread):
                 extracted_size / uncompress_size, "Extracting: %p%")
 
             if not self.is_running:
-                shutil.rmtree(os.path.join(self.root_folder,
-                                           zf.infolist()[0].filename.split('/')[0]))
+                shutil.rmtree(os.path.join(self.root_folder, version))
                 zf.close()
                 os.remove(download_path)
                 self.finished.emit(False)
                 return
 
+        self.progress_changed.emit(0, "Registering .blend extension...")
+        subprocess.call(os.path.join(self.root_folder,
+                                     version, "blender.exe") + " -r")
         self.progress_changed.emit(0, "Finishing...")
         self.finished.emit(True)
 
