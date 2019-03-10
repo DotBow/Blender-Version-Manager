@@ -166,11 +166,10 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
     def collect_versions(self):
         root_folder = self.settings.value('root_folder')
         dirs = next(os.walk(root_folder))[1]
-        prog = re.compile("blender-2.80")
         versions = []
 
         for dir in dirs:
-            if prog.match(dir):
+            if os.path.isfile(os.path.join(root_folder, dir, "blender.exe")):
                 versions.append(dir)
 
         versions.sort(key=lambda ver: os.path.getctime(
