@@ -674,8 +674,8 @@ QPushButton:hover
       </property>
       <property name="sizeHint" stdset="0">
        <size>
-        <width>20</width>
-        <height>40</height>
+        <width>0</width>
+        <height>0</height>
        </size>
       </property>
      </spacer>
@@ -739,8 +739,7 @@ QMenu::icon:checked
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionClearTempFolder"/>
-    <addaction name="separator"/>
+    <addaction name="actionToggleRegisterBlend"/>
     <addaction name="actionToggleRunMinimized"/>
     <addaction name="actionToggleRunOnStartup"/>
     <addaction name="separator"/>
@@ -756,20 +755,17 @@ QMenu::icon:checked
     <bool>true</bool>
    </property>
   </widget>
-  <action name="actionClearTempFolder">
+  <action name="actionToggleRegisterBlend">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset>
-     <normalon>:/icons/clear.svg</normalon>
+     <normalon>:/icons/fake.svg</normalon>
     </iconset>
    </property>
    <property name="text">
-    <string notr="true">Clear Temp Folder</string>
-   </property>
-   <property name="iconText">
-    <string notr="true">Clear Temp Folder</string>
-   </property>
-   <property name="toolTip">
-    <string notr="true">Clear Temp Folder</string>
+    <string>Toggle Register Blend-file Extension</string>
    </property>
    <property name="statusTip">
     <string notr="true"/>
@@ -790,10 +786,7 @@ QMenu::icon:checked
     </iconset>
    </property>
    <property name="text">
-    <string>Toggle Run Minimized</string>
-   </property>
-   <property name="toolTip">
-    <string notr="true">Minimize to Tray</string>
+    <string>Toggle Run Minimized To Tray</string>
    </property>
    <property name="statusTip">
     <string notr="true"/>
@@ -811,7 +804,7 @@ QMenu::icon:checked
     </iconset>
    </property>
    <property name="text">
-    <string notr="true">Quit                        Ctrl+Q</string>
+    <string notr="true">Quit                                     Ctrl+Q</string>
    </property>
    <property name="toolTip">
     <string notr="true">Quit</string>
@@ -838,10 +831,7 @@ QMenu::icon:checked
     </iconset>
    </property>
    <property name="text">
-    <string>Toggle Run on Startup</string>
-   </property>
-   <property name="toolTip">
-    <string notr="true">Run on Startup</string>
+    <string>Toggle Run When Windows Starts</string>
    </property>
    <property name="statusTip">
     <string notr="true"/>

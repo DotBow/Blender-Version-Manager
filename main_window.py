@@ -34,6 +34,8 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         # Read Settings
         self.settings = QSettings('b3d_version_manager', 'settings')
 
+        is_register_blend = self.settings.value(
+            'is_register_blend', type=bool)
         self.is_run_minimized = self.settings.value(
             'is_run_minimized', type=bool)
         is_run_on_startup = self.settings.value(
@@ -50,6 +52,10 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.btnMinimize.clicked.connect(self.showMinimized)
 
         # Custom Menu Bar
+        self.actionToggleRegisterBlend.setChecked(is_register_blend)
+        self.actionToggleRegisterBlend.triggered.connect(
+            self.toggle_register_blend)
+
         self.actionToggleRunMinimized.setChecked(self.is_run_minimized)
         self.actionToggleRunMinimized.triggered.connect(
             self.toggle_run_minimized)
@@ -58,7 +64,6 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.actionToggleRunOnStartup.triggered.connect(
             self.toggle_run_on_startup)
 
-        self.actionClearTempFolder.triggered.connect(self.clear_temp_folder)
         self.actionQuit.triggered.connect(self.quit)
 
         self.menubar.hide()
@@ -145,13 +150,8 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
     def toggle_run_minimized(self, is_checked):
         self.settings.setValue('is_run_minimized', is_checked)
 
-    def clear_temp_folder(self):
-        if not self.is_running_task():
-            temp_folder = os.path.join(
-                self.settings.value('root_folder'), "temp")
-
-            if os.path.isdir(temp_folder):
-                shutil.rmtree(temp_folder)
+    def toggle_register_blend(self, is_checked):
+        self.settings.setValue('is_register_blend', is_checked)
 
     def cleanup_layout(self, layout):
         while layout.count():
@@ -221,9 +221,12 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.set_progress_bar(0, "Downloading: %p%")
 
         self.build_loader = BuildLoader(
-            self.settings.value('root_folder'), self.uptodate_thread.download_url)
+            self.settings.value('root_folder'),
+            self.uptodate_thread.download_url)
         self.build_loader.finished.connect(self.finished)
         self.build_loader.progress_changed.connect(self.set_progress_bar)
+        self.build_loader.block_abortion.connect(
+            lambda: self.btnCancel.setEnabled(False))
         self.btnCancel.clicked.connect(self.build_loader.stop)
         self.build_loader.start()
 
