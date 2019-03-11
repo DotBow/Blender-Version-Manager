@@ -9,6 +9,7 @@ from PyQt5.QtCore import QThread, pyqtSignal
 
 class BuildLoader(QThread):
     finished = pyqtSignal('PyQt_PyObject')
+    block_abortion = pyqtSignal()
     progress_changed = pyqtSignal('PyQt_PyObject', 'PyQt_PyObject')
 
     def __init__(self, root_folder, download_url):
@@ -29,6 +30,7 @@ class BuildLoader(QThread):
         download_path = os.path.join(
             temp_path, self.download_url.split('/', -1)[-1])
 
+        # Download
         with open(download_path, 'wb') as self.f:
             while True:
                 chunk = blender_zip.read(16 * 1024)
@@ -42,10 +44,12 @@ class BuildLoader(QThread):
 
                 if not self.is_running:
                     self.f.close()
-                    os.remove(download_path)
+                    if os.path.isdir(temp_path):
+                        shutil.rmtree(temp_path)
                     self.finished.emit(False)
                     return
 
+        # Extract
         zf = zipfile.ZipFile(download_path)
         version = zf.infolist()[0].filename.split('/')[0]
         uncompress_size = sum((file.file_size for file in zf.infolist()))
@@ -60,13 +64,24 @@ class BuildLoader(QThread):
             if not self.is_running:
                 shutil.rmtree(os.path.join(self.root_folder, version))
                 zf.close()
-                os.remove(download_path)
+                if os.path.isdir(temp_path):
+                    shutil.rmtree(temp_path)
                 self.finished.emit(False)
                 return
 
-        self.progress_changed.emit(0, "Registering .blend extension...")
-        subprocess.call(os.path.join(self.root_folder,
-                                     version, "blender.exe") + " -r")
+        self.block_abortion.emit()
+
+        # Delete Temp Folder
+        self.progress_changed.emit(0, "Deleting temporary files...")
+        if os.path.isdir(temp_path):
+            shutil.rmtree(temp_path)
+
+        # Register Extension
+        if self.parent.settings.value('is_register_blend', type=bool):
+            self.progress_changed.emit(0, "Registering .blend extension...")
+            subprocess.call(os.path.join(self.root_folder,
+                                         version, "blender.exe") + " -r")
+
         self.progress_changed.emit(0, "Finishing...")
         self.finished.emit(True)
 
