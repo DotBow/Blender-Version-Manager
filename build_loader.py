@@ -12,10 +12,11 @@ class BuildLoader(QThread):
     block_abortion = pyqtSignal()
     progress_changed = pyqtSignal('PyQt_PyObject', 'PyQt_PyObject')
 
-    def __init__(self, root_folder, download_url):
+    def __init__(self, parent, download_url):
         QThread.__init__(self)
         self.download_url = download_url
-        self.root_folder = root_folder
+        self.parent = parent
+        self.root_folder = self.parent.settings.value('root_folder')
         self.is_running = False
 
     def run(self):
@@ -69,6 +70,7 @@ class BuildLoader(QThread):
                 self.finished.emit(False)
                 return
 
+        zf.close()
         self.block_abortion.emit()
 
         # Delete Temp Folder
