@@ -1,6 +1,7 @@
 import os
 import shutil
 import subprocess
+import time
 import zipfile
 from urllib.request import urlopen
 
@@ -30,6 +31,10 @@ class BuildLoader(QThread):
 
         download_path = os.path.join(
             temp_path, self.download_url.split('/', -1)[-1])
+
+        ctime = urlopen(self.download_url).info()['last-modified']
+        time_struct = time.strptime(ctime, '%a, %d %b %Y %H:%M:%S %Z')
+        sec = time.mktime(time_struct)
 
         # Download
         with open(download_path, 'wb') as self.f:
@@ -72,6 +77,9 @@ class BuildLoader(QThread):
 
         zf.close()
         self.block_abortion.emit()
+
+        os.utime(os.path.join(self.root_folder,
+                              version, "blender.exe"), (sec, sec))
 
         # Delete Temp Folder
         self.progress_changed.emit(0, "Deleting temporary files...")
