@@ -172,7 +172,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             if os.path.isfile(os.path.join(root_folder, dir, "blender.exe")):
                 versions.append(dir)
 
-        versions.sort(key=lambda ver: os.path.getctime(
+        versions.sort(key=lambda ver: os.path.getmtime(
             os.path.join(root_folder, ver, "blender.exe")), reverse=True)
 
         return versions
