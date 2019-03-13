@@ -184,13 +184,12 @@ class B3dItemLayout(QHBoxLayout):
         self.btnDelete.setText(str(len(self.pids)))
 
     def delete(self):
-        delete = QMessageBox.warning(
-            self.parent,
-            "Warning",
-            "Are you sure you want to delete\n'" + self.btnOpen.text() + "'\nfrom drive?",
-            QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        msgBox = QMessageBox.question(
+            self.parent, "Blender Version Manager",
+            "Are you sure you want to delete\n'" + self.btnOpen.text() + "'?",
+            QMessageBox.Yes | QMessageBox.Cancel, QMessageBox.Yes)
 
-        if delete == QMessageBox.Yes:
+        if msgBox == QMessageBox.Yes:
             threading.Thread(target=lambda: asyncio.run(
                 self.delete_tread())).start()
 
