@@ -25,16 +25,17 @@ class BuildLoader(QThread):
         blender_zip = urlopen(self.download_url)
         size = blender_zip.info()['Content-Length']
         temp_path = os.path.join(self.root_folder, "temp")
-
-        if not os.path.isdir(temp_path):
-            os.makedirs(temp_path)
-
         download_path = os.path.join(
             temp_path, self.download_url.split('/', -1)[-1])
 
+        # Create temp directory
+        if not os.path.isdir(temp_path):
+            os.makedirs(temp_path)
+
+        # Get time in seconds
         ctime = urlopen(self.download_url).info()['last-modified']
-        time_struct = time.strptime(ctime, '%a, %d %b %Y %H:%M:%S %Z')
-        sec = time.mktime(time_struct)
+        mod_time = time.mktime(time.strptime(
+            ctime, '%a, %d %b %Y %H:%M:%S %Z'))
 
         # Download
         with open(download_path, 'wb') as self.f:
@@ -78,15 +79,16 @@ class BuildLoader(QThread):
         zf.close()
         self.block_abortion.emit()
 
+        # Change time to match one from BuildBot
         os.utime(os.path.join(self.root_folder,
-                              version, "blender.exe"), (sec, sec))
+                              version, "blender.exe"), (mod_time, mod_time))
 
-        # Delete Temp Folder
+        # Delete temp folder
         self.progress_changed.emit(0, "Deleting temporary files...")
         if os.path.isdir(temp_path):
             shutil.rmtree(temp_path)
 
-        # Register Extension
+        # Register .blend extension
         if self.parent.settings.value('is_register_blend', type=bool):
             self.progress_changed.emit(0, "Registering .blend extension...")
             subprocess.call(os.path.join(self.root_folder,

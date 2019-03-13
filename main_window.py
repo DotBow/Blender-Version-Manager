@@ -23,7 +23,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.app = app
         self.setupUi(self)
 
-        # Read Icons
+        # Read icons
         self.app_icon = QIcon(":/icons/app.svg")
         self.star_icon = QIcon(":/icons/star.svg")
         self.star_inv_icon = QIcon(":/icons/star_inv.svg")
@@ -31,7 +31,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.quit_icon = QIcon(":/icons/quit_inv.svg")
         self.fake_icon = QIcon(":/icons/fake.svg")
 
-        # Read Settings
+        # Read settings
         self.settings = QSettings('b3d_version_manager', 'settings')
 
         is_register_blend = self.settings.value(
@@ -45,13 +45,13 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             exe_path = os.path.dirname(sys.executable)
             self.settings.setValue('root_folder', exe_path)
 
-        # Custom Title Bar
+        # Custom title bar
         self.title.setText(QApplication.applicationName() +
                            ' ' + QApplication.applicationVersion())
         self.btnClose.clicked.connect(self.close)
         self.btnMinimize.clicked.connect(self.showMinimized)
 
-        # Custom Menu Bar
+        # Custom menu bar
         self.actionToggleRegisterBlend.setChecked(is_register_blend)
         self.actionToggleRegisterBlend.triggered.connect(
             self.toggle_register_blend)
@@ -69,13 +69,13 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.menubar.hide()
         self.btnFile.setMenu(self.menuFile)
 
-        # Root Folder Layout
+        # Root folder layout
         self.labelRootFolder.setText(self.settings.value('root_folder'))
         self.btnSetRootFolder.clicked.connect(self.set_root_folder)
         self.btnOpenRootFolder.clicked.connect(
             lambda: os.startfile(self.settings.value('root_folder')))
 
-        # Tray Layout
+        # Tray layout
         self.blender_action = QAction(self.star_inv_icon, "Blender", self)
         show_action = QAction("Show", self)
         hide_action = QAction("Hide", self)
@@ -99,16 +99,16 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             lambda btn: self.bring_to_front() if btn == 3 else False)
         self.tray_icon.show()
 
-        # Version Layout
+        # Version layout
         self.btnUpdate.clicked.connect(self.update)
         self.set_task_visible(False)
         self.draw_list_versions()
 
-        # Custom Drag Behaviour
+        # Custom drag behaviour
         self.old_pos = self.pos()
         self.pressed = False
 
-        # Update Task
+        # Update task
         self.is_update_running = False
         self.uptodate_silent = False
         self.uptodate_thread = CheckForUpdates(self)
@@ -221,9 +221,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.set_progress_bar(0, "Downloading: %p%")
 
         self.build_loader = BuildLoader(
-            self,
-            # self.settings.value('root_folder'),
-            self.uptodate_thread.download_url)
+            self, self.uptodate_thread.download_url)
         self.build_loader.finished.connect(self.finished)
         self.build_loader.progress_changed.connect(self.set_progress_bar)
         self.build_loader.block_abortion.connect(
@@ -286,7 +284,8 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
     def toggle_run_on_startup(self, is_checked):
         key = winreg.OpenKey(winreg.HKEY_CURRENT_USER,
-                             r'SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run', 0, winreg.KEY_SET_VALUE)
+                             r'SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run',
+                             0, winreg.KEY_SET_VALUE)
 
         if (is_checked):
             path = sys.executable
