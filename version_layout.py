@@ -114,10 +114,15 @@ class B3dItemLayout(QHBoxLayout):
 
         ctime = os.path.getctime(os.path.join(
             root_folder, version, "blender.exe"))
-        fctime = time.strftime("%d-%b-%Y", time.gmtime(ctime))
+        fctime = time.strftime("%d-%b-%H:%M", time.gmtime(ctime))
 
-        self.btnOpen = QPushButton(
-            (version.split('-',)[-2]).replace("git.", "Git-") + " | " + fctime)
+        if ("git." in version):
+            git = (version.split('-',)[-2]).replace("git.", "Git-")
+        else:
+            parts = version.split('-', 2)
+            git = parts[0] + '-' + parts[1]
+
+        self.btnOpen = QPushButton(git + " | " + fctime)
         self.btnOpen.clicked.connect(self.open)
 
         if (is_latest):
