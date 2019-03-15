@@ -91,8 +91,9 @@ class BuildLoader(QThread):
         # Register .blend extension
         if self.parent.settings.value('is_register_blend', type=bool):
             self.progress_changed.emit(0, "Registering .blend extension...")
-            subprocess.call(os.path.join(self.root_folder,
-                                         version, "blender.exe") + " -r")
+            path = os.path.join(self.root_folder, version, "blender.exe")
+            subprocess.call(
+                [path, "-r"], creationflags=subprocess.CREATE_NO_WINDOW)
 
         self.progress_changed.emit(0, "Finishing...")
         self.finished.emit(True)
