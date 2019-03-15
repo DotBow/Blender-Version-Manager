@@ -224,8 +224,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             self, self.uptodate_thread.download_url)
         self.build_loader.finished.connect(self.finished)
         self.build_loader.progress_changed.connect(self.set_progress_bar)
-        self.build_loader.block_abortion.connect(
-            lambda: self.btnCancel.setVisible(False))
+        self.build_loader.block_abortion.connect(lambda: self.btnCancel.hide())
         self.btnCancel.clicked.connect(self.build_loader.stop)
         self.build_loader.start()
 
