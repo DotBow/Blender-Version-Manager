@@ -79,6 +79,13 @@ class BuildLoader(QThread):
         zf.close()
         self.block_abortion.emit()
 
+        # Make nice name for dir
+        git = (version.split("git.", 2)[-1]).split('-',)[0]
+        nice_name = "Git-" + git + "-" + time.strftime("%d-%b-%Y", ctime)
+        os.rename(os.path.join(self.root_folder, version),
+                  os.path.join(self.root_folder, nice_name))
+        version = nice_name
+
         # Change time to match one from BuildBot
         os.utime(os.path.join(self.root_folder,
                               version, "blender.exe"), (mod_time, mod_time))
