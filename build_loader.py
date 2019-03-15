@@ -34,8 +34,8 @@ class BuildLoader(QThread):
 
         # Get time in seconds
         ctime = urlopen(self.download_url).info()['last-modified']
-        mod_time = time.mktime(time.strptime(
-            ctime, '%a, %d %b %Y %H:%M:%S %Z'))
+        strptime = time.strptime(ctime, '%a, %d %b %Y %H:%M:%S %Z')
+        mod_time = time.mktime(strptime)
 
         # Download
         with open(download_path, 'wb') as self.f:
@@ -79,21 +79,23 @@ class BuildLoader(QThread):
         zf.close()
         self.block_abortion.emit()
 
+        # Delete temp folder
+        self.progress_changed.emit(0, "Deleting temporary files...")
+        if os.path.isdir(temp_path):
+            shutil.rmtree(temp_path)
+
         # Make nice name for dir
+        self.progress_changed.emit(0, "Making nice naming...")
         git = (version.split("git.", 2)[-1]).split('-',)[0]
-        nice_name = "Git-" + git + "-" + time.strftime("%d-%b-%Y", ctime)
+        nice_name = "Git-" + git + "-" + time.strftime("%d-%b-%H-%M", strptime)
         os.rename(os.path.join(self.root_folder, version),
                   os.path.join(self.root_folder, nice_name))
         version = nice_name
 
         # Change time to match one from BuildBot
+        self.progress_changed.emit(0, "Matching time with BuildBot...")
         os.utime(os.path.join(self.root_folder,
                               version, "blender.exe"), (mod_time, mod_time))
-
-        # Delete temp folder
-        self.progress_changed.emit(0, "Deleting temporary files...")
-        if os.path.isdir(temp_path):
-            shutil.rmtree(temp_path)
 
         # Register .blend extension
         if self.parent.settings.value('is_register_blend', type=bool):
