@@ -259,7 +259,7 @@ class Ui_MainWindow(object):
         self.layoutRootFolderSettings.addWidget(self.btnOpenRootFolder)
         self.verticalLayout.addLayout(self.layoutRootFolderSettings)
         self.line = QtWidgets.QFrame(self.centralwidget)
-        self.line.setStyleSheet("margin: 0px 6px 0px 6px;\n"
+        self.line.setStyleSheet("margin: 0px 7px 0px 7px;\n"
 "color:  rgb(97, 97, 98);")
         self.line.setFrameShadow(QtWidgets.QFrame.Plain)
         self.line.setLineWidth(2)

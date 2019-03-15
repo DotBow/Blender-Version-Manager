@@ -466,7 +466,7 @@ QPushButton:hover
     <item>
      <widget class="Line" name="line">
       <property name="styleSheet">
-       <string notr="true">margin: 0px 6px 0px 6px;
+       <string notr="true">margin: 0px 7px 0px 7px;
 color:  rgb(97, 97, 98);</string>
       </property>
       <property name="frameShadow">
