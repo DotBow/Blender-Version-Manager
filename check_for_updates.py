@@ -1,4 +1,5 @@
 import re
+import time
 import urllib
 from urllib.request import urlopen
 
@@ -19,18 +20,20 @@ class CheckForUpdates(QThread):
         while self.is_running:
             try:
                 self.download_url = self.get_download_url()
-                version = self.download_url.split('-',)[-2]
+                git = self.download_url.split('-',)[-2]
                 new_version = True
 
                 if self.parent.latest_local:
-                    if version in self.parent.latest_local:
+                    if git in self.parent.latest_local:
                         new_version = False
 
                 if new_version:
                     info = urlopen(self.download_url).info()
-                    ctime = info['last-modified']
+                    mtime = info['last-modified']
+                    strptime = time.strptime(mtime, '%a, %d %b %Y %H:%M:%S %Z')
+                    mtime = time.strftime("%d-%b-%H:%M", strptime)
                     size = str(int(info['content-length']) // 1048576) + " MB"
-                    display_name = "Git-" + version + " | " + ctime + " | " + size
+                    display_name = "Git-" + git + " | " + mtime + " | " + size
                     self.new_version_obtained.emit(display_name)
             except urllib.error.URLError as e:
                 print(e)
