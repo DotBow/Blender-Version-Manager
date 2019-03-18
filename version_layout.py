@@ -112,9 +112,9 @@ class B3dItemLayout(QHBoxLayout):
         self.setContentsMargins(6, 0, 6, 0)
         self.setSpacing(0)
 
-        ctime = os.path.getctime(os.path.join(
+        ctime = os.path.getmtime(os.path.join(
             root_folder, version, "blender.exe"))
-        fctime = time.strftime("%d-%b-%H:%M", time.gmtime(ctime))
+        fctime = time.strftime("%d-%b-%H:%M", time.localtime(ctime))
 
         if ("git." in version):
             git = (version.split('-',)[-2]).replace("git.", "Git-")
