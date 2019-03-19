@@ -102,6 +102,8 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         # Version layout
         self.btnUpdate.clicked.connect(self.update)
         self.set_task_visible(False)
+        self.layouts = []
+        self.collect_versions()
         self.draw_list_versions()
 
         # Custom drag behaviour
@@ -164,6 +166,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
                 self.cleanup_layout(item.layout())
 
     def collect_versions(self):
+        self.layouts.clear()
         root_folder = self.settings.value('root_folder')
         dirs = next(os.walk(root_folder))[1]
         versions = []
@@ -175,21 +178,22 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         versions.sort(key=lambda ver: os.path.getmtime(
             os.path.join(root_folder, ver, "blender.exe")), reverse=True)
 
-        return versions
+        self.latest_local = versions[0]
+
+        for ver in versions:
+            is_latest = True if ver == self.latest_local else False
+            b3d_item_layout = B3dItemLayout(
+                root_folder, ver, is_latest, self)
+            self.layouts.append(b3d_item_layout)
 
     def draw_list_versions(self):
-        versions = self.collect_versions()
-        self.cleanup_layout(self.layoutListVersions)
-        root_folder = self.settings.value('root_folder')
-
-        if versions:
+        if self.layouts:
             self.blender_action.setVisible(True)
-            self.latest_local = versions[0]
 
-            for ver in versions:
-                is_latest = True if ver == self.latest_local else False
-                b3d_item_layout = B3dItemLayout(
-                    root_folder, ver, is_latest, self)
+            for b3d_item_layout in self.layouts:
+                self.layoutListVersions.removeItem(b3d_item_layout)
+
+            for b3d_item_layout in self.layouts:
                 self.layoutListVersions.addLayout(b3d_item_layout)
         else:
             self.latest_local = None

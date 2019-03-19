@@ -8,6 +8,8 @@ from urllib.request import urlopen
 
 from PyQt5.QtCore import QThread, pyqtSignal
 
+from version_layout import B3dItemLayout
+
 
 class BuildLoader(QThread):
     finished = pyqtSignal('PyQt_PyObject')
@@ -103,6 +105,9 @@ class BuildLoader(QThread):
         os.rename(os.path.join(self.root_folder, version),
                   os.path.join(self.root_folder, nice_name))
 
+        b3d_item_layout = B3dItemLayout(
+            self.root_folder, nice_name, True, self.parent)
+        self.parent.layouts.append(b3d_item_layout)
         self.finished.emit(True)
 
     def stop(self):

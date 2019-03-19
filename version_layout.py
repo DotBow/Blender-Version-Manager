@@ -203,6 +203,7 @@ class B3dItemLayout(QHBoxLayout):
         self.btnOpen.setEnabled(False)
         self.btnDelete.hide()
         shutil.rmtree(os.path.join(self.root_folder, self.version))
+        self.parent.layouts.remove(self)
         self.parent.cleanup_layout(self.layout())
 
 
