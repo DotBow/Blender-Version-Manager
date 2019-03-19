@@ -219,7 +219,7 @@ class ObserveInstances(QThread):
     def run(self):
         self.started.emit()
 
-        while True:
+        while self.parent:
             for pid in self.parent.pids:
                 if not psutil.pid_exists(pid):
                     self.parent.pids.remove(pid)
