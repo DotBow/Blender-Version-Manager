@@ -1,4 +1,5 @@
 import os
+import re
 import shutil
 import subprocess
 import time
@@ -31,11 +32,6 @@ class BuildLoader(QThread):
         # Create temp directory
         if not os.path.isdir(temp_path):
             os.makedirs(temp_path)
-
-        # Get time in seconds
-        ctime = urlopen(self.download_url).info()['last-modified']
-        strptime = time.strptime(ctime, '%a, %d %b %Y %H:%M:%S %Z')
-        mod_time = time.mktime(strptime)
 
         # Download
         with open(download_path, 'wb') as self.f:
@@ -84,27 +80,29 @@ class BuildLoader(QThread):
         if os.path.isdir(temp_path):
             shutil.rmtree(temp_path)
 
-        # Make nice name for dir
-        self.progress_changed.emit(0, "Making nice naming...")
-        git = (version.split("git.", 2)[-1]).split('-',)[0]
-        nice_name = "Git-" + git + "-" + time.strftime("%d-%b-%H-%M", strptime)
-        os.rename(os.path.join(self.root_folder, version),
-                  os.path.join(self.root_folder, nice_name))
-        version = nice_name
-
-        # Change time to match one from BuildBot
-        self.progress_changed.emit(0, "Matching time with BuildBot...")
-        os.utime(os.path.join(self.root_folder,
-                              version, "blender.exe"), (mod_time, mod_time))
-
         # Register .blend extension
+        b3d_exe = os.path.join(self.root_folder, version, "blender.exe")
+
         if self.parent.settings.value('is_register_blend', type=bool):
             self.progress_changed.emit(0, "Registering .blend extension...")
-            path = os.path.join(self.root_folder, version, "blender.exe")
-            subprocess.call(
-                [path, "-r"], creationflags=subprocess.CREATE_NO_WINDOW)
+            subprocess.call([b3d_exe, "-r"],
+                            creationflags=subprocess.CREATE_NO_WINDOW)
 
+        # Get blender version info
         self.progress_changed.emit(0, "Finishing...")
+        info = subprocess.check_output(
+            [b3d_exe, "-v"], creationflags=subprocess.CREATE_NO_WINDOW).decode('UTF-8')
+
+        ctime = re.search("build commit time: " + "(.*)", info)[1].rstrip()
+        cdate = re.search("build commit date: " + "(.*)", info)[1].rstrip()
+        strptime = time.strptime(cdate + ' ' + ctime, "%Y-%m-%d %H:%M")
+
+        # Make nice name for dir
+        git = re.search("build hash: " + "(.*)", info)[1].rstrip()
+        nice_name = "Git-%s-%s" % (git, time.strftime("%d-%b-%H-%M", strptime))
+        os.rename(os.path.join(self.root_folder, version),
+                  os.path.join(self.root_folder, nice_name))
+
         self.finished.emit(True)
 
     def stop(self):

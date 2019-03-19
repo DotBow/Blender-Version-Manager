@@ -4,6 +4,7 @@ import shutil
 import subprocess
 import threading
 import time
+import re
 
 import psutil
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
@@ -112,17 +113,17 @@ class B3dItemLayout(QHBoxLayout):
         self.setContentsMargins(6, 0, 6, 0)
         self.setSpacing(0)
 
-        ctime = os.path.getmtime(os.path.join(
-            root_folder, version, "blender.exe"))
-        fctime = time.strftime("%d-%b-%H:%M", time.localtime(ctime))
+        b3d_exe = os.path.join(root_folder, version, "blender.exe")
+        info = subprocess.check_output(
+            [b3d_exe, "-v"], creationflags=subprocess.CREATE_NO_WINDOW).decode('UTF-8')
 
-        if ("git." in version):
-            git = (version.split('-',)[-2]).replace("git.", "Git-")
-        else:
-            parts = version.split('-', 2)
-            git = parts[0] + '-' + parts[1]
+        ctime = re.search("build commit time: " + "(.*)", info)[1].rstrip()
+        cdate = re.search("build commit date: " + "(.*)", info)[1].rstrip()
+        git = re.search("build hash: " + "(.*)", info)[1].rstrip()
+        strptime = time.strptime(cdate + ' ' + ctime, "%Y-%m-%d %H:%M")
 
-        self.btnOpen = QPushButton(git + " | " + fctime)
+        self.btnOpen = QPushButton(
+            "Git-%s | %s" % (git, time.strftime("%d-%b-%H:%M", strptime)))
         self.btnOpen.clicked.connect(self.open)
 
         if (is_latest):
