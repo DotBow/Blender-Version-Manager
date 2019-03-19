@@ -5,6 +5,7 @@ import shutil
 import subprocess
 import threading
 import time
+from subprocess import CREATE_NO_WINDOW
 
 import psutil
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
@@ -115,7 +116,7 @@ class B3dItemLayout(QHBoxLayout):
 
         b3d_exe = os.path.join(root_folder, version, "blender.exe")
         info = subprocess.check_output(
-            [b3d_exe, "-v"], creationflags=subprocess.CREATE_NO_WINDOW).decode('UTF-8')
+            [b3d_exe, "-v"], creationflags=CREATE_NO_WINDOW).decode('UTF-8')
 
         ctime = re.search("build commit time: " + "(.*)", info)[1].rstrip()
         cdate = re.search("build commit date: " + "(.*)", info)[1].rstrip()
