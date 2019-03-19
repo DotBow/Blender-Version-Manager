@@ -1,10 +1,10 @@
 import asyncio
 import os
+import re
 import shutil
 import subprocess
 import threading
 import time
-import re
 
 import psutil
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
@@ -136,7 +136,6 @@ class B3dItemLayout(QHBoxLayout):
         self.btnOpen.setFont(QFont("MS Shell Dlg 2", 10))
         self.btnOpen.setCursor(QCursor(Qt.PointingHandCursor))
         self.btnOpen.setStyleSheet(self.btn_open_style)
-
         self.btnOpen.setProperty('IsRunning', False)
 
         self.btnDelete = QPushButton("")
@@ -147,7 +146,6 @@ class B3dItemLayout(QHBoxLayout):
         self.btnDelete.setCursor(QCursor(Qt.PointingHandCursor))
         self.btnDelete.clicked.connect(lambda: self.delete())
         self.btnDelete.setStyleSheet(self.btn_delete_style)
-
         self.btnDelete.setProperty('IsRunning', False)
 
         self.addWidget(self.btnOpen)
