@@ -672,7 +672,10 @@ QPushButton:hover
 QScrollBar:vertical
 {
 	background-color: rgb(30, 30, 30);
-	width: 6px;
+	width: 12px;
+	border-style: block;
+	border-width: 0px 6px 0px 0px;
+	border-color: #424242;
 }
 
 QScrollBar::handle:vertical
@@ -682,12 +685,24 @@ QScrollBar::handle:vertical
 
 QScrollBar::sub-page:vertical
 {
-	background-color: rgb(30, 30, 30);
+	 background: none;
 }
 
 QScrollBar::add-page:vertical
 {
-	background-color: rgb(30, 30, 30);	
+	background-color: rgb(30, 30, 30);
+}
+
+QScrollBar::add-line:vertical
+{
+	border: none;
+	background: none;
+}
+
+QScrollBar::sub-line:vertical 
+{
+	border: none;
+	background: none;
 }</string>
       </property>
       <property name="frameShape">
