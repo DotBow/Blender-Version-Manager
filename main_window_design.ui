@@ -672,7 +672,7 @@ QPushButton:hover
 QScrollBar:vertical
 {
 	background-color: rgb(30, 30, 30);
-	width: 12px;
+	width: 10px;
 	border-style: block;
 	border-width: 0px 6px 0px 0px;
 	border-color: #424242;

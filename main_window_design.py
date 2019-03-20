@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'main_window_design.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.2
+# Created by: PyQt5 UI code generator 5.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -377,7 +377,7 @@ class Ui_MainWindow(object):
 "QScrollBar:vertical\n"
 "{\n"
 "    background-color: rgb(30, 30, 30);\n"
-"    width: 12px;\n"
+"    width: 10px;\n"
 "    border-style: block;\n"
 "    border-width: 0px 6px 0px 0px;\n"
 "    border-color: #424242;\n"
