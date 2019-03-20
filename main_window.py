@@ -103,6 +103,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.btnUpdate.clicked.connect(self.update)
         self.set_task_visible(False)
         self.layouts = []
+        self.latest_local = None
         self.collect_versions()
         self.draw_list_versions()
 

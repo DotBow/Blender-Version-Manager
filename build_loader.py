@@ -4,6 +4,7 @@ import shutil
 import subprocess
 import time
 import zipfile
+from subprocess import CREATE_NO_WINDOW, DEVNULL
 from urllib.request import urlopen
 
 from PyQt5.QtCore import QThread, pyqtSignal
@@ -93,7 +94,7 @@ class BuildLoader(QThread):
         # Get blender version info
         self.progress_changed.emit(0, "Finishing...")
         info = subprocess.check_output(
-            [b3d_exe, "-v"], creationflags=subprocess.CREATE_NO_WINDOW).decode('UTF-8')
+            [b3d_exe, "-v"], creationflags=CREATE_NO_WINDOW, shell=True, stderr=DEVNULL, stdin=DEVNULL).decode('UTF-8')
 
         ctime = re.search("build commit time: " + "(.*)", info)[1].rstrip()
         cdate = re.search("build commit date: " + "(.*)", info)[1].rstrip()
