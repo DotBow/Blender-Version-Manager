@@ -372,24 +372,54 @@ class Ui_MainWindow(object):
         self.scrollArea.setStyleSheet("QWidget\n"
 "{\n"
 "    background-color: rgb(30, 30, 30);\n"
-"}r")
+"}\n"
+"\n"
+"QScrollBar:vertical\n"
+"{\n"
+"    background-color: rgb(30, 30, 30);\n"
+"    width: 4px;\n"
+"    margin: 0px;\n"
+"}\n"
+"\n"
+"QFrame\n"
+"{\n"
+"    border-style: solid;\n"
+"    border-color: rgb(30, 30, 30);\n"
+"    border-width: 0px 0px 0px 0px;\n"
+"}\n"
+"\n"
+"QScrollBar::handle:vertical\n"
+"{\n"
+"    background-color: #424242;\n"
+"}\n"
+"\n"
+"QScrollBar::sub-page:vertical\n"
+"{\n"
+"    background-color: rgb(30, 30, 30);\n"
+"}\n"
+"\n"
+"QScrollBar::add-page:vertical\n"
+"{\n"
+"    background-color: rgb(30, 30, 30);    \n"
+"}")
         self.scrollArea.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.scrollArea.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.scrollArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
         self.scrollArea.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 440, 78))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 436, 78))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_2.setSpacing(6)
+        self.verticalLayout_2.setSpacing(0)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.layoutListVersions = QtWidgets.QVBoxLayout()
-        self.layoutListVersions.setContentsMargins(-1, -1, 6, -1)
+        self.layoutListVersions.setContentsMargins(-1, -1, 0, -1)
+        self.layoutListVersions.setSpacing(6)
         self.layoutListVersions.setObjectName("layoutListVersions")
         self.verticalLayout_2.addLayout(self.layoutListVersions)
-        spacerItem = QtWidgets.QSpacerItem(20, 47, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_2.addItem(spacerItem)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.verticalLayout.addWidget(self.scrollArea)

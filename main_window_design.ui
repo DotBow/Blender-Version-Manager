@@ -667,13 +667,42 @@ QPushButton:hover
        <string notr="true">QWidget
 {
 	background-color: rgb(30, 30, 30);
-}r</string>
+}
+
+QScrollBar:vertical
+{
+	background-color: rgb(30, 30, 30);
+	width: 4px;
+	margin: 0px;
+}
+
+QFrame
+{
+	border-style: solid;
+	border-color: rgb(30, 30, 30);
+	border-width: 0px 0px 0px 0px;
+}
+
+QScrollBar::handle:vertical
+{
+	background-color: #424242;
+}
+
+QScrollBar::sub-page:vertical
+{
+	background-color: rgb(30, 30, 30);
+}
+
+QScrollBar::add-page:vertical
+{
+	background-color: rgb(30, 30, 30);	
+}</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
       </property>
-      <property name="frameShadow">
-       <enum>QFrame::Plain</enum>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOn</enum>
       </property>
       <property name="horizontalScrollBarPolicy">
        <enum>Qt::ScrollBarAlwaysOff</enum>
@@ -686,13 +715,13 @@ QPushButton:hover
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>440</width>
+         <width>436</width>
          <height>78</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <property name="spacing">
-         <number>6</number>
+         <number>0</number>
         </property>
         <property name="leftMargin">
          <number>0</number>
@@ -708,6 +737,9 @@ QPushButton:hover
         </property>
         <item>
          <layout class="QVBoxLayout" name="layoutListVersions">
+          <property name="spacing">
+           <number>6</number>
+          </property>
           <property name="rightMargin">
            <number>0</number>
           </property>
@@ -720,8 +752,8 @@ QPushButton:hover
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>20</width>
-            <height>47</height>
+            <width>0</width>
+            <height>0</height>
            </size>
           </property>
          </spacer>
