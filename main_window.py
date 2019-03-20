@@ -175,16 +175,14 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             if os.path.isfile(os.path.join(root_folder, dir, "blender.exe")):
                 versions.append(dir)
 
-        self.latest_local = versions[0]
-
         for ver in versions:
-            is_latest = True if ver == self.latest_local else False
             b3d_item_layout = B3dItemLayout(
-                root_folder, ver, is_latest, self)
+                root_folder, ver, False, self)
             self.layouts.append(b3d_item_layout)
 
     def draw_list_versions(self):
-        if self.layouts:
+        if len(self.layouts) > 0:
+            self.latest_local = self.layouts[0].version
             self.layouts.sort(key=lambda ver: ver.mtime, reverse=True)
             self.blender_action.setVisible(True)
 
@@ -206,12 +204,15 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             self.blender_action.setVisible(False)
 
     def set_root_folder(self):
+        root_folder = self.settings.value('root_folder')
         dir = QFileDialog.getExistingDirectory(
-            self, "Choose Root Folder", self.settings.value('root_folder'))
+            self, "Choose Root Folder", root_folder)
 
-        if dir:
+        if dir and (dir != root_folder):
             self.settings.setValue('root_folder', dir)
             self.labelRootFolder.setText(dir)
+            self.cleanup_layout(self.layoutListVersions)
+            self.collect_versions()
             self.draw_list_versions()
 
     def update(self):
