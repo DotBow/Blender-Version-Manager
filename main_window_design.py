@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'main_window_design.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.11.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -368,11 +368,31 @@ class Ui_MainWindow(object):
         self.btnCancel.setObjectName("btnCancel")
         self.layoutUpdateTaskIndicator.addWidget(self.btnCancel)
         self.verticalLayout.addLayout(self.layoutUpdateTaskIndicator)
+        self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
+        self.scrollArea.setStyleSheet("QWidget\n"
+"{\n"
+"    background-color: rgb(30, 30, 30);\n"
+"}r")
+        self.scrollArea.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.scrollArea.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.scrollArea.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollArea.setObjectName("scrollArea")
+        self.scrollAreaWidgetContents = QtWidgets.QWidget()
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 440, 78))
+        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
+        self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_2.setSpacing(6)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.layoutListVersions = QtWidgets.QVBoxLayout()
+        self.layoutListVersions.setContentsMargins(-1, -1, 6, -1)
         self.layoutListVersions.setObjectName("layoutListVersions")
-        self.verticalLayout.addLayout(self.layoutListVersions)
-        spacerItem = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.MinimumExpanding)
-        self.verticalLayout.addItem(spacerItem)
+        self.verticalLayout_2.addLayout(self.layoutListVersions)
+        spacerItem = QtWidgets.QSpacerItem(20, 47, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_2.addItem(spacerItem)
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+        self.verticalLayout.addWidget(self.scrollArea)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 440, 21))
