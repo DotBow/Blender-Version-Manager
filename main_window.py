@@ -175,9 +175,6 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             if os.path.isfile(os.path.join(root_folder, dir, "blender.exe")):
                 versions.append(dir)
 
-        versions.sort(key=lambda ver: os.path.getmtime(
-            os.path.join(root_folder, ver, "blender.exe")), reverse=True)
-
         self.latest_local = versions[0]
 
         for ver in versions:
@@ -188,10 +185,14 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
     def draw_list_versions(self):
         if self.layouts:
+            self.layouts.sort(key=lambda ver: ver.mtime, reverse=True)
             self.blender_action.setVisible(True)
 
             for b3d_item_layout in self.layouts:
                 self.layoutListVersions.removeItem(b3d_item_layout)
+                b3d_item_layout.set_is_latest(False)
+
+            self.layouts[0].set_is_latest(True)
 
             for b3d_item_layout in self.layouts:
                 self.layoutListVersions.addLayout(b3d_item_layout)
@@ -232,21 +233,27 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.btnCancel.clicked.connect(self.build_loader.stop)
         self.build_loader.start()
 
-    def finished(self, success):
+    def finished(self, version):
         self.build_loader.terminate()
         self.build_loader.wait()
 
         self.btnSetRootFolder.setEnabled(True)
         self.set_task_visible(False)
-        self.draw_list_versions()
         self.is_update_running = False
 
-        if success:
+        if version:
+            root_folder = self.settings.value('root_folder')
+            b3d_item_layout = B3dItemLayout(
+                root_folder, version, True, self)
+            self.layouts.append(b3d_item_layout)
+            self.latest_local = version
+
             self.tray_icon.showMessage(
                 "Blender Version Manager",
                 "Update finished!",
                 QSystemTrayIcon.Information, 4000)
 
+        self.draw_list_versions()
         self.uptodate_thread = CheckForUpdates(self)
         self.uptodate_thread.new_version_obtained.connect(
             self.show_new_version)

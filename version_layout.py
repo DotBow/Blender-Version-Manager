@@ -110,6 +110,7 @@ class B3dItemLayout(QHBoxLayout):
         self.root_folder = root_folder
         self.version = version
         self.pids = []
+        self.mtime = os.path.getmtime(os.path.join(root_folder, version, "blender.exe"))
 
         self.setContentsMargins(6, 0, 6, 0)
         self.setSpacing(0)
@@ -127,12 +128,9 @@ class B3dItemLayout(QHBoxLayout):
             "Git-%s | %s" % (git, time.strftime("%d-%b-%H:%M", strptime)))
         self.btnOpen.clicked.connect(self.open)
 
-        if (is_latest):
-            self.btnOpen.setIcon(parent.star_icon)
-            self.parent.blender_action.triggered.disconnect()
-            self.parent.blender_action.triggered.connect(self.open)
-        else:
-            self.btnOpen.setIcon(parent.fake_icon)
+        self.set_is_latest(is_latest)
+        self.parent.blender_action.triggered.disconnect()
+        self.parent.blender_action.triggered.connect(self.open)
 
         self.btnOpen.setFont(QFont("MS Shell Dlg 2", 10))
         self.btnOpen.setCursor(QCursor(Qt.PointingHandCursor))
@@ -151,6 +149,12 @@ class B3dItemLayout(QHBoxLayout):
 
         self.addWidget(self.btnOpen)
         self.addWidget(self.btnDelete)
+
+    def set_is_latest(self, is_latest):
+        if is_latest:
+            self.btnOpen.setIcon(self.parent.star_icon)
+        else:
+            self.btnOpen.setIcon(self.parent.fake_icon)
 
     def open(self):
         process = subprocess.Popen(os.path.join(
@@ -199,6 +203,7 @@ class B3dItemLayout(QHBoxLayout):
                 self.delete_tread())).start()
 
     async def delete_tread(self):
+        self.set_is_latest(False)
         self.btnOpen.setText("Deleting...")
         self.btnOpen.setEnabled(False)
         self.btnDelete.hide()

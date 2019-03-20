@@ -51,7 +51,7 @@ class BuildLoader(QThread):
                     self.f.close()
                     if os.path.isdir(temp_path):
                         shutil.rmtree(temp_path)
-                    self.finished.emit(False)
+                    self.finished.emit(None)
                     return
 
         # Extract
@@ -71,7 +71,7 @@ class BuildLoader(QThread):
                 zf.close()
                 if os.path.isdir(temp_path):
                     shutil.rmtree(temp_path)
-                self.finished.emit(False)
+                self.finished.emit(None)
                 return
 
         zf.close()
@@ -105,10 +105,7 @@ class BuildLoader(QThread):
         os.rename(os.path.join(self.root_folder, version),
                   os.path.join(self.root_folder, nice_name))
 
-        b3d_item_layout = B3dItemLayout(
-            self.root_folder, nice_name, True, self.parent)
-        self.parent.layouts.append(b3d_item_layout)
-        self.finished.emit(True)
+        self.finished.emit(nice_name)
 
     def stop(self):
         self.is_running = False
