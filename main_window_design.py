@@ -377,15 +377,7 @@ class Ui_MainWindow(object):
 "QScrollBar:vertical\n"
 "{\n"
 "    background-color: rgb(30, 30, 30);\n"
-"    width: 4px;\n"
-"    margin: 0px;\n"
-"}\n"
-"\n"
-"QFrame\n"
-"{\n"
-"    border-style: solid;\n"
-"    border-color: rgb(30, 30, 30);\n"
-"    border-width: 0px 0px 0px 0px;\n"
+"    width: 6px;\n"
 "}\n"
 "\n"
 "QScrollBar::handle:vertical\n"
@@ -403,12 +395,14 @@ class Ui_MainWindow(object):
 "    background-color: rgb(30, 30, 30);    \n"
 "}")
         self.scrollArea.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.scrollArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
+        self.scrollArea.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.scrollArea.setLineWidth(0)
+        self.scrollArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.scrollArea.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 436, 78))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 440, 78))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)

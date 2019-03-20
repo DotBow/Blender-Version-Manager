@@ -672,15 +672,7 @@ QPushButton:hover
 QScrollBar:vertical
 {
 	background-color: rgb(30, 30, 30);
-	width: 4px;
-	margin: 0px;
-}
-
-QFrame
-{
-	border-style: solid;
-	border-color: rgb(30, 30, 30);
-	border-width: 0px 0px 0px 0px;
+	width: 6px;
 }
 
 QScrollBar::handle:vertical
@@ -701,8 +693,14 @@ QScrollBar::add-page:vertical
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
       </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <property name="lineWidth">
+       <number>0</number>
+      </property>
       <property name="verticalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOn</enum>
+       <enum>Qt::ScrollBarAsNeeded</enum>
       </property>
       <property name="horizontalScrollBarPolicy">
        <enum>Qt::ScrollBarAlwaysOff</enum>
@@ -715,7 +713,7 @@ QScrollBar::add-page:vertical
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>436</width>
+         <width>440</width>
          <height>78</height>
         </rect>
        </property>
