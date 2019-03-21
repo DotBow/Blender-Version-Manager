@@ -122,16 +122,16 @@ class B3dItemLayout(QHBoxLayout):
 
         ctime = re.search("build commit time: " + "(.*)", info)[1].rstrip()
         cdate = re.search("build commit date: " + "(.*)", info)[1].rstrip()
-        git = re.search("build hash: " + "(.*)", info)[1].rstrip()
+        self.git = re.search("build hash: " + "(.*)", info)[1].rstrip()
         strptime = time.strptime(cdate + ' ' + ctime, "%Y-%m-%d %H:%M")
 
         self.btnOpen = QPushButton(
-            "Git-%s | %s" % (git, time.strftime("%d-%b-%H:%M", strptime)))
+            "Git-%s | %s" % (self.git, time.strftime("%d-%b-%H:%M", strptime)))
         self.btnOpen.clicked.connect(self.open)
 
         self.set_is_latest(is_latest)
-        self.parent.blender_action.triggered.disconnect()
-        self.parent.blender_action.triggered.connect(self.open)
+        # self.parent.blender_action.triggered.disconnect()
+        # self.parent.blender_action.triggered.connect(self.open)
 
         self.btnOpen.setFont(QFont("MS Shell Dlg 2", 10))
         self.btnOpen.setCursor(QCursor(Qt.PointingHandCursor))

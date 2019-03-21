@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>440</width>
+    <width>400</width>
     <height>240</height>
    </rect>
   </property>
@@ -672,10 +672,10 @@ QPushButton:hover
 QScrollBar:vertical
 {
 	background-color: rgb(30, 30, 30);
-	width: 10px;
-	border-style: block;
+	width: 4px;
+	/*border-style: block;
 	border-width: 0px 6px 0px 0px;
-	border-color: #424242;
+	border-color: #424242;*/
 }
 
 QScrollBar::handle:vertical
@@ -728,7 +728,7 @@ QScrollBar::sub-line:vertical
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>440</width>
+         <width>400</width>
          <height>78</height>
         </rect>
        </property>
@@ -782,7 +782,7 @@ QScrollBar::sub-line:vertical
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>440</width>
+     <width>400</width>
      <height>21</height>
     </rect>
    </property>

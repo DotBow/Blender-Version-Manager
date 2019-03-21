@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(440, 240)
+        MainWindow.resize(400, 240)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -377,10 +377,10 @@ class Ui_MainWindow(object):
 "QScrollBar:vertical\n"
 "{\n"
 "    background-color: rgb(30, 30, 30);\n"
-"    width: 10px;\n"
-"    border-style: block;\n"
+"    width: 4px;\n"
+"    /*border-style: block;\n"
 "    border-width: 0px 6px 0px 0px;\n"
-"    border-color: #424242;\n"
+"    border-color: #424242;*/\n"
 "}\n"
 "\n"
 "QScrollBar::handle:vertical\n"
@@ -417,7 +417,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 440, 78))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 400, 78))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -434,7 +434,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.scrollArea)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 440, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 400, 21))
         self.menubar.setStyleSheet("")
         self.menubar.setNativeMenuBar(False)
         self.menubar.setObjectName("menubar")

@@ -46,8 +46,8 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             self.settings.setValue('root_folder', exe_path)
 
         # Custom title bar
-        self.title.setText(QApplication.applicationName() +
-                           ' ' + QApplication.applicationVersion())
+        self.title.setText("%s %s" % (
+            QApplication.applicationName(), QApplication.applicationVersion()))
         self.btnClose.clicked.connect(self.close)
         self.btnMinimize.clicked.connect(self.showMinimized)
 
@@ -183,8 +183,9 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
     def draw_list_versions(self):
         if len(self.layouts) > 0:
-            self.latest_local = self.layouts[0].version
             self.layouts.sort(key=lambda ver: ver.mtime, reverse=True)
+            self.latest_local = self.layouts[0].git
+            self.blender_action.triggered.connect(self.layouts[0].open)
             self.blender_action.setVisible(True)
 
             for b3d_item_layout in self.layouts:
@@ -224,7 +225,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
         self.btnUpdate.hide()
         self.btnCancel.show()
-        self.btnSetRootFolder.setEnabled(False)
+        self.btnSetRootFolder.hide()
         self.set_progress_bar(0, "Downloading: %p%")
 
         self.build_loader = BuildLoader(
@@ -239,7 +240,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.build_loader.terminate()
         self.build_loader.wait()
 
-        self.btnSetRootFolder.setEnabled(True)
+        self.btnSetRootFolder.show()
         self.set_task_visible(False)
         self.is_update_running = False
 
@@ -248,7 +249,6 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             b3d_item_layout = B3dItemLayout(
                 root_folder, version, True, self)
             self.layouts.append(b3d_item_layout)
-            self.latest_local = version
 
             self.tray_icon.showMessage(
                 "Blender Version Manager",
