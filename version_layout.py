@@ -130,8 +130,6 @@ class B3dItemLayout(QHBoxLayout):
         self.btnOpen.clicked.connect(self.open)
 
         self.set_is_latest(is_latest)
-        # self.parent.blender_action.triggered.disconnect()
-        # self.parent.blender_action.triggered.connect(self.open)
 
         self.btnOpen.setFont(QFont("MS Shell Dlg 2", 10))
         self.btnOpen.setCursor(QCursor(Qt.PointingHandCursor))
