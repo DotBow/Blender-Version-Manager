@@ -81,6 +81,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         hide_action = QAction("Hide", self)
         quit_action = QAction(self.quit_icon, "Quit", self)
 
+        self.blender_action.triggered.connect(self.open_latest_b3d)
         show_action.triggered.connect(self.bring_to_front)
         hide_action.triggered.connect(self.hide)
         quit_action.triggered.connect(self.quit)
@@ -118,6 +119,10 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.uptodate_thread.new_version_obtained.connect(
             self.show_new_version)
         self.uptodate_thread.start()
+
+    def open_latest_b3d(self):
+        if self.layouts:
+            self.layouts[0].open()
 
     def show_new_version(self, display_name):
         if (display_name == self.progressBar.text()):
@@ -185,7 +190,6 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         if len(self.layouts) > 0:
             self.layouts.sort(key=lambda ver: ver.mtime, reverse=True)
             self.latest_local = self.layouts[0].git
-            self.blender_action.triggered.connect(self.layouts[0].open)
             self.blender_action.setVisible(True)
 
             for b3d_item_layout in self.layouts:
