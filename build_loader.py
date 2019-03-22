@@ -101,8 +101,8 @@ class BuildLoader(QThread):
         b3d_exe = os.path.join(self.root_folder, nice_name, "blender.exe")
 
         if self.parent.settings.value('is_register_blend', type=bool):
-            subprocess.call([b3d_exe, "-r"],
-                            creationflags=subprocess.CREATE_NO_WINDOW)
+            subprocess.call([b3d_exe, "-r"], creationflags=CREATE_NO_WINDOW,
+                            shell=True, stderr=DEVNULL, stdin=DEVNULL)
 
         self.finished.emit(nice_name)
 
