@@ -10,6 +10,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QAction, QApplication, QFileDialog, QLabel,
                              QMainWindow, QMenu, QMessageBox, QSizePolicy,
                              QSystemTrayIcon)
+from PyQt5.QtWinExtras import QWinTaskbarButton, QWinTaskbarProgress
 
 import main_window_design
 from build_loader import BuildLoader
@@ -119,6 +120,15 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.uptodate_thread.new_version_obtained.connect(
             self.show_new_version)
         self.uptodate_thread.start()
+
+    def showEvent(self, event):
+        # Setup taskbar
+        self.task_button = QWinTaskbarButton(self)
+        self.task_button.setWindow(self.windowHandle())
+
+        self.taskbar_progress = self.task_button.progress()
+        self.taskbar_progress.setVisible(True)
+        self.taskbar_progress.setValue(0)
 
     def open_latest_b3d(self):
         if self.layouts:
