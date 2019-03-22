@@ -12,30 +12,17 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(400, 240)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
-        MainWindow.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
-        font.setBold(False)
-        font.setWeight(50)
-        font.setStrikeOut(False)
-        font.setKerning(True)
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         MainWindow.setFont(font)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/icons/app.svg"), QtGui.QIcon.Normal, QtGui.QIcon.On)
         MainWindow.setWindowIcon(icon)
-        MainWindow.setAccessibleDescription("")
-        MainWindow.setAutoFillBackground(False)
         MainWindow.setStyleSheet("QMainWindow\n"
 "{\n"
 "    background-color: rgb(30, 30, 30);\n"
 "}")
-        MainWindow.setDocumentMode(False)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
-        self.centralwidget.setContextMenuPolicy(QtCore.Qt.DefaultContextMenu)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -45,11 +32,8 @@ class Ui_MainWindow(object):
         self.layoutTitleBar.setSpacing(0)
         self.layoutTitleBar.setObjectName("layoutTitleBar")
         self.btnFile = QtWidgets.QPushButton(self.centralwidget)
-        self.btnFile.setSizeIncrement(QtCore.QSize(0, 0))
         self.btnFile.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btnFile.setToolTip("File Menu")
-        self.btnFile.setStatusTip("")
-        self.btnFile.setAutoFillBackground(False)
         self.btnFile.setStyleSheet("QPushButton\n"
 "{\n"
 "    background-color: rgb(60, 60, 60);\n"
@@ -71,7 +55,6 @@ class Ui_MainWindow(object):
 "{\n"
 "    image: none;\n"
 "}")
-        self.btnFile.setText("")
         self.btnFile.setIcon(icon)
         self.btnFile.setIconSize(QtCore.QSize(20, 20))
         self.btnFile.setObjectName("btnFile")
@@ -82,11 +65,9 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.title.sizePolicy().hasHeightForWidth())
         self.title.setSizePolicy(sizePolicy)
-        self.title.setSizeIncrement(QtCore.QSize(0, 0))
         font = QtGui.QFont()
         font.setPointSize(10)
         self.title.setFont(font)
-        self.title.setAutoFillBackground(False)
         self.title.setStyleSheet("background-color: rgb(60, 60, 60);\n"
 "color: rgb(204, 204, 204);\n"
 "padding: 0px 0px 0px 20px;")
@@ -96,11 +77,7 @@ class Ui_MainWindow(object):
         self.title.setObjectName("title")
         self.layoutTitleBar.addWidget(self.title)
         self.btnMinimize = QtWidgets.QPushButton(self.centralwidget)
-        self.btnMinimize.setSizeIncrement(QtCore.QSize(0, 0))
         self.btnMinimize.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.btnMinimize.setToolTip("")
-        self.btnMinimize.setStatusTip("")
-        self.btnMinimize.setAutoFillBackground(False)
         self.btnMinimize.setStyleSheet("QPushButton\n"
 "{\n"
 "    background-color: rgb(60, 60, 60);\n"
@@ -117,7 +94,6 @@ class Ui_MainWindow(object):
 "{\n"
 "    background-color: rgb(80, 80, 80);\n"
 "}")
-        self.btnMinimize.setText("")
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap(":/icons/minimize.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         icon1.addPixmap(QtGui.QPixmap(":/icons/minimize.svg"), QtGui.QIcon.Normal, QtGui.QIcon.On)
@@ -126,11 +102,7 @@ class Ui_MainWindow(object):
         self.btnMinimize.setObjectName("btnMinimize")
         self.layoutTitleBar.addWidget(self.btnMinimize)
         self.btnClose = QtWidgets.QPushButton(self.centralwidget)
-        self.btnClose.setSizeIncrement(QtCore.QSize(0, 0))
         self.btnClose.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.btnClose.setToolTip("")
-        self.btnClose.setStatusTip("")
-        self.btnClose.setAutoFillBackground(False)
         self.btnClose.setStyleSheet("QPushButton\n"
 "{\n"
 "    background-color: rgb(60, 60, 60);\n"
@@ -147,7 +119,6 @@ class Ui_MainWindow(object):
 "{\n"
 "    background-color: rgb(232, 17, 35);\n"
 "}")
-        self.btnClose.setText("")
         icon2 = QtGui.QIcon()
         icon2.addPixmap(QtGui.QPixmap(":/icons/close.svg"), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.btnClose.setIcon(icon2)
@@ -173,11 +144,9 @@ class Ui_MainWindow(object):
         font.setStrikeOut(False)
         font.setKerning(True)
         self.labelRootFolder.setFont(font)
-        self.labelRootFolder.setStatusTip("")
         self.labelRootFolder.setStyleSheet("color: rgb(255, 255, 255);")
         self.labelRootFolder.setText("C:/Blender/2.8")
         self.labelRootFolder.setTextFormat(QtCore.Qt.PlainText)
-        self.labelRootFolder.setScaledContents(False)
         self.labelRootFolder.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
         self.labelRootFolder.setObjectName("labelRootFolder")
         self.layoutRootFolderSettings.addWidget(self.labelRootFolder)
@@ -192,8 +161,6 @@ class Ui_MainWindow(object):
         self.btnSetRootFolder.setFont(font)
         self.btnSetRootFolder.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btnSetRootFolder.setToolTip("Change Root Folder")
-        self.btnSetRootFolder.setStatusTip("")
-        self.btnSetRootFolder.setAutoFillBackground(False)
         self.btnSetRootFolder.setStyleSheet("QPushButton\n"
 "{\n"
 "    border-style: solid;\n"
@@ -211,7 +178,6 @@ class Ui_MainWindow(object):
 "    background-color: rgb(80, 80, 80);\n"
 "    border-color: rgb(80, 80, 80);\n"
 "}")
-        self.btnSetRootFolder.setText("")
         icon3 = QtGui.QIcon()
         icon3.addPixmap(QtGui.QPixmap(":/icons/folder_add.svg"), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.btnSetRootFolder.setIcon(icon3)
@@ -230,7 +196,6 @@ class Ui_MainWindow(object):
         self.btnOpenRootFolder.setFont(font)
         self.btnOpenRootFolder.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btnOpenRootFolder.setToolTip("Open Root Folder")
-        self.btnOpenRootFolder.setStatusTip("")
         self.btnOpenRootFolder.setStyleSheet("QPushButton\n"
 "{\n"
 "    border-style: solid;\n"
@@ -248,7 +213,6 @@ class Ui_MainWindow(object):
 "    background-color: rgb(80, 80, 80);\n"
 "    border-color: rgb(80, 80, 80);\n"
 "}")
-        self.btnOpenRootFolder.setText("")
         icon4 = QtGui.QIcon()
         icon4.addPixmap(QtGui.QPixmap(":/icons/folder_open.svg"), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.btnOpenRootFolder.setIcon(icon4)
@@ -531,7 +495,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Blender Version Manager 1.2"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Blender Version Manager"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.actionToggleRegisterBlend.setText(_translate("MainWindow", "Toggle Register Blend-file Extension"))
         self.actionToggleRunMinimized.setText(_translate("MainWindow", "Toggle Run Minimized To Tray"))

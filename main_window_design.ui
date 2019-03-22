@@ -10,34 +10,18 @@
     <height>240</height>
    </rect>
   </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
   <property name="font">
    <font>
-    <weight>50</weight>
-    <bold>false</bold>
-    <strikeout>false</strikeout>
     <stylestrategy>PreferAntialias</stylestrategy>
-    <kerning>true</kerning>
    </font>
   </property>
   <property name="windowTitle">
-   <string>Blender Version Manager 1.2</string>
+   <string>Blender Version Manager</string>
   </property>
   <property name="windowIcon">
    <iconset>
     <normalon>:/icons/app.svg</normalon>
    </iconset>
-  </property>
-  <property name="accessibleDescription">
-   <string/>
-  </property>
-  <property name="autoFillBackground">
-   <bool>false</bool>
   </property>
   <property name="styleSheet">
    <string notr="true">QMainWindow
@@ -45,13 +29,7 @@
 	background-color: rgb(30, 30, 30);
 }</string>
   </property>
-  <property name="documentMode">
-   <bool>false</bool>
-  </property>
   <widget class="QWidget" name="centralwidget">
-   <property name="contextMenuPolicy">
-    <enum>Qt::DefaultContextMenu</enum>
-   </property>
    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0">
     <property name="leftMargin">
      <number>0</number>
@@ -78,23 +56,11 @@
       </property>
       <item>
        <widget class="QPushButton" name="btnFile">
-        <property name="sizeIncrement">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
         <property name="cursor">
          <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="toolTip">
          <string notr="true">File Menu</string>
-        </property>
-        <property name="statusTip">
-         <string notr="true"/>
-        </property>
-        <property name="autoFillBackground">
-         <bool>false</bool>
         </property>
         <property name="styleSheet">
          <string notr="true">QPushButton
@@ -119,9 +85,6 @@ QPushButton::menu-indicator
 	image: none;
 }</string>
         </property>
-        <property name="text">
-         <string notr="true"/>
-        </property>
         <property name="icon">
          <iconset>
           <normalon>:/icons/app.svg</normalon>
@@ -143,19 +106,10 @@ QPushButton::menu-indicator
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="sizeIncrement">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
         <property name="font">
          <font>
           <pointsize>10</pointsize>
          </font>
-        </property>
-        <property name="autoFillBackground">
-         <bool>false</bool>
         </property>
         <property name="styleSheet">
          <string notr="true">background-color: rgb(60, 60, 60);
@@ -178,23 +132,8 @@ padding: 0px 0px 0px 20px;</string>
       </item>
       <item>
        <widget class="QPushButton" name="btnMinimize">
-        <property name="sizeIncrement">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
         <property name="cursor">
          <cursorShape>PointingHandCursor</cursorShape>
-        </property>
-        <property name="toolTip">
-         <string notr="true"/>
-        </property>
-        <property name="statusTip">
-         <string notr="true"/>
-        </property>
-        <property name="autoFillBackground">
-         <bool>false</bool>
         </property>
         <property name="styleSheet">
          <string notr="true">QPushButton
@@ -213,9 +152,6 @@ QPushButton:hover
 {
 	background-color: rgb(80, 80, 80);
 }</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset>
@@ -232,23 +168,8 @@ QPushButton:hover
       </item>
       <item>
        <widget class="QPushButton" name="btnClose">
-        <property name="sizeIncrement">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
         <property name="cursor">
          <cursorShape>PointingHandCursor</cursorShape>
-        </property>
-        <property name="toolTip">
-         <string notr="true"/>
-        </property>
-        <property name="statusTip">
-         <string notr="true"/>
-        </property>
-        <property name="autoFillBackground">
-         <bool>false</bool>
         </property>
         <property name="styleSheet">
          <string notr="true">QPushButton
@@ -267,9 +188,6 @@ QPushButton:hover
 {
 	background-color: rgb(232, 17, 35);
 }</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset>
@@ -315,9 +233,6 @@ QPushButton:hover
           <kerning>true</kerning>
          </font>
         </property>
-        <property name="statusTip">
-         <string notr="true"/>
-        </property>
         <property name="styleSheet">
          <string notr="true">color: rgb(255, 255, 255);</string>
         </property>
@@ -326,9 +241,6 @@ QPushButton:hover
         </property>
         <property name="textFormat">
          <enum>Qt::PlainText</enum>
-        </property>
-        <property name="scaledContents">
-         <bool>false</bool>
         </property>
         <property name="textInteractionFlags">
          <set>Qt::NoTextInteraction</set>
@@ -354,12 +266,6 @@ QPushButton:hover
         <property name="toolTip">
          <string notr="true">Change Root Folder</string>
         </property>
-        <property name="statusTip">
-         <string notr="true"/>
-        </property>
-        <property name="autoFillBackground">
-         <bool>false</bool>
-        </property>
         <property name="styleSheet">
          <string notr="true">QPushButton
 {
@@ -378,9 +284,6 @@ QPushButton:hover
 	background-color: rgb(80, 80, 80);
 	border-color: rgb(80, 80, 80);
 }</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset>
@@ -417,9 +320,6 @@ QPushButton:hover
         <property name="toolTip">
          <string notr="true">Open Root Folder</string>
         </property>
-        <property name="statusTip">
-         <string notr="true"/>
-        </property>
         <property name="styleSheet">
          <string notr="true">QPushButton
 {
@@ -438,9 +338,6 @@ QPushButton:hover
 	background-color: rgb(80, 80, 80);
 	border-color: rgb(80, 80, 80);
 }</string>
-        </property>
-        <property name="text">
-         <string notr="true"/>
         </property>
         <property name="icon">
          <iconset>
