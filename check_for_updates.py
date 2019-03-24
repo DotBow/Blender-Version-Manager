@@ -23,8 +23,8 @@ class CheckForUpdates(QThread):
                 git = self.download_url.split('-',)[-2]
                 new_version = True
 
-                if self.parent.latest_local:
-                    if git in self.parent.latest_local:
+                if self.parent.layouts:
+                    if git in self.parent.layouts[0].git:
                         new_version = False
 
                 if new_version:
