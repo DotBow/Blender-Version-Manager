@@ -4,6 +4,7 @@ import shutil
 import subprocess
 import time
 import zipfile
+from pathlib import Path
 from subprocess import CREATE_NO_WINDOW, DEVNULL
 from urllib.request import urlopen
 
@@ -94,14 +95,16 @@ class BuildLoader(QThread):
         # Make nice name for dir
         git = re.search("build hash: " + "(.*)", info)[1].rstrip()
         nice_name = "Git-%s-%s" % (git, time.strftime("%d-%b-%H-%M", strptime))
-        os.rename(os.path.join(self.root_folder, version),
-                  os.path.join(self.root_folder, nice_name))
+
+        p = Path(os.path.join(self.root_folder, version))
+        t = Path(os.path.join(self.root_folder, nice_name))
+        p.rename(t)
 
         # Register .blend extension
-        b3d_exe = os.path.join(self.root_folder, nice_name, "blender.exe")
+        test = t / "blender.exe"
 
         if self.parent.settings.value('is_register_blend', type=bool):
-            subprocess.call([b3d_exe, "-r"], creationflags=CREATE_NO_WINDOW,
+            subprocess.call([str(test), "-r"], creationflags=CREATE_NO_WINDOW,
                             shell=True, stderr=DEVNULL, stdin=DEVNULL)
 
         self.finished.emit(nice_name)
