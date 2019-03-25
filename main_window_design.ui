@@ -731,9 +731,9 @@ QMenu::icon:checked
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionToggleRegisterBlend"/>
-    <addaction name="actionToggleRunMinimized"/>
     <addaction name="actionToggleRunOnStartup"/>
+    <addaction name="actionToggleRunMinimized"/>
+    <addaction name="actionToggleRegisterBlend"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
