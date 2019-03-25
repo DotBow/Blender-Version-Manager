@@ -5,7 +5,7 @@ import subprocess
 import time
 import zipfile
 from pathlib import Path
-from subprocess import CREATE_NO_WINDOW, DEVNULL
+from subprocess import CREATE_NO_WINDOW, DEVNULL, PIPE, STDOUT
 from urllib.request import urlopen
 
 from PyQt5.QtCore import QThread, pyqtSignal
@@ -105,7 +105,7 @@ class BuildLoader(QThread):
 
         if self.parent.settings.value('is_register_blend', type=bool):
             subprocess.call([str(test), "-r"], creationflags=CREATE_NO_WINDOW,
-                            shell=True, stderr=DEVNULL, stdin=DEVNULL)
+                            shell=True, stdout=PIPE, stderr=STDOUT, stdin=DEVNULL)
 
         self.finished.emit(nice_name)
 
