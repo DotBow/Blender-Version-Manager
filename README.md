@@ -7,7 +7,10 @@ Minimalistic download manager for Blender 2.8 (Win x64) latest builds.
 * Fast access via tray icon
 
 ### Main Window
-![Blender Version Manager Main Window](https://i.imgur.com/wAYYSF7.png)
+![Blender Version Manager Main Window](https://i.imgur.com/VKLWqwM.png)
+
+### File Menu
+![Blender Version Manager Main Window](https://i.imgur.com/hAxqp7s.png)
 
 ### Tray Context Menu
 ![Blender Version Manager Tray Icon](https://i.imgur.com/gHHU09Y.png)
