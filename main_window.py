@@ -121,14 +121,17 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             self.show_new_version)
         self.uptodate_thread.start()
 
+        self.taskbar_progress = None
+
     def showEvent(self, event):
         # Setup taskbar
-        self.task_button = QWinTaskbarButton(self)
-        self.task_button.setWindow(self.windowHandle())
+        if not self.taskbar_progress:
+            self.task_button = QWinTaskbarButton(self)
+            self.task_button.setWindow(self.windowHandle())
 
-        self.taskbar_progress = self.task_button.progress()
-        self.taskbar_progress.setVisible(True)
-        self.taskbar_progress.setValue(0)
+            self.taskbar_progress = self.task_button.progress()
+            self.taskbar_progress.setVisible(True)
+            self.taskbar_progress.setValue(0)
 
     def open_latest_b3d(self):
         if self.layouts:
@@ -139,7 +142,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             return
 
         self.set_task_visible(True)
-        self.set_progress_bar(0, display_name)
+        self.set_progress_bar(0, 0, display_name)
 
         if self.isHidden() and not self.uptodate_silent:
             self.tray_icon.showMessage(
@@ -240,7 +243,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.btnUpdate.hide()
         self.btnCancel.show()
         self.btnSetRootFolder.hide()
-        self.set_progress_bar(0, "Downloading: %p%")
+        self.set_progress_bar(0, 0, "Downloading: %p%")
 
         self.build_loader = BuildLoader(
             self, self.uptodate_thread.download_url)
@@ -273,12 +276,15 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.uptodate_thread = CheckForUpdates(self)
         self.uptodate_thread.new_version_obtained.connect(
             self.show_new_version)
-        self.set_progress_bar(0, "")
+        self.set_progress_bar(0, 0, "")
         self.uptodate_thread.start()
 
-    def set_progress_bar(self, val, format):
+    def set_progress_bar(self, progress_bar_val, taskbar_val, format):
         self.progressBar.setFormat(format)
-        self.progressBar.setValue(val * 100)
+        self.progressBar.setValue(progress_bar_val * 100)
+
+        if self.taskbar_progress:
+            self.taskbar_progress.setValue(taskbar_val * 100)
 
     def quit(self):
         if not self.is_running_task():

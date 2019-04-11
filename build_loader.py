@@ -14,7 +14,7 @@ from PyQt5.QtCore import QThread, pyqtSignal
 class BuildLoader(QThread):
     finished = pyqtSignal('PyQt_PyObject')
     block_abortion = pyqtSignal()
-    progress_changed = pyqtSignal('PyQt_PyObject', 'PyQt_PyObject')
+    progress_changed = pyqtSignal('PyQt_PyObject', 'PyQt_PyObject', 'PyQt_PyObject')
 
     def __init__(self, parent, url):
         QThread.__init__(self)
@@ -43,8 +43,9 @@ class BuildLoader(QThread):
                     break
 
                 file.write(chunk)
+                progress = os.stat(path).st_size / int(size)
                 self.progress_changed.emit(
-                    os.stat(path).st_size / int(size), "Downloading: %p%")
+                    progress, progress * 0.5, "Downloading: %p%")
 
                 if not self.is_running:
                     file.close()
@@ -62,8 +63,9 @@ class BuildLoader(QThread):
         for file in zf.infolist():
             zf.extract(file, self.root_folder)
             extracted_size += file.file_size
+            progress = extracted_size / uncompress_size
             self.progress_changed.emit(
-                extracted_size / uncompress_size, "Extracting: %p%")
+                progress, progress * 0.5 + 0.5, "Extracting: %p%")
 
             if not self.is_running:
                 shutil.rmtree(os.path.join(self.root_folder, version))
@@ -75,7 +77,7 @@ class BuildLoader(QThread):
 
         zf.close()
         self.block_abortion.emit()
-        self.progress_changed.emit(0, "Finishing...")
+        self.progress_changed.emit(0, 0, "Finishing...")
 
         # Delete temp folder
         if os.path.isdir(temp_path):
