@@ -98,15 +98,15 @@ class BuildLoader(QThread):
         git = re.search("build hash: " + "(.*)", info)[1].rstrip()
         nice_name = "Git-%s-%s" % (git, time.strftime("%d-%b-%H-%M", strptime))
 
-        p = Path(os.path.join(self.root_folder, version))
-        t = Path(os.path.join(self.root_folder, nice_name))
-        p.rename(t)
+        source_path = Path(os.path.join(self.root_folder, version))
+        target_path = Path(os.path.join(self.root_folder, nice_name))
+        source_path.rename(target_path)
 
         # Register .blend extension
-        test = t / "blender.exe"
+        b3d_exe = target_path / "blender.exe"
 
         if self.parent.settings.value('is_register_blend', type=bool):
-            subprocess.call([str(test), "-r"], creationflags=CREATE_NO_WINDOW,
+            subprocess.call([str(b3d_exe), "-r"], creationflags=CREATE_NO_WINDOW,
                             shell=True, stdout=PIPE, stderr=STDOUT, stdin=DEVNULL)
 
         self.finished.emit(nice_name)
