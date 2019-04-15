@@ -29,9 +29,9 @@ class CheckForUpdates(QThread):
 
                 if new_version:
                     datetime = self.get_commit_datetime(commit)
-                    strptime = time.strptime(
+                    self.strptime = time.strptime(
                         datetime, '%a, %d %b %Y %H:%M:%S %z')
-                    strftime = time.strftime("%d-%b-%H:%M", strptime)
+                    strftime = time.strftime("%d-%b-%H:%M", self.strptime)
                     info = urlopen(self.download_url).info()
                     size = str(int(info['content-length']) // 1048576) + " MB"
                     display_name = "Git-" + commit + " | " + strftime + " | " + size

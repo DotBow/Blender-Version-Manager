@@ -14,12 +14,14 @@ from PyQt5.QtCore import QThread, pyqtSignal
 class BuildLoader(QThread):
     finished = pyqtSignal('PyQt_PyObject')
     block_abortion = pyqtSignal()
-    progress_changed = pyqtSignal('PyQt_PyObject', 'PyQt_PyObject', 'PyQt_PyObject')
+    progress_changed = pyqtSignal(
+        'PyQt_PyObject', 'PyQt_PyObject', 'PyQt_PyObject')
 
-    def __init__(self, parent, url):
+    def __init__(self, parent, url, strptime):
         QThread.__init__(self)
-        self.url = url
         self.parent = parent
+        self.url = url
+        self.strptime = strptime
         self.root_folder = self.parent.settings.value('root_folder')
         self.is_running = False
 
@@ -83,20 +85,10 @@ class BuildLoader(QThread):
         if os.path.isdir(temp_path):
             shutil.rmtree(temp_path)
 
-        # Get blender version info
-        b3d_exe = os.path.join(self.root_folder, version, "blender.exe")
-
-        info = subprocess.check_output(
-            [b3d_exe, "-v"], creationflags=CREATE_NO_WINDOW, shell=True,
-            stderr=DEVNULL, stdin=DEVNULL).decode('UTF-8')
-
-        ctime = re.search("build commit time: " + "(.*)", info)[1].rstrip()
-        cdate = re.search("build commit date: " + "(.*)", info)[1].rstrip()
-        strptime = time.strptime(cdate + ' ' + ctime, "%Y-%m-%d %H:%M")
-
         # Make nice name for dir
-        git = re.search("build hash: " + "(.*)", info)[1].rstrip()
-        nice_name = "Git-%s-%s" % (git, time.strftime("%d-%b-%H-%M", strptime))
+        git = self.url.split('-',)[-2]
+        nice_name = "Git-%s-%s" % (git,
+                                   time.strftime("%d-%b-%H-%M", self.strptime))
 
         source_path = Path(os.path.join(self.root_folder, version))
         target_path = Path(os.path.join(self.root_folder, nice_name))
