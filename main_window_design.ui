@@ -615,7 +615,7 @@ QScrollBar::sub-line:vertical
        <number>0</number>
       </property>
       <property name="verticalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOn</enum>
+       <enum>Qt::ScrollBarAsNeeded</enum>
       </property>
       <property name="horizontalScrollBarPolicy">
        <enum>Qt::ScrollBarAlwaysOff</enum>
@@ -628,7 +628,7 @@ QScrollBar::sub-line:vertical
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>396</width>
+         <width>400</width>
          <height>73</height>
         </rect>
        </property>
