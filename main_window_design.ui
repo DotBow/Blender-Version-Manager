@@ -563,16 +563,19 @@ QPushButton:hover
       <property name="styleSheet">
        <string notr="true">QWidget
 {
-	background-color: rgb(30, 30, 30);
+	background-color: #1e1e1e;
 }
 
 QScrollBar:vertical
 {
-	background-color: rgb(30, 30, 30);
+	background-color: #1e1e1e;
 	width: 4px;
-	/*border-style: block;
-	border-width: 0px 6px 0px 0px;
-	border-color: #424242;*/
+}
+
+QScrollBar::handle:vertical:hover
+{
+	background-color: #4f4f4f;
+	width: 4px;
 }
 
 QScrollBar::handle:vertical
@@ -612,7 +615,7 @@ QScrollBar::sub-line:vertical
        <number>0</number>
       </property>
       <property name="verticalScrollBarPolicy">
-       <enum>Qt::ScrollBarAsNeeded</enum>
+       <enum>Qt::ScrollBarAlwaysOn</enum>
       </property>
       <property name="horizontalScrollBarPolicy">
        <enum>Qt::ScrollBarAlwaysOff</enum>
@@ -625,7 +628,7 @@ QScrollBar::sub-line:vertical
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>400</width>
+         <width>396</width>
          <height>73</height>
         </rect>
        </property>
