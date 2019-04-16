@@ -8,7 +8,7 @@ from main_window import B3dVersionMangerMainWindow
 
 def main():
     QApplication.setApplicationName("Blender Version Manager")
-    QApplication.setApplicationVersion("1.4.0")
+    QApplication.setApplicationVersion("1.4.1")
 
     app = QApplication(sys.argv)
     window = B3dVersionMangerMainWindow(app)
