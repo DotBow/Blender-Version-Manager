@@ -5,7 +5,7 @@ import sys
 import winreg
 
 from bs4 import BeautifulSoup
-from PyQt5.QtCore import QPoint, QSettings, Qt
+from PyQt5.QtCore import QPoint, QSettings, Qt, QEvent
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QAction, QApplication, QFileDialog, QLabel,
                              QMainWindow, QMenu, QMessageBox, QSizePolicy,
@@ -69,6 +69,8 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
         self.menubar.hide()
         self.btnFile.setMenu(self.menuFile)
+
+        self.menuFile.installEventFilter(self)
 
         # Root folder layout
         self.labelRootFolder.setText(self.settings.value('root_folder'))
@@ -337,3 +339,14 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
                             Qt.WindowMinimized | Qt.WindowActive)
         self.activateWindow()
         self.show()
+
+    # Prevent QMenu from closing
+    def eventFilter(self, obj, event):
+        if event.type() in [QEvent.MouseButtonRelease]:
+            if isinstance(obj, QMenu):
+                if obj.activeAction():
+                    if not obj.activeAction().menu():
+                        obj.activeAction().trigger()
+                        return True
+
+        return super(B3dVersionMangerMainWindow, self).eventFilter(obj, event)
