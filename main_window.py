@@ -26,10 +26,10 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
         # Read icons
         self.app_icon = QIcon(":/icons/app.svg")
-        self.star_icon = QIcon(":/icons/star.svg")
-        self.star_inv_icon = QIcon(":/icons/star_inv.svg")
-        self.trash_icon = QIcon(":/icons/delete.svg")
-        self.quit_icon = QIcon(":/icons/quit_inv.svg")
+        self.star_icon = QIcon(":/icons/star.png")
+        self.star_inv_icon = QIcon(":/icons/star.png")
+        self.trash_icon = QIcon(":/icons/delete.png")
+        self.quit_icon = QIcon(":/icons/quit.png")
         self.fake_icon = QIcon(":/icons/fake.svg")
 
         # Read settings
@@ -79,7 +79,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             lambda: os.startfile(self.settings.value('root_folder')))
 
         # Tray layout
-        self.blender_action = QAction(self.star_inv_icon, "Blender", self)
+        self.blender_action = QAction(self.star_inv_icon, "Blender    ", self)
         show_action = QAction("Show", self)
         hide_action = QAction("Hide", self)
         quit_action = QAction(self.quit_icon, "Quit", self)
@@ -90,6 +90,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         quit_action.triggered.connect(self.quit)
 
         self.tray_menu = QMenu()
+        self.tray_menu.setStyleSheet(self.menuFile.styleSheet())
         self.tray_menu.addAction(self.blender_action)
         self.tray_menu.addSeparator()
         self.tray_menu.addAction(show_action)

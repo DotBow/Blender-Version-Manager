@@ -68,7 +68,7 @@ class B3dItemLayout(QHBoxLayout):
                     border-style: solid;
                     border-color: rgb(51, 51, 51);
                     border-width: 0px 4px 0px 4px;
-                    qproperty-icon: url(:/icons/delete.svg);
+                    qproperty-icon: url(:/icons/delete.png);
                     qproperty-iconSize: 20px;
                 }
 

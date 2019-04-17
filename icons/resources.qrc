@@ -1,19 +1,18 @@
 <RCC>
   <qresource prefix="icons">
+    <file>download.png</file>
+    <file>stop.png</file>
+    <file>folder_add.png</file>
+    <file>folder_open.png</file>
+    <file>star.png</file>
+    <file>delete.png</file>
+    <file>quit.png</file>
+    <file>tick_off.png</file>
+    <file>tick_on.png</file>
     <file>app.svg</file>
     <file>fake.svg</file>
     <file>app_inv.svg</file>
     <file>close.svg</file>
-    <file>delete.svg</file>
-    <file>download.svg</file>
-    <file>folder_add.svg</file>
-    <file>folder_open.svg</file>
     <file>minimize.svg</file>
-    <file>quit.svg</file>
-    <file>quit_inv.svg</file>
-    <file>star.svg</file>
-    <file>star_inv.svg</file>
-    <file>stop.svg</file>
-    <file>tick.svg</file>
   </qresource>
 </RCC>

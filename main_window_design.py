@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(400, 235)
+        MainWindow.resize(400, 231)
         font = QtGui.QFont()
         font.setStyleStrategy(QtGui.QFont.PreferAntialias)
         MainWindow.setFont(font)
@@ -179,7 +179,7 @@ class Ui_MainWindow(object):
 "    border-color: rgb(80, 80, 80);\n"
 "}")
         icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap(":/icons/folder_add.svg"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        icon3.addPixmap(QtGui.QPixmap(":/icons/folder_add.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.btnSetRootFolder.setIcon(icon3)
         self.btnSetRootFolder.setIconSize(QtCore.QSize(20, 20))
         self.btnSetRootFolder.setFlat(True)
@@ -214,7 +214,7 @@ class Ui_MainWindow(object):
 "    border-color: rgb(80, 80, 80);\n"
 "}")
         icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap(":/icons/folder_open.svg"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        icon4.addPixmap(QtGui.QPixmap(":/icons/folder_open.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.btnOpenRootFolder.setIcon(icon4)
         self.btnOpenRootFolder.setIconSize(QtCore.QSize(20, 20))
         self.btnOpenRootFolder.setDefault(False)
@@ -293,7 +293,7 @@ class Ui_MainWindow(object):
 "}")
         self.btnUpdate.setText("")
         icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap(":/icons/download.svg"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        icon5.addPixmap(QtGui.QPixmap(":/icons/download.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.btnUpdate.setIcon(icon5)
         self.btnUpdate.setIconSize(QtCore.QSize(20, 20))
         self.btnUpdate.setFlat(True)
@@ -325,7 +325,7 @@ class Ui_MainWindow(object):
 "}")
         self.btnCancel.setText("")
         icon6 = QtGui.QIcon()
-        icon6.addPixmap(QtGui.QPixmap(":/icons/stop.svg"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        icon6.addPixmap(QtGui.QPixmap(":/icons/stop.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.btnCancel.setIcon(icon6)
         self.btnCancel.setIconSize(QtCore.QSize(20, 20))
         self.btnCancel.setFlat(True)
@@ -384,7 +384,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 400, 73))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 400, 69))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -436,9 +436,14 @@ class Ui_MainWindow(object):
 "    margin: 6px;\n"
 "}\n"
 "\n"
-"QMenu::icon:checked \n"
+"QMenu::icon:checked\n"
 "{\n"
-"    image: url(:/icons/tick.svg);\n"
+"    image: url(:/icons/tick_on.png);\n"
+"}\n"
+"\n"
+"QMenu::icon:unchecked\n"
+"{\n"
+"    image: url(:/icons/tick_off.png);\n"
 "}")
         self.menuFile.setObjectName("menuFile")
         MainWindow.setMenuBar(self.menubar)
@@ -467,7 +472,7 @@ class Ui_MainWindow(object):
         self.actionToggleRunMinimized.setObjectName("actionToggleRunMinimized")
         self.actionQuit = QtWidgets.QAction(MainWindow)
         icon8 = QtGui.QIcon()
-        icon8.addPixmap(QtGui.QPixmap(":/icons/quit.svg"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        icon8.addPixmap(QtGui.QPixmap(":/icons/quit.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.actionQuit.setIcon(icon8)
         self.actionQuit.setText("Quit                                     Ctrl+Q")
         self.actionQuit.setToolTip("Quit")
@@ -500,10 +505,10 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Blender Version Manager"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
-        self.actionToggleRegisterBlend.setText(_translate("MainWindow", "Toggle Register Blend-file Extension"))
-        self.actionToggleRunMinimized.setText(_translate("MainWindow", "Toggle Run Minimized To Tray"))
+        self.actionToggleRegisterBlend.setText(_translate("MainWindow", "Register Blend-file Extension"))
+        self.actionToggleRunMinimized.setText(_translate("MainWindow", "Run Minimized To Tray"))
         self.actionQuit.setShortcut(_translate("MainWindow", "Ctrl+Q"))
-        self.actionToggleRunOnStartup.setText(_translate("MainWindow", "Toggle Run When Windows Starts"))
+        self.actionToggleRunOnStartup.setText(_translate("MainWindow", "Run When Windows Starts"))
         self.actionasd_as_sa_da.setText(_translate("MainWindow", "asd as sa da "))
 
 import resources_rc

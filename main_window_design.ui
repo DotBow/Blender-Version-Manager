@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>235</height>
+    <height>231</height>
    </rect>
   </property>
   <property name="font">
@@ -287,7 +287,7 @@ QPushButton:hover
         </property>
         <property name="icon">
          <iconset>
-          <normalon>:/icons/folder_add.svg</normalon>
+          <normalon>:/icons/folder_add.png</normalon>
          </iconset>
         </property>
         <property name="iconSize">
@@ -341,7 +341,7 @@ QPushButton:hover
         </property>
         <property name="icon">
          <iconset>
-          <normalon>:/icons/folder_open.svg</normalon>
+          <normalon>:/icons/folder_open.png</normalon>
          </iconset>
         </property>
         <property name="iconSize">
@@ -490,7 +490,7 @@ QPushButton:hover
         </property>
         <property name="icon">
          <iconset>
-          <normalon>:/icons/download.svg</normalon>
+          <normalon>:/icons/download.png</normalon>
          </iconset>
         </property>
         <property name="iconSize">
@@ -542,7 +542,7 @@ QPushButton:hover
         </property>
         <property name="icon">
          <iconset>
-          <normalon>:/icons/stop.svg</normalon>
+          <normalon>:/icons/stop.png</normalon>
          </iconset>
         </property>
         <property name="iconSize">
@@ -629,7 +629,7 @@ QScrollBar::sub-line:vertical
          <x>0</x>
          <y>0</y>
          <width>400</width>
-         <height>73</height>
+         <height>69</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -726,9 +726,14 @@ QMenu::icon
 	margin: 6px;
 }
 
-QMenu::icon:checked 
+QMenu::icon:checked
 {
-	image: url(:/icons/tick.svg);
+	image: url(:/icons/tick_on.png);
+}
+
+QMenu::icon:unchecked
+{
+	image: url(:/icons/tick_off.png);
 }</string>
     </property>
     <property name="title">
@@ -760,7 +765,7 @@ QMenu::icon:checked
     </iconset>
    </property>
    <property name="text">
-    <string>Toggle Register Blend-file Extension</string>
+    <string>Register Blend-file Extension</string>
    </property>
    <property name="statusTip">
     <string notr="true"/>
@@ -781,7 +786,7 @@ QMenu::icon:checked
     </iconset>
    </property>
    <property name="text">
-    <string>Toggle Run Minimized To Tray</string>
+    <string>Run Minimized To Tray</string>
    </property>
    <property name="statusTip">
     <string notr="true"/>
@@ -795,7 +800,7 @@ QMenu::icon:checked
   <action name="actionQuit">
    <property name="icon">
     <iconset>
-     <normalon>:/icons/quit.svg</normalon>
+     <normalon>:/icons/quit.png</normalon>
     </iconset>
    </property>
    <property name="text">
@@ -826,7 +831,7 @@ QMenu::icon:checked
     </iconset>
    </property>
    <property name="text">
-    <string>Toggle Run When Windows Starts</string>
+    <string>Run When Windows Starts</string>
    </property>
    <property name="statusTip">
     <string notr="true"/>
