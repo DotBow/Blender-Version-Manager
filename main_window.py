@@ -123,23 +123,16 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
         self.taskbar_progress = None
 
-        self.disambiguateTimer = QTimer(self)
-        self.disambiguateTimer.setSingleShot(True)
-        self.disambiguateTimer.timeout.connect(
-            self.disambiguateTimerTimeout)
+        self.left_click_timer = QTimer(self)
+        self.left_click_timer.setSingleShot(True)
+        self.left_click_timer.timeout.connect(self.bring_to_front)
 
     def onTrayIconActivated(self, reason):
         if reason == QSystemTrayIcon.Trigger:
-            self.disambiguateTimer.start(QApplication.doubleClickInterval())
+            self.left_click_timer.start(QApplication.doubleClickInterval())
         elif reason == QSystemTrayIcon.DoubleClick:
-            print("Tray icon double clicked")
-            self.disambiguateTimer.stop()
+            self.left_click_timer.stop()
             self.open_latest_b3d()
-
-    def disambiguateTimerTimeout(self):
-        print("Tray icon single clicked")
-        self.show()
-        self.activateWindow()
 
     def showEvent(self, event):
         # Setup taskbar
