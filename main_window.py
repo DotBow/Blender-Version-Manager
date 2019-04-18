@@ -5,7 +5,7 @@ import sys
 import winreg
 
 from bs4 import BeautifulSoup
-from PyQt5.QtCore import QPoint, QSettings, Qt, QEvent
+from PyQt5.QtCore import QPoint, QSettings, Qt, QEvent, QTimer
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QAction, QApplication, QFileDialog, QLabel,
                              QMainWindow, QMenu, QMessageBox, QSizePolicy,
@@ -91,7 +91,6 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.tray_menu = QMenu()
         self.tray_menu.setStyleSheet(self.menuFile.styleSheet())
         self.tray_menu.addAction(self.blender_action)
-        # self.tray_menu.addSeparator()
         self.tray_menu.addAction(show_action)
         self.tray_menu.addAction(hide_action)
         self.tray_menu.addAction(quit_action)
@@ -99,8 +98,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.tray_icon = QSystemTrayIcon(self.app_icon, self)
         self.tray_icon.setContextMenu(self.tray_menu)
         self.tray_icon.messageClicked.connect(self.bring_to_front)
-        self.tray_icon.activated.connect(
-            lambda btn: self.bring_to_front() if btn == 3 else False)
+        self.tray_icon.activated.connect(self.onTrayIconActivated)
         self.tray_icon.show()
 
         # Version layout
@@ -124,6 +122,24 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.uptodate_thread.start()
 
         self.taskbar_progress = None
+
+        self.disambiguateTimer = QTimer(self)
+        self.disambiguateTimer.setSingleShot(True)
+        self.disambiguateTimer.timeout.connect(
+            self.disambiguateTimerTimeout)
+
+    def onTrayIconActivated(self, reason):
+        if reason == QSystemTrayIcon.Trigger:
+            self.disambiguateTimer.start(QApplication.doubleClickInterval())
+        elif reason == QSystemTrayIcon.DoubleClick:
+            print("Tray icon double clicked")
+            self.disambiguateTimer.stop()
+            self.open_latest_b3d()
+
+    def disambiguateTimerTimeout(self):
+        print("Tray icon single clicked")
+        self.show()
+        self.activateWindow()
 
     def showEvent(self, event):
         # Setup taskbar
@@ -337,8 +353,8 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
     def bring_to_front(self):
         self.setWindowState(self.windowState() & ~
                             Qt.WindowMinimized | Qt.WindowActive)
-        self.activateWindow()
         self.show()
+        self.activateWindow()
 
     # Prevent QMenu from closing
     def eventFilter(self, obj, event):
