@@ -31,10 +31,10 @@ class Ui_MainWindow(object):
         self.layoutTitleBar.setContentsMargins(0, 0, -1, -1)
         self.layoutTitleBar.setSpacing(0)
         self.layoutTitleBar.setObjectName("layoutTitleBar")
-        self.btnFile = QtWidgets.QPushButton(self.centralwidget)
-        self.btnFile.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.btnFile.setToolTip("Settings Menu")
-        self.btnFile.setStyleSheet("QPushButton\n"
+        self.btnSettings = QtWidgets.QPushButton(self.centralwidget)
+        self.btnSettings.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.btnSettings.setToolTip("Settings Menu")
+        self.btnSettings.setStyleSheet("QPushButton\n"
 "{\n"
 "    background-color: rgb(60, 60, 60);\n"
 "    border-style: solid;\n"
@@ -57,10 +57,10 @@ class Ui_MainWindow(object):
 "}")
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap(":/icons/settings.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
-        self.btnFile.setIcon(icon1)
-        self.btnFile.setIconSize(QtCore.QSize(20, 20))
-        self.btnFile.setObjectName("btnFile")
-        self.layoutTitleBar.addWidget(self.btnFile)
+        self.btnSettings.setIcon(icon1)
+        self.btnSettings.setIconSize(QtCore.QSize(20, 20))
+        self.btnSettings.setObjectName("btnSettings")
+        self.layoutTitleBar.addWidget(self.btnSettings)
         self.title = QtWidgets.QLabel(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -496,8 +496,6 @@ class Ui_MainWindow(object):
         self.menuFile.addAction(self.actionToggleRunOnStartup)
         self.menuFile.addAction(self.actionToggleRunMinimized)
         self.menuFile.addAction(self.actionToggleRegisterBlend)
-        self.menuFile.addSeparator()
-        self.menuFile.addAction(self.actionQuit)
         self.menubar.addAction(self.menuFile.menuAction())
 
         self.retranslateUi(MainWindow)

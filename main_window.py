@@ -64,10 +64,8 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.actionToggleRunOnStartup.triggered.connect(
             self.toggle_run_on_startup)
 
-        self.actionQuit.triggered.connect(self.quit)
-
         self.menubar.hide()
-        self.btnFile.setMenu(self.menuFile)
+        self.btnSettings.setMenu(self.menuFile)
 
         self.menuFile.installEventFilter(self)
 

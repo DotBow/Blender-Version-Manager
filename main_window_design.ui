@@ -55,7 +55,7 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QPushButton" name="btnFile">
+       <widget class="QPushButton" name="btnSettings">
         <property name="cursor">
          <cursorShape>PointingHandCursor</cursorShape>
         </property>
@@ -742,8 +742,6 @@ QMenu::icon:unchecked
     <addaction name="actionToggleRunOnStartup"/>
     <addaction name="actionToggleRunMinimized"/>
     <addaction name="actionToggleRegisterBlend"/>
-    <addaction name="separator"/>
-    <addaction name="actionQuit"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
