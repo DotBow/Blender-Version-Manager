@@ -60,7 +60,7 @@
          <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="toolTip">
-         <string notr="true">File Menu</string>
+         <string notr="true">Settings Menu</string>
         </property>
         <property name="styleSheet">
          <string notr="true">QPushButton
@@ -87,7 +87,7 @@ QPushButton::menu-indicator
         </property>
         <property name="icon">
          <iconset>
-          <normalon>:/icons/app.svg</normalon>
+          <normalon>:/icons/settings.png</normalon>
          </iconset>
         </property>
         <property name="iconSize">
