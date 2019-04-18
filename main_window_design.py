@@ -474,7 +474,7 @@ class Ui_MainWindow(object):
         icon8 = QtGui.QIcon()
         icon8.addPixmap(QtGui.QPixmap(":/icons/quit.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.actionQuit.setIcon(icon8)
-        self.actionQuit.setText("Quit                                     Ctrl+Q")
+        self.actionQuit.setText("Quit                          Ctrl+Q")
         self.actionQuit.setToolTip("Quit")
         self.actionQuit.setStatusTip("")
         font = QtGui.QFont()
