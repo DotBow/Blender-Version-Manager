@@ -701,19 +701,12 @@ QScrollBar::sub-line:vertical
 {
 	background-color: rgb(37, 37, 38);
 	color: rgb(255, 255, 255);
-	padding: 4px 1px 4px 1px;
-}
-
-QMenu::separator
-{
-	background-color: rgb(97, 97, 98);
-	height: 1px;
-	margin: 4px 8px 4px 32px;
+	padding: 1px;
 }
 
 QMenu::item
 {
-	padding: 4px 12px 4px 32px;
+	padding: 4px 8px 7px 28px;
 }
 
 QMenu::item::selected
