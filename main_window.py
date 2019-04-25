@@ -102,8 +102,8 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         # Version layout
         self.btnUpdate.clicked.connect(self.update)
         self.set_task_visible(False)
+        self.zeroBuildsWarning.hide()
         self.layouts = []
-        self.latest_local = None
         self.collect_versions()
         self.draw_list_versions()
 
@@ -210,8 +210,8 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
     def draw_list_versions(self):
         if len(self.layouts) > 0:
+            self.zeroBuildsWarning.hide()
             self.layouts.sort(key=lambda ver: ver.mtime, reverse=True)
-            self.latest_local = self.layouts[0].git
             self.blender_action.setVisible(True)
 
             for b3d_item_layout in self.layouts:
@@ -223,12 +223,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             for b3d_item_layout in self.layouts:
                 self.layoutListVersions.addLayout(b3d_item_layout)
         else:
-            self.latest_local = None
-            label = QLabel("No Local Versions Found!")
-            label.setStyleSheet("color: white; font-size: 10pt;")
-            label.setAlignment(Qt.AlignCenter)
-            label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-            self.layoutListVersions.addWidget(label)
+            self.zeroBuildsWarning.show()
             self.blender_action.setVisible(False)
 
     def set_root_folder(self):
