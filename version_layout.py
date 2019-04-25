@@ -16,6 +16,7 @@ from PyQt5.QtWidgets import QHBoxLayout, QMessageBox, QPushButton, QSizePolicy
 class B3dItemLayout(QHBoxLayout):
     def __init__(self, root_folder, version, is_latest, parent):
         super(B3dItemLayout, self).__init__(None)
+        self.is_latest = is_latest
 
         self.btn_open_style = \
             ("""QPushButton[IsRunning=false]
@@ -129,7 +130,7 @@ class B3dItemLayout(QHBoxLayout):
             "Git-%s | %s" % (self.git, time.strftime("%d-%b-%H:%M", strptime)))
         self.btnOpen.clicked.connect(self.open)
 
-        self.set_is_latest(is_latest)
+        self.set_is_latest(self.is_latest)
 
         self.btnOpen.setFont(QFont("MS Shell Dlg 2", 10))
         self.btnOpen.setCursor(QCursor(Qt.PointingHandCursor))
@@ -150,7 +151,9 @@ class B3dItemLayout(QHBoxLayout):
         self.addWidget(self.btnDelete)
 
     def set_is_latest(self, is_latest):
-        if is_latest:
+        self.is_latest = is_latest
+
+        if self.is_latest:
             self.btnOpen.setIcon(self.parent.star_icon)
         else:
             self.btnOpen.setIcon(self.parent.fake_icon)
@@ -202,7 +205,10 @@ class B3dItemLayout(QHBoxLayout):
                 self.delete_tread())).start()
 
     async def delete_tread(self):
-        self.set_is_latest(False)
+        if self.is_latest:
+            self.set_is_latest(False)
+            self.parent.layouts[1].set_is_latest(True)
+
         self.btnOpen.setText("Deleting...")
         self.btnOpen.setEnabled(False)
         self.btnDelete.hide()
