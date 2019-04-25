@@ -113,17 +113,24 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
         # Update task
         self.is_update_running = False
-        self.uptodate_silent = False
-        self.uptodate_thread = CheckForUpdates(self)
-        self.uptodate_thread.new_version_obtained.connect(
-            self.show_new_version)
-        self.uptodate_thread.start()
+        self.start_uptodate_thread()
 
         self.taskbar_progress = None
 
         self.left_click_timer = QTimer(self)
         self.left_click_timer.setSingleShot(True)
         self.left_click_timer.timeout.connect(self.bring_to_front)
+
+    def start_uptodate_thread(self):
+        self.uptodate_thread = CheckForUpdates(self)
+        self.uptodate_thread.new_version_obtained.connect(
+            self.show_new_version)
+        self.uptodate_thread.start()
+
+    def stop_uptodate_thread(self):
+        self.uptodate_thread.is_running = False
+        self.uptodate_thread.terminate()
+        self.uptodate_thread.wait()
 
     def onTrayIconActivated(self, reason):
         if reason == QSystemTrayIcon.Trigger:
@@ -153,7 +160,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.set_task_visible(True)
         self.set_progress_bar(0, 0, display_name)
 
-        if self.isHidden() and not self.uptodate_silent:
+        if self.isHidden():
             self.tray_icon.showMessage(
                 "Blender Version Manager",
                 "New version of Blender 2.8 is avaliable!",
@@ -240,9 +247,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
     def update(self):
         self.is_update_running = True
-        self.uptodate_thread.is_running = False
-        self.uptodate_thread.terminate()
-        self.uptodate_thread.wait()
+        self.stop_uptodate_thread()
 
         self.btnUpdate.hide()
         self.btnCancel.show()
@@ -277,11 +282,8 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
                 QSystemTrayIcon.Information, 4000)
 
         self.draw_list_versions()
-        self.uptodate_thread = CheckForUpdates(self)
-        self.uptodate_thread.new_version_obtained.connect(
-            self.show_new_version)
         self.set_progress_bar(0, 0, "")
-        self.uptodate_thread.start()
+        self.start_uptodate_thread()
 
     def set_progress_bar(self, progress_bar_val, taskbar_val, format):
         self.progressBar.setFormat(format)
