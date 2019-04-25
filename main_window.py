@@ -154,8 +154,8 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             self.layouts[0].open()
 
     def show_new_version(self, display_name):
-        if (display_name == self.progressBar.text()):
-            return
+        # if (display_name == self.progressBar.text()):
+        #     return
 
         self.set_task_visible(True)
         self.set_progress_bar(0, 0, display_name)
@@ -239,11 +239,15 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             self, "Choose Root Folder", root_folder)
 
         if dir and (dir != root_folder):
+            self.stop_uptodate_thread()
+            self.zeroBuildsWarning.hide()
+            self.set_task_visible(False)
             self.settings.setValue('root_folder', dir)
             self.labelRootFolder.setText(dir)
             self.cleanup_layout(self.layoutListVersions)
             self.collect_versions()
             self.draw_list_versions()
+            self.start_uptodate_thread()
 
     def update(self):
         self.is_update_running = True

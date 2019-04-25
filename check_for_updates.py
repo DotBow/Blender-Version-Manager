@@ -42,6 +42,8 @@ class CheckForUpdates(QThread):
             print("Check For Updates")
             QThread.sleep(60)
 
+        return
+
     def get_download_url(self):
         builder_url = "https://builder.blender.org"
         content = urlopen(builder_url + "/download").read()
