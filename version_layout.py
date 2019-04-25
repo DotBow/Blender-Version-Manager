@@ -159,8 +159,9 @@ class B3dItemLayout(QHBoxLayout):
             self.btnOpen.setIcon(self.parent.fake_icon)
 
     def open(self):
-        process = subprocess.Popen(os.path.join(
-            self.root_folder, self.version, "blender.exe"))
+        DETACHED_PROCESS = 0x00000008
+        process = subprocess.Popen(os.path.join(self.root_folder, self.version, "blender.exe"), shell=True,
+                                   stdin=None, stdout=None, stderr=None, close_fds=True, creationflags=DETACHED_PROCESS)
         self.pids.append(process.pid)
 
         if (len(self.pids) == 1):
