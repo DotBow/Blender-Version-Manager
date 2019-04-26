@@ -48,7 +48,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         # Custom title bar
         self.title.setText("%s %s" % (
             QApplication.applicationName(), QApplication.applicationVersion()))
-        self.btnClose.clicked.connect(self.close)
+        self.btnClose.clicked.connect(self.hide)
         self.btnMinimize.clicked.connect(self.showMinimized)
 
         # Custom menu bar
@@ -154,9 +154,6 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             self.layouts[0].open()
 
     def show_new_version(self, display_name):
-        # if (display_name == self.progressBar.text()):
-        #     return
-
         self.set_task_visible(True)
         self.set_progress_bar(0, 0, display_name)
 
@@ -302,10 +299,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             self.app.quit()
 
     def closeEvent(self, event):
-        if self.actionToggleRunMinimized.isChecked():
-            event.ignore()
-            self.hide()
-        elif self.is_running_task():
+        if self.is_running_task():
             event.ignore()
         else:
             self.tray_icon.hide()

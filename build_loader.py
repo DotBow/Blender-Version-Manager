@@ -70,8 +70,8 @@ class BuildLoader(QThread):
                 progress, progress * 0.5 + 0.5, "Extracting: %p%")
 
             if not self.is_running:
-                shutil.rmtree(os.path.join(self.root_folder, version))
                 zf.close()
+                shutil.rmtree(os.path.join(self.root_folder, version))
                 if os.path.isdir(temp_path):
                     shutil.rmtree(temp_path)
                 self.finished.emit(None)
@@ -87,8 +87,8 @@ class BuildLoader(QThread):
 
         # Make nice name for dir
         git = self.url.split('-',)[-2]
-        nice_name = "Git-%s-%s" % (git,
-                                   time.strftime("%d-%b-%H-%M", self.strptime))
+        nice_name = "Git-%s-%s" % \
+            (git, time.strftime("%d-%b-%H-%M", self.strptime))
 
         source_path = Path(os.path.join(self.root_folder, version))
         target_path = Path(os.path.join(self.root_folder, nice_name))

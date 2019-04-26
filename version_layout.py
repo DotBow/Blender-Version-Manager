@@ -160,8 +160,9 @@ class B3dItemLayout(QHBoxLayout):
 
     def open(self):
         DETACHED_PROCESS = 0x00000008
-        process = subprocess.Popen(os.path.join(self.root_folder, self.version, "blender.exe"), shell=True,
-                                   stdin=None, stdout=None, stderr=None, close_fds=True, creationflags=DETACHED_PROCESS)
+        b3d_exe = os.path.join(self.root_folder, self.version, "blender.exe")
+        process = subprocess.Popen(b3d_exe, shell=True, stdin=None, stdout=None,
+                                   stderr=None, close_fds=True, creationflags=DETACHED_PROCESS)
         self.pids.append(process.pid)
 
         if (len(self.pids) == 1):
