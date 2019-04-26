@@ -209,16 +209,18 @@ class B3dItemLayout(QHBoxLayout):
         if self.is_latest:
             self.set_is_latest(False)
 
+            if (not self.parent.is_update_running and not self.parent.progressBar.isVisible()):
+                self.parent.stop_uptodate_thread()
+                self.parent.start_uptodate_thread()
+
             if len(self.parent.layouts) > 1:
                 self.parent.layouts[1].set_is_latest(True)
 
         self.btnOpen.setText("Deleting...")
         self.btnOpen.setEnabled(False)
-        self.btnDelete.hide()
+        self.btnDelete.setIcon(self.parent.fake_icon)
         shutil.rmtree(os.path.join(self.root_folder, self.version))
         self.parent.layouts.remove(self)
-        self.parent.stop_uptodate_thread()
-        self.parent.start_uptodate_thread()
         self.parent.cleanup_layout(self.layout())
 
 
