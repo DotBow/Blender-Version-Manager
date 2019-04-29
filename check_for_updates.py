@@ -24,7 +24,7 @@ class CheckForUpdates(QThread):
                 new_version = True
 
                 if self.parent.layouts:
-                    if commit in self.parent.layouts[0].git:
+                    if (commit in self.parent.layouts[0].git or commit in self.parent.progressBar.text()):
                         new_version = False
 
                 if new_version:
