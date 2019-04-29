@@ -27,7 +27,7 @@ sys.excepthook = handle_exception
 
 def main():
     QApplication.setApplicationName("Blender Version Manager")
-    QApplication.setApplicationVersion("1.4.1")
+    QApplication.setApplicationVersion("1.5.0")
 
     app = QApplication(sys.argv)
     window = B3dVersionMangerMainWindow(app)
