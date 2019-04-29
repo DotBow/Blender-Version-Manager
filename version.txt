@@ -29,13 +29,13 @@ VSVersionInfo(
       [
       StringTable(
         u'04090000',
-        [StringStruct(u'FileVersion', u'1.5.0'),
-        StringStruct(u'ProductVersion', u'1.5.0'),
-        StringStruct(u'CompanyName', u'Oleg Stepanov'),
+        [StringStruct(u'CompanyName', u'Oleg Stepanov'),
         StringStruct(u'FileDescription', u'Blender Version Manager'),
-        StringStruct(u'LegalCopyright', u'GPLv3'),
+        StringStruct(u'FileVersion', u'1.5.0'),
+        StringStruct(u'LegalCopyright', u'GPLv3 © 2019 Oleg Stepanov'),
         StringStruct(u'OriginalFilename', u'Blender Version Manager.exe'),
-        StringStruct(u'ProductName', u'Blender Version Manager')])
+        StringStruct(u'ProductName', u'Blender Version Manager'),
+        StringStruct(u'ProductVersion', u'1.5.0')])
       ]), 
     VarFileInfo([VarStruct(u'Translation', [0x0409, 1200])])
   ]
