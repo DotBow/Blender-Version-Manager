@@ -51,14 +51,14 @@ class B3dItemLayout(QHBoxLayout):
 
                 QPushButton[IsRunning=true]:pressed
                 {
-                    background-color: rgb(204, 102, 51);
-                    border-color: rgb(204, 102, 51);
+                    background-color: rgb(223, 121, 70);
+                    border-color: rgb(223, 121, 70);
                 }
 
                 QPushButton[IsRunning=true]:hover
                 {
-                    background-color: rgb(204, 102, 51);
-                    border-color: rgb(204, 102, 51);
+                    background-color: rgb(223, 121, 70);
+                    border-color: rgb(223, 121, 70);
                 }""")
 
         self.btn_delete_style = \
