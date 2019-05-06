@@ -8,7 +8,6 @@ python -OO -m PyInstaller ^
 --noupx ^
 --onefile ^
 --windowed ^
---uac-admin ^
 --icon="icons\app_inv.ico" ^
 --name="Blender Version Manager" ^
 --version-file="version.txt" ^
