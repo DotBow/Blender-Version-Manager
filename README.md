@@ -2,18 +2,18 @@
 Minimalistic download manager for Blender 2.8 (Win x64) latest builds.
 
 * Simple UI with list of downloaded builds from [BuildBot](https://builder.blender.org/download/)
-* Indication of running version and its number of instances
 * Automatic checking of latest builds
 * Fast access via tray icon
+* Indication of running version and its number of instances
+* Automatic registration of Blend-file extension
+
+ &#128220; Here is the [Wiki](https://github.com/DotBow/Blender-Version-Manager/wiki)
 
 ### Main Window
-![Blender Version Manager Main Window](https://i.imgur.com/VKLWqwM.png)
-
-### File Menu
-![Blender Version Manager Main Window](https://i.imgur.com/hAxqp7s.png)
+![Blender Version Manager Main Window](https://raw.githubusercontent.com/DotBow/Blender-Version-Manager/master/readme/Blender%20Version%20Manager%20Window.png)
 
 ### Tray Context Menu
-![Blender Version Manager Tray Icon](https://i.imgur.com/gHHU09Y.png)
+![Blender Version Manager Tray Icon](https://raw.githubusercontent.com/DotBow/Blender-Version-Manager/master/readme/Blender%20Version%20Manager%20Tray%20Icon.png)
 
 ### Support
 You can buy Blender Version Manager on [Gumroad](https://gumroad.com/products/jyIzM) for 1$ or more.
