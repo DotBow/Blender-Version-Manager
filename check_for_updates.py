@@ -55,5 +55,5 @@ class CheckForUpdates(QThread):
         commit_url = "https://git.blender.org/gitweb/gitweb.cgi/blender.git/commit/"
         content = urlopen(commit_url + commit).read()
         soup = BeautifulSoup(content, 'html.parser')
-        datetime = soup.find("span", {"class": "datetime"}).text
+        datetime = soup.find_all("span", {"class": "datetime"})[1].text
         return datetime
