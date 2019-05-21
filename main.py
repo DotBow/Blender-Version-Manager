@@ -1,8 +1,9 @@
 import logging
 import sys
 
+import psutil
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QMessageBox
 
 from main_window import B3dVersionMangerMainWindow
 
@@ -30,13 +31,26 @@ def main():
     QApplication.setApplicationVersion("1.5.0")
 
     app = QApplication(sys.argv)
-    window = B3dVersionMangerMainWindow(app)
-    window.setWindowFlags(Qt.FramelessWindowHint)
 
-    if not window.is_run_minimized:
-        window.show()
+    is_running = "Blender Version Manager.exe" in (
+        p.name() for p in psutil.process_iter())
 
-    app.exec_()
+    if is_running:
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Warning)
+        msg.setText(
+            "One instance of Blender Version Manager \nis already running!")
+        msg.setWindowTitle("Blender Version Manager")
+        msg.setStandardButtons(QMessageBox.Ok)
+        msg.exec_()
+    else:
+        window = B3dVersionMangerMainWindow(app)
+        window.setWindowFlags(Qt.FramelessWindowHint)
+
+        if not window.is_run_minimized:
+            window.show()
+
+        app.exec_()
 
 
 if __name__ == '__main__':
