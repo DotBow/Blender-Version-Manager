@@ -61,6 +61,31 @@ class Ui_MainWindow(object):
         self.btnSettings.setIconSize(QtCore.QSize(20, 20))
         self.btnSettings.setObjectName("btnSettings")
         self.layoutTitleBar.addWidget(self.btnSettings)
+        self.btnWiki = QtWidgets.QPushButton(self.centralwidget)
+        self.btnWiki.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.btnWiki.setToolTip("Wiki Page")
+        self.btnWiki.setStyleSheet("QPushButton\n"
+"{\n"
+"    background-color: rgb(60, 60, 60);\n"
+"    border-style: solid;\n"
+"    border-width: 6px;\n"
+"}\n"
+"\n"
+"QPushButton:pressed\n"
+"{\n"
+"    background-color: rgb(80, 80, 80);\n"
+"}\n"
+"\n"
+"QPushButton:hover\n"
+"{\n"
+"    background-color: rgb(80, 80, 80);\n"
+"}")
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap(":/icons/wiki.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.btnWiki.setIcon(icon2)
+        self.btnWiki.setIconSize(QtCore.QSize(20, 20))
+        self.btnWiki.setObjectName("btnWiki")
+        self.layoutTitleBar.addWidget(self.btnWiki)
         self.title = QtWidgets.QLabel(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -71,8 +96,7 @@ class Ui_MainWindow(object):
         font.setPointSize(10)
         self.title.setFont(font)
         self.title.setStyleSheet("background-color: rgb(60, 60, 60);\n"
-"color: rgb(204, 204, 204);\n"
-"padding: 0px 0px 0px 20px;")
+"color: rgb(204, 204, 204);")
         self.title.setText("Blender Version Manager")
         self.title.setAlignment(QtCore.Qt.AlignCenter)
         self.title.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
@@ -96,10 +120,10 @@ class Ui_MainWindow(object):
 "{\n"
 "    background-color: rgb(80, 80, 80);\n"
 "}")
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap(":/icons/minimize.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        icon2.addPixmap(QtGui.QPixmap(":/icons/minimize.svg"), QtGui.QIcon.Normal, QtGui.QIcon.On)
-        self.btnMinimize.setIcon(icon2)
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap(":/icons/minimize.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon3.addPixmap(QtGui.QPixmap(":/icons/minimize.svg"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.btnMinimize.setIcon(icon3)
         self.btnMinimize.setIconSize(QtCore.QSize(20, 20))
         self.btnMinimize.setObjectName("btnMinimize")
         self.layoutTitleBar.addWidget(self.btnMinimize)
@@ -121,9 +145,9 @@ class Ui_MainWindow(object):
 "{\n"
 "    background-color: rgb(232, 17, 35);\n"
 "}")
-        icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap(":/icons/close.svg"), QtGui.QIcon.Normal, QtGui.QIcon.On)
-        self.btnClose.setIcon(icon3)
+        icon4 = QtGui.QIcon()
+        icon4.addPixmap(QtGui.QPixmap(":/icons/close.svg"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.btnClose.setIcon(icon4)
         self.btnClose.setIconSize(QtCore.QSize(20, 20))
         self.btnClose.setObjectName("btnClose")
         self.layoutTitleBar.addWidget(self.btnClose)
@@ -180,9 +204,9 @@ class Ui_MainWindow(object):
 "    background-color: rgb(80, 80, 80);\n"
 "    border-color: rgb(80, 80, 80);\n"
 "}")
-        icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap(":/icons/folder_add.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
-        self.btnSetRootFolder.setIcon(icon4)
+        icon5 = QtGui.QIcon()
+        icon5.addPixmap(QtGui.QPixmap(":/icons/folder_add.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.btnSetRootFolder.setIcon(icon5)
         self.btnSetRootFolder.setIconSize(QtCore.QSize(20, 20))
         self.btnSetRootFolder.setFlat(True)
         self.btnSetRootFolder.setObjectName("btnSetRootFolder")
@@ -215,9 +239,9 @@ class Ui_MainWindow(object):
 "    background-color: rgb(80, 80, 80);\n"
 "    border-color: rgb(80, 80, 80);\n"
 "}")
-        icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap(":/icons/folder_open.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
-        self.btnOpenRootFolder.setIcon(icon5)
+        icon6 = QtGui.QIcon()
+        icon6.addPixmap(QtGui.QPixmap(":/icons/folder_open.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.btnOpenRootFolder.setIcon(icon6)
         self.btnOpenRootFolder.setIconSize(QtCore.QSize(20, 20))
         self.btnOpenRootFolder.setDefault(False)
         self.btnOpenRootFolder.setFlat(True)
@@ -294,9 +318,9 @@ class Ui_MainWindow(object):
 "    border-color: rgb(80, 80, 80);\n"
 "}")
         self.btnUpdate.setText("")
-        icon6 = QtGui.QIcon()
-        icon6.addPixmap(QtGui.QPixmap(":/icons/download.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
-        self.btnUpdate.setIcon(icon6)
+        icon7 = QtGui.QIcon()
+        icon7.addPixmap(QtGui.QPixmap(":/icons/download.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.btnUpdate.setIcon(icon7)
         self.btnUpdate.setIconSize(QtCore.QSize(20, 20))
         self.btnUpdate.setFlat(True)
         self.btnUpdate.setObjectName("btnUpdate")
@@ -326,9 +350,9 @@ class Ui_MainWindow(object):
 "    border-color: rgb(80, 80, 80);\n"
 "}")
         self.btnCancel.setText("")
-        icon7 = QtGui.QIcon()
-        icon7.addPixmap(QtGui.QPixmap(":/icons/stop.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
-        self.btnCancel.setIcon(icon7)
+        icon8 = QtGui.QIcon()
+        icon8.addPixmap(QtGui.QPixmap(":/icons/stop.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.btnCancel.setIcon(icon8)
         self.btnCancel.setIconSize(QtCore.QSize(20, 20))
         self.btnCancel.setFlat(True)
         self.btnCancel.setObjectName("btnCancel")
@@ -465,9 +489,9 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
         self.actionToggleRegisterBlend = QtWidgets.QAction(MainWindow)
         self.actionToggleRegisterBlend.setCheckable(True)
-        icon8 = QtGui.QIcon()
-        icon8.addPixmap(QtGui.QPixmap(":/icons/fake.svg"), QtGui.QIcon.Normal, QtGui.QIcon.On)
-        self.actionToggleRegisterBlend.setIcon(icon8)
+        icon9 = QtGui.QIcon()
+        icon9.addPixmap(QtGui.QPixmap(":/icons/fake.svg"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.actionToggleRegisterBlend.setIcon(icon9)
         self.actionToggleRegisterBlend.setStatusTip("")
         font = QtGui.QFont()
         font.setPointSize(10)
@@ -475,16 +499,16 @@ class Ui_MainWindow(object):
         self.actionToggleRegisterBlend.setObjectName("actionToggleRegisterBlend")
         self.actionToggleRunMinimized = QtWidgets.QAction(MainWindow)
         self.actionToggleRunMinimized.setCheckable(True)
-        self.actionToggleRunMinimized.setIcon(icon8)
+        self.actionToggleRunMinimized.setIcon(icon9)
         self.actionToggleRunMinimized.setStatusTip("")
         font = QtGui.QFont()
         font.setPointSize(10)
         self.actionToggleRunMinimized.setFont(font)
         self.actionToggleRunMinimized.setObjectName("actionToggleRunMinimized")
         self.actionQuit = QtWidgets.QAction(MainWindow)
-        icon9 = QtGui.QIcon()
-        icon9.addPixmap(QtGui.QPixmap(":/icons/quit.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
-        self.actionQuit.setIcon(icon9)
+        icon10 = QtGui.QIcon()
+        icon10.addPixmap(QtGui.QPixmap(":/icons/quit.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.actionQuit.setIcon(icon10)
         self.actionQuit.setText("Quit                          Ctrl+Q")
         self.actionQuit.setToolTip("Quit")
         self.actionQuit.setStatusTip("")
@@ -494,7 +518,7 @@ class Ui_MainWindow(object):
         self.actionQuit.setObjectName("actionQuit")
         self.actionToggleRunOnStartup = QtWidgets.QAction(MainWindow)
         self.actionToggleRunOnStartup.setCheckable(True)
-        self.actionToggleRunOnStartup.setIcon(icon8)
+        self.actionToggleRunOnStartup.setIcon(icon9)
         self.actionToggleRunOnStartup.setStatusTip("")
         font = QtGui.QFont()
         font.setPointSize(10)

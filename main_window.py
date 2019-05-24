@@ -2,10 +2,11 @@ import os
 import re
 import shutil
 import sys
+import webbrowser
 import winreg
 
 from bs4 import BeautifulSoup
-from PyQt5.QtCore import QPoint, QSettings, Qt, QEvent, QTimer
+from PyQt5.QtCore import QEvent, QPoint, QSettings, Qt, QTimer
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QAction, QApplication, QFileDialog, QLabel,
                              QMainWindow, QMenu, QMessageBox, QSizePolicy,
@@ -46,6 +47,8 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             self.settings.setValue('root_folder', exe_path)
 
         # Custom title bar
+        self.btnWiki.clicked.connect(lambda: webbrowser.open(
+            "https://github.com/DotBow/Blender-Version-Manager/wiki"))
         self.title.setText("%s %s" % (
             QApplication.applicationName(), QApplication.applicationVersion()))
         self.btnClose.clicked.connect(self.hide)

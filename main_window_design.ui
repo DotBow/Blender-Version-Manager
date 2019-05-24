@@ -99,6 +99,45 @@ QPushButton::menu-indicator
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="btnWiki">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="toolTip">
+         <string notr="true">Wiki Page</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton
+{
+	background-color: rgb(60, 60, 60);
+	border-style: solid;
+	border-width: 6px;
+}
+
+QPushButton:pressed
+{
+	background-color: rgb(80, 80, 80);
+}
+
+QPushButton:hover
+{
+	background-color: rgb(80, 80, 80);
+}</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normalon>:/icons/wiki.png</normalon>
+         </iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QLabel" name="title">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -113,8 +152,7 @@ QPushButton::menu-indicator
         </property>
         <property name="styleSheet">
          <string notr="true">background-color: rgb(60, 60, 60);
-color: rgb(204, 204, 204);
-padding: 0px 0px 0px 20px;</string>
+color: rgb(204, 204, 204);</string>
         </property>
         <property name="text">
          <string notr="true">Blender Version Manager</string>
