@@ -3,6 +3,7 @@ import sys
 
 import psutil
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMessageBox
 
 from main_window import B3dVersionMangerMainWindow
@@ -38,6 +39,7 @@ def main():
     if is_running:
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Warning)
+        msg.setWindowIcon(QIcon(":/icons/app.svg"))
         msg.setText(
             "One instance of Blender Version Manager \nis already running!")
         msg.setWindowTitle("Blender Version Manager")
