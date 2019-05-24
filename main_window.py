@@ -299,11 +299,8 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             self.app.quit()
 
     def closeEvent(self, event):
-        if self.is_running_task():
-            event.ignore()
-        else:
-            self.tray_icon.hide()
-            event.accept()
+        self.hide()
+        event.ignore()
 
     def mousePressEvent(self, event):
         self.old_pos = event.globalPos()
