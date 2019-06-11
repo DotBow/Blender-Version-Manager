@@ -33,10 +33,10 @@ def main():
 
     app = QApplication(sys.argv)
 
-    is_running = "Blender Version Manager.exe" in (
-        p.name() for p in psutil.process_iter())
+    proc_count = len([proc for proc in psutil.process_iter()
+                      if proc.name() == "Blender Version Manager.exe"])
 
-    if is_running:
+    if proc_count > 2:
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Warning)
         msg.setWindowIcon(QIcon(":/icons/app.svg"))
