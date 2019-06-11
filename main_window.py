@@ -90,6 +90,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         quit_action.triggered.connect(self.quit)
 
         self.tray_menu = QMenu()
+        self.tray_menu.setToolTip("Blender Version Manager")
         self.tray_menu.setStyleSheet(self.menuFile.styleSheet())
         self.tray_menu.addAction(self.blender_action)
         self.tray_menu.addAction(show_action)
