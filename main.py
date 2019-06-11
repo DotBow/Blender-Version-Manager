@@ -6,7 +6,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMessageBox
 
-from main_window import B3dVersionMangerMainWindow
+from main_window import BVMQMainWindow
 
 logger = logging.getLogger(__name__)
 handler = logging.StreamHandler(stream=sys.stdout)
@@ -46,7 +46,7 @@ def main():
         msg.setStandardButtons(QMessageBox.Ok)
         msg.exec_()
     else:
-        window = B3dVersionMangerMainWindow(app)
+        window = BVMQMainWindow(app)
         window.setWindowFlags(Qt.FramelessWindowHint)
 
         if not window.is_run_minimized:

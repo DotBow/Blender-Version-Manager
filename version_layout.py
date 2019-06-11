@@ -155,9 +155,9 @@ class B3dItemLayout(QHBoxLayout):
         self.is_latest = is_latest
 
         if self.is_latest:
-            self.btnOpen.setIcon(self.parent.star_icon)
+            self.btnOpen.setIcon(self.parent.icon_star)
         else:
-            self.btnOpen.setIcon(self.parent.fake_icon)
+            self.btnOpen.setIcon(self.parent.icon_fake)
 
     def open(self):
         DETACHED_PROCESS = 0x00000008

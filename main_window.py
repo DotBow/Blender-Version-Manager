@@ -19,18 +19,18 @@ from check_for_updates import CheckForUpdates
 from version_layout import B3dItemLayout
 
 
-class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
+class BVMQMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
     def __init__(self, app):
         super().__init__()
         self.app = app
         self.setupUi(self)
 
         # Read icons
-        self.app_icon = QIcon(":/icons/app.svg")
-        self.star_icon = QIcon(":/icons/star.png")
-        self.trash_icon = QIcon(":/icons/delete.png")
-        self.quit_icon = QIcon(":/icons/quit.png")
-        self.fake_icon = QIcon(":/icons/fake.svg")
+        self.icon_app = QIcon(":/icons/app.svg")
+        self.icon_star = QIcon(":/icons/star.png")
+        self.icon_trash = QIcon(":/icons/delete.png")
+        self.icon_quit = QIcon(":/icons/quit.png")
+        self.icon_fake = QIcon(":/icons/fake.svg")
 
         # Read settings
         self.settings = QSettings('b3d_version_manager', 'settings')
@@ -79,10 +79,10 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             lambda: os.startfile(self.settings.value('root_folder')))
 
         # Tray layout
-        self.blender_action = QAction(self.star_icon, "Blender    ", self)
+        self.blender_action = QAction(self.icon_star, "Blender    ", self)
         show_action = QAction("Show", self)
         hide_action = QAction("Hide", self)
-        quit_action = QAction(self.quit_icon, "Quit", self)
+        quit_action = QAction(self.icon_quit, "Quit", self)
 
         self.blender_action.triggered.connect(self.open_latest_b3d)
         show_action.triggered.connect(self.bring_to_front)
@@ -96,7 +96,7 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.tray_menu.addAction(hide_action)
         self.tray_menu.addAction(quit_action)
 
-        self.tray_icon = QSystemTrayIcon(self.app_icon, self)
+        self.tray_icon = QSystemTrayIcon(self.icon_app, self)
         self.tray_icon.setToolTip("Blender Version Manager")
         self.tray_icon.setContextMenu(self.tray_menu)
         self.tray_icon.messageClicked.connect(self.bring_to_front)
@@ -352,4 +352,4 @@ class B3dVersionMangerMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
                         obj.activeAction().trigger()
                         return True
 
-        return super(B3dVersionMangerMainWindow, self).eventFilter(obj, event)
+        return super(BVMQMainWindow, self).eventFilter(obj, event)
