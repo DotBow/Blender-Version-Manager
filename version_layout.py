@@ -187,7 +187,7 @@ class B3dItemLayout(QHBoxLayout):
     def observe_finished(self):
         self.btnOpen.setProperty('IsRunning', False)
         self.btnOpen.setStyle(self.btnOpen.style())
-        self.btnDelete.setIcon(self.parent.trash_icon)
+        self.btnDelete.setIcon(self.parent.icon_trash)
         self.btnDelete.setText("")
         self.btnDelete.setToolTip("Delete From Drive")
         self.btnDelete.setEnabled(True)
