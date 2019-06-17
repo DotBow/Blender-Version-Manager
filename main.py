@@ -27,6 +27,20 @@ def handle_exception(exc_type, exc_value, exc_traceback):
 sys.excepthook = handle_exception
 
 
+def get_platform():
+    platforms = {
+        'linux1': 'Linux',
+        'linux2': 'Linux',
+        'darwin': 'OSX',
+        'win32': 'Windows'
+    }
+
+    if sys.platform not in platforms:
+        return sys.platform
+
+    return platforms[sys.platform]
+
+
 def main():
     QApplication.setApplicationName("Blender Version Manager")
     QApplication.setApplicationVersion("1.5.1")
@@ -46,7 +60,7 @@ def main():
         msg.setStandardButtons(QMessageBox.Ok)
         msg.exec_()
     else:
-        window = BVMQMainWindow(app)
+        window = BVMQMainWindow(app, get_platform())
         window.setWindowFlags(Qt.FramelessWindowHint)
 
         if not window.is_run_minimized:

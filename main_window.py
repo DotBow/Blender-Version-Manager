@@ -20,9 +20,10 @@ from version_layout import B3dItemLayout
 
 
 class BVMQMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
-    def __init__(self, app):
+    def __init__(self, app, platform):
         super().__init__()
         self.app = app
+        self.platform = platform
         self.setupUi(self)
 
         # Read icons
