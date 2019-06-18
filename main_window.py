@@ -24,6 +24,8 @@ class BVMQMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         super().__init__()
         self.app = app
         self.platform = platform
+
+        self.setWindowFlags(Qt.FramelessWindowHint)
         self.setupUi(self)
 
         # Read icons
