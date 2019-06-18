@@ -1,5 +1,6 @@
 import logging
 import sys
+from time import gmtime, strftime
 
 import psutil
 from PyQt5.QtGui import QIcon
@@ -17,8 +18,9 @@ def handle_exception(exc_type, exc_value, exc_traceback):
         sys.__excepthook__(exc_type, exc_value, exc_traceback)
         return
 
-    logging.basicConfig(filename="b3d_version_manager.log",
-                        level=logging.DEBUG)
+    utcnow = strftime(('%Y-%m-%d_%H-%M-%S'), gmtime())
+    logging.basicConfig(filename="BVM_Report_" + utcnow +
+                        ".log", level=logging.DEBUG)
     logger.error("Uncaught exception", exc_info=(
         exc_type, exc_value, exc_traceback))
 
@@ -41,6 +43,7 @@ def get_platform():
 
 
 def main():
+    raise Exception("x", "x")
     QApplication.setApplicationName("Blender Version Manager")
     QApplication.setApplicationVersion("1.5.1")
 
