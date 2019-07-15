@@ -43,7 +43,6 @@ def get_platform():
 
 
 def main():
-    raise Exception("x", "x")
     QApplication.setApplicationName("Blender Version Manager")
     QApplication.setApplicationVersion("1.5.1")
 
