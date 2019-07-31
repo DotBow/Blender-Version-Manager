@@ -3,6 +3,7 @@ import sys
 
 def get_platform():
     platforms = {
+        'linux': 'Linux',
         'linux1': 'Linux',
         'linux2': 'Linux',
         'darwin': 'OSX',
