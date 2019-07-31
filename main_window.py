@@ -262,7 +262,7 @@ class BVMQMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         if platform == 'Windows':
             os.startfile(root_folder)
         elif platform == 'Linux':
-            subprocess.call(["open", root_folder])
+            subprocess.call(["xdg-open", root_folder])
 
     def update(self):
         self.is_update_running = True
