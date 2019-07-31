@@ -48,7 +48,7 @@ class CheckForUpdates(QThread):
         builder_url = "https://builder.blender.org"
         content = urlopen(builder_url + "/download").read()
         soup = BeautifulSoup(content, 'html.parser')
-        build_url = soup.find(href=re.compile("blender-2.80"))['href']
+        build_url = soup.find(href=re.compile("blender-2.8"))['href']
         return builder_url + build_url
 
     def get_commit_datetime(self, commit):
