@@ -3,7 +3,6 @@ import re
 import shutil
 import sys
 import webbrowser
-import winreg
 
 from bs4 import BeautifulSoup
 from PyQt5.QtCore import QEvent, QPoint, QSettings, Qt, QTimer
@@ -11,19 +10,22 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QAction, QApplication, QFileDialog, QLabel,
                              QMainWindow, QMenu, QMessageBox, QSizePolicy,
                              QSystemTrayIcon)
-from PyQt5.QtWinExtras import QWinTaskbarButton, QWinTaskbarProgress
 
 import main_window_design
+from _platform import get_platform
 from build_loader import BuildLoader
 from check_for_updates import CheckForUpdates
 from version_layout import B3dItemLayout
 
+if get_platform() == 'Windows':
+    import winreg
+    from PyQt5.QtWinExtras import QWinTaskbarButton
+
 
 class BVMQMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
-    def __init__(self, app, platform):
+    def __init__(self, app):
         super().__init__()
         self.app = app
-        self.platform = platform
 
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setupUi(self)
