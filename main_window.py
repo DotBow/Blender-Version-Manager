@@ -1,6 +1,7 @@
 import os
 import re
 import shutil
+import subprocess
 import sys
 import webbrowser
 
@@ -80,8 +81,7 @@ class BVMQMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         # Root folder layout
         self.labelRootFolder.setText(self.settings.value('root_folder'))
         self.btnSetRootFolder.clicked.connect(self.set_root_folder)
-        self.btnOpenRootFolder.clicked.connect(
-            lambda: os.startfile(self.settings.value('root_folder')))
+        self.btnOpenRootFolder.clicked.connect(self.open_root_folder)
 
         # Tray layout
         self.blender_action = QAction(self.icon_star, "Blender    ", self)
@@ -254,6 +254,15 @@ class BVMQMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             self.collect_versions()
             self.draw_list_versions()
             self.start_uptodate_thread()
+
+    def open_root_folder(self):
+        platform = get_platform()
+        root_folder = self.settings.value('root_folder')
+
+        if platform == 'Windows':
+            os.startfile(root_folder)
+        elif platform == 'Linux':
+            subprocess.call(["open", root_folder])
 
     def update(self):
         self.is_update_running = True
