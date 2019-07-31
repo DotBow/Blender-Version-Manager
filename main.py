@@ -44,7 +44,7 @@ def get_platform():
 
 def main():
     QApplication.setApplicationName("Blender Version Manager")
-    QApplication.setApplicationVersion("1.5.1")
+    QApplication.setApplicationVersion("1.5.2")
 
     app = QApplication(sys.argv)
 
