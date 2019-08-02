@@ -6,6 +6,8 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 from PyQt5.QtCore import QThread, pyqtSignal
 
+from _platform import get_platform
+
 
 class CheckForUpdates(QThread):
     new_version_obtained = pyqtSignal('PyQt_PyObject')
@@ -48,7 +50,15 @@ class CheckForUpdates(QThread):
         builder_url = "https://builder.blender.org"
         content = urlopen(builder_url + "/download").read()
         soup = BeautifulSoup(content, 'html.parser')
-        build_url = soup.find(href=re.compile("blender-2.8"))['href']
+        platform = get_platform()
+
+        if platform == 'Windows':
+            build_url = soup.find(href=re.compile(
+                r'blender-.+win64'))['href']
+        elif platform == 'Linux':
+            build_url = soup.find(href=re.compile(
+                r'blender-.+linux.+64'))['href']
+
         return builder_url + build_url
 
     def get_commit_datetime(self, commit):
