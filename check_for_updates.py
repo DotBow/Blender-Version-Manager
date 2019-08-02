@@ -22,7 +22,7 @@ class CheckForUpdates(QThread):
         while self.is_running:
             try:
                 self.download_url = self.get_download_url()
-                commit = self.download_url.split('-',)[-2]
+                commit = self.download_url.split('-',)[2]
                 new_version = True
 
                 if self.parent.layouts:
