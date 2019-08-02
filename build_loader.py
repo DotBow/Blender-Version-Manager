@@ -2,6 +2,7 @@ import os
 import re
 import shutil
 import subprocess
+import tarfile
 import time
 import zipfile
 from pathlib import Path
@@ -9,6 +10,8 @@ from subprocess import CREATE_NO_WINDOW, DEVNULL, PIPE, STDOUT
 from urllib.request import urlopen
 
 from PyQt5.QtCore import QThread, pyqtSignal
+
+from _platform import get_platform
 
 
 class BuildLoader(QThread):
@@ -57,27 +60,35 @@ class BuildLoader(QThread):
                     return
 
         # Extract
-        zf = zipfile.ZipFile(path)
-        version = zf.infolist()[0].filename.split('/')[0]
-        uncompress_size = sum((file.file_size for file in zf.infolist()))
-        extracted_size = 0
+        platform = get_platform()
 
-        for file in zf.infolist():
-            zf.extract(file, self.root_folder)
-            extracted_size += file.file_size
-            progress = extracted_size / uncompress_size
-            self.progress_changed.emit(
-                progress, progress * 0.5 + 0.5, "Extracting: %p%")
+        if platform == 'Windows':
+            zf = zipfile.ZipFile(path)
+            version = zf.infolist()[0].filename.split('/')[0]
+            uncompress_size = sum((file.file_size for file in zf.infolist()))
+            extracted_size = 0
 
-            if not self.is_running:
-                zf.close()
-                shutil.rmtree(os.path.join(self.root_folder, version))
-                if os.path.isdir(temp_path):
-                    shutil.rmtree(temp_path)
-                self.finished.emit(None)
-                return
+            for file in zf.infolist():
+                zf.extract(file, self.root_folder)
+                extracted_size += file.file_size
+                progress = extracted_size / uncompress_size
+                self.progress_changed.emit(
+                    progress, progress * 0.5 + 0.5, "Extracting: %p%")
 
-        zf.close()
+                if not self.is_running:
+                    zf.close()
+                    shutil.rmtree(os.path.join(self.root_folder, version))
+                    if os.path.isdir(temp_path):
+                        shutil.rmtree(temp_path)
+                    self.finished.emit(None)
+                    return
+
+            zf.close()
+        elif platform == 'Linux':
+            tar = tarfile.open(path)
+            tar.extractall(path=self.root_folder)
+            tar.close()
+
         self.block_abortion.emit()
         self.progress_changed.emit(0, 0, "Finishing...")
 
