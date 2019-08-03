@@ -86,7 +86,25 @@ class BuildLoader(QThread):
             zf.close()
         elif platform == 'Linux':
             tar = tarfile.open(path)
-            tar.extractall(path=self.root_folder)
+            version = tar.getnames()[0].split('/')[0]
+            uncompress_size = sum((member.size for member in tar.getmembers()))
+            extracted_size = 0
+
+            for member in tar.getmembers():
+                tar.extract(member, path=self.root_folder)
+                extracted_size += member.size
+                progress = extracted_size / uncompress_size
+                self.progress_changed.emit(
+                    progress, progress * 0.5 + 0.5, "Extracting: %p%")
+
+                if not self.is_running:
+                    tar.close()
+                    shutil.rmtree(os.path.join(self.root_folder, version))
+                    if os.path.isdir(temp_path):
+                        shutil.rmtree(temp_path)
+                    self.finished.emit(None)
+                    return
+
             tar.close()
 
         self.block_abortion.emit()
