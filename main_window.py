@@ -211,9 +211,15 @@ class BVMQMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         root_folder = self.settings.value('root_folder')
         dirs = next(os.walk(root_folder))[1]
         versions = []
+        platform = get_platform()
+
+        if platform == 'Windows':
+            blender_exe = "blender.exe"
+        elif platform == 'Linux':
+            blender_exe = "blender"
 
         for dir in dirs:
-            if os.path.isfile(os.path.join(root_folder, dir, "blender.exe")):
+            if os.path.isfile(os.path.join(root_folder, dir, blender_exe)):
                 versions.append(dir)
 
         for ver in versions:
