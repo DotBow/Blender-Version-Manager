@@ -5,12 +5,17 @@ import shutil
 import subprocess
 import threading
 import time
-from subprocess import CREATE_NO_WINDOW, DEVNULL
+from subprocess import DEVNULL
 
 import psutil
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from PyQt5.QtGui import QCursor, QFont
 from PyQt5.QtWidgets import QHBoxLayout, QMessageBox, QPushButton, QSizePolicy
+
+from _platform import get_platform
+
+if get_platform() == 'Windows':
+    from subprocess import CREATE_NO_WINDOW
 
 
 class B3dItemLayout(QHBoxLayout):
@@ -107,20 +112,33 @@ class B3dItemLayout(QHBoxLayout):
                     border-color: rgb(80, 80, 80);
                 }""")
 
+        platform = get_platform()
+
+        if platform == 'Windows':
+            blender_exe = "blender.exe"
+        elif platform == 'Linux':
+            blender_exe = "blender"
+
         self.parent = parent
         self.root_folder = root_folder
         self.version = version
         self.pids = []
         self.mtime = os.path.getmtime(os.path.join(
-            root_folder, version, "blender.exe"))
+            root_folder, version, blender_exe))
 
         self.setContentsMargins(6, 0, 6, 0)
         self.setSpacing(0)
 
-        b3d_exe = os.path.join(root_folder, version, "blender.exe")
-        info = subprocess.check_output(
-            [b3d_exe, "-v"], creationflags=CREATE_NO_WINDOW, shell=True,
-            stderr=DEVNULL, stdin=DEVNULL).decode('UTF-8')
+        b3d_exe = os.path.join(root_folder, version, blender_exe)
+
+        if platform == 'Windows':
+            info = subprocess.check_output(
+                [b3d_exe, "-v"], creationflags=CREATE_NO_WINDOW, shell=True,
+                stderr=DEVNULL, stdin=DEVNULL).decode('UTF-8')
+        elif platform == 'Linux':
+            info = subprocess.check_output(
+                [b3d_exe, "-v"], shell=False,
+                stderr=DEVNULL, stdin=DEVNULL).decode('UTF-8')
 
         ctime = re.search("build commit time: " + "(.*)", info)[1].rstrip()
         cdate = re.search("build commit date: " + "(.*)", info)[1].rstrip()
@@ -160,10 +178,19 @@ class B3dItemLayout(QHBoxLayout):
             self.btnOpen.setIcon(self.parent.icon_fake)
 
     def open(self):
-        DETACHED_PROCESS = 0x00000008
-        b3d_exe = os.path.join(self.root_folder, self.version, "blender.exe")
-        process = subprocess.Popen(b3d_exe, shell=True, stdin=None, stdout=None,
-                                   stderr=None, close_fds=True, creationflags=DETACHED_PROCESS)
+        platform = get_platform()
+
+        if platform == 'Windows':
+            DETACHED_PROCESS = 0x00000008
+            b3d_exe = os.path.join(
+                self.root_folder, self.version, "blender.exe")
+            process = subprocess.Popen(b3d_exe, shell=True, stdin=None, stdout=None,
+                                       stderr=None, close_fds=True, creationflags=DETACHED_PROCESS)
+        elif platform == 'Linux':
+            b3d_exe = os.path.join(self.root_folder, self.version, "blender")
+            process = subprocess.Popen(b3d_exe, shell=True, stdin=None, stdout=None,
+                                       stderr=None, close_fds=True)
+
         self.pids.append(process.pid)
 
         if (len(self.pids) == 1):
