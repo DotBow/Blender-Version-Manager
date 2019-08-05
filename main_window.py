@@ -151,13 +151,14 @@ class BVMQMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
     def showEvent(self, event):
         # Setup taskbar
-        if not self.taskbar_progress:
-            self.task_button = QWinTaskbarButton(self)
-            self.task_button.setWindow(self.windowHandle())
+        if self.platform == 'Windows':
+            if not self.taskbar_progress:
+                self.task_button = QWinTaskbarButton(self)
+                self.task_button.setWindow(self.windowHandle())
 
-            self.taskbar_progress = self.task_button.progress()
-            self.taskbar_progress.setVisible(True)
-            self.taskbar_progress.setValue(0)
+                self.taskbar_progress = self.task_button.progress()
+                self.taskbar_progress.setVisible(True)
+                self.taskbar_progress.setValue(0)
 
     def open_latest_b3d(self):
         if self.layouts:
