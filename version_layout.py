@@ -112,11 +112,11 @@ class B3dItemLayout(QHBoxLayout):
                     border-color: rgb(80, 80, 80);
                 }""")
 
-        platform = get_platform()
+        self.platform = get_platform()
 
-        if platform == 'Windows':
+        if self.platform == 'Windows':
             blender_exe = "blender.exe"
-        elif platform == 'Linux':
+        elif self.platform == 'Linux':
             blender_exe = "blender"
 
         self.parent = parent
@@ -131,11 +131,11 @@ class B3dItemLayout(QHBoxLayout):
 
         b3d_exe = os.path.join(root_folder, version, blender_exe)
 
-        if platform == 'Windows':
+        if self.platform == 'Windows':
             info = subprocess.check_output(
                 [b3d_exe, "-v"], creationflags=CREATE_NO_WINDOW, shell=True,
                 stderr=DEVNULL, stdin=DEVNULL).decode('UTF-8')
-        elif platform == 'Linux':
+        elif self.platform == 'Linux':
             info = subprocess.check_output(
                 [b3d_exe, "-v"], shell=False,
                 stderr=DEVNULL, stdin=DEVNULL).decode('UTF-8')
@@ -178,15 +178,13 @@ class B3dItemLayout(QHBoxLayout):
             self.btnOpen.setIcon(self.parent.icon_fake)
 
     def open(self):
-        platform = get_platform()
-
-        if platform == 'Windows':
+        if self.platform == 'Windows':
             DETACHED_PROCESS = 0x00000008
             b3d_exe = os.path.join(
                 self.root_folder, self.version, "blender.exe")
             process = subprocess.Popen(b3d_exe, shell=True, stdin=None, stdout=None,
                                        stderr=None, close_fds=True, creationflags=DETACHED_PROCESS)
-        elif platform == 'Linux':
+        elif self.platform == 'Linux':
             b3d_exe = os.path.join(self.root_folder, self.version, "blender")
             process = subprocess.Popen(b3d_exe, shell=True, stdin=None, stdout=None,
                                        stderr=None, close_fds=True)
