@@ -27,6 +27,7 @@ class BVMQMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
     def __init__(self, app):
         super().__init__()
         self.app = app
+        self.platform = get_platform()
 
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setupUi(self)
@@ -211,11 +212,10 @@ class BVMQMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         root_folder = self.settings.value('root_folder')
         dirs = next(os.walk(root_folder))[1]
         versions = []
-        platform = get_platform()
 
-        if platform == 'Windows':
+        if self.platform == 'Windows':
             blender_exe = "blender.exe"
-        elif platform == 'Linux':
+        elif self.platform == 'Linux':
             blender_exe = "blender"
 
         for dir in dirs:
@@ -262,12 +262,11 @@ class BVMQMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
             self.start_uptodate_thread()
 
     def open_root_folder(self):
-        platform = get_platform()
         root_folder = self.settings.value('root_folder')
 
-        if platform == 'Windows':
+        if self.platform == 'Windows':
             os.startfile(root_folder)
-        elif platform == 'Linux':
+        elif self.platform == 'Linux':
             subprocess.call(["xdg-open", root_folder])
 
     def update(self):
