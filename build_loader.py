@@ -6,12 +6,15 @@ import tarfile
 import time
 import zipfile
 from pathlib import Path
-from subprocess import CREATE_NO_WINDOW, DEVNULL, PIPE, STDOUT
+from subprocess import DEVNULL, PIPE, STDOUT
 from urllib.request import urlopen
 
 from PyQt5.QtCore import QThread, pyqtSignal
 
 from _platform import get_platform
+
+if get_platform() == 'Windows':
+    from subprocess import CREATE_NO_WINDOW
 
 
 class BuildLoader(QThread):
@@ -27,6 +30,7 @@ class BuildLoader(QThread):
         self.strptime = strptime
         self.root_folder = self.parent.settings.value('root_folder')
         self.is_running = False
+        self.platform = get_platform()
 
     def run(self):
         self.is_running = True
@@ -60,9 +64,7 @@ class BuildLoader(QThread):
                     return
 
         # Extract
-        platform = get_platform()
-
-        if platform == 'Windows':
+        if self.platform == 'Windows':
             zf = zipfile.ZipFile(path)
             version = zf.infolist()[0].filename.split('/')[0]
             uncompress_size = sum((file.file_size for file in zf.infolist()))
@@ -84,7 +86,7 @@ class BuildLoader(QThread):
                     return
 
             zf.close()
-        elif platform == 'Linux':
+        elif self.platform == 'Linux':
             tar = tarfile.open(path)
             version = tar.getnames()[0].split('/')[0]
             uncompress_size = sum((member.size for member in tar.getmembers()))
@@ -124,11 +126,15 @@ class BuildLoader(QThread):
         source_path.rename(target_path)
 
         # Register .blend extension
-        b3d_exe = target_path / "blender.exe"
-
         if self.parent.settings.value('is_register_blend', type=bool):
-            subprocess.call([str(b3d_exe), "-r"], creationflags=CREATE_NO_WINDOW,
-                            shell=True, stdout=PIPE, stderr=STDOUT, stdin=DEVNULL)
+            if self.platform == 'Windows':
+                    b3d_exe = target_path / "blender.exe"
+                    subprocess.call([str(b3d_exe), "-r"], creationflags=CREATE_NO_WINDOW,
+                                    shell=True, stdout=PIPE, stderr=STDOUT, stdin=DEVNULL)
+            elif self.platform == 'Linux':
+                    b3d_exe = target_path / "blender"
+                    subprocess.call([str(b3d_exe), "-r"],
+                                    shell=True, stdout=PIPE, stderr=STDOUT, stdin=DEVNULL)
 
         self.finished.emit(nice_name)
 
