@@ -7,7 +7,6 @@ import threading
 import time
 from subprocess import DEVNULL
 
-import psutil
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from PyQt5.QtGui import QCursor, QFont
 from PyQt5.QtWidgets import QHBoxLayout, QMessageBox, QPushButton, QSizePolicy
@@ -122,7 +121,7 @@ class B3dItemLayout(QHBoxLayout):
         self.parent = parent
         self.root_folder = root_folder
         self.version = version
-        self.pids = []
+        self.processes = []
         self.mtime = os.path.getmtime(os.path.join(
             root_folder, version, blender_exe))
 
@@ -186,12 +185,12 @@ class B3dItemLayout(QHBoxLayout):
                                        stderr=None, close_fds=True, creationflags=DETACHED_PROCESS)
         elif self.platform == 'Linux':
             b3d_exe = os.path.join(self.root_folder, self.version, "blender")
-            process = subprocess.Popen(b3d_exe, shell=True, stdin=None, stdout=None,
-                                       stderr=None, close_fds=True)
+            process = subprocess.Popen(
+                "nohup " + b3d_exe, shell=True, stdout=None, stderr=None, preexec_fn=os.setpgrp)
 
-        self.pids.append(process.pid)
+        self.processes.append(process)
 
-        if (len(self.pids) == 1):
+        if (len(self.processes) == 1):
             self.observe_instances = ObserveInstances(self)
             self.observe_instances.started.connect(self.observe_started)
             self.observe_instances.finished.connect(self.observe_finished)
@@ -220,7 +219,7 @@ class B3dItemLayout(QHBoxLayout):
         self.btnDelete.setStyle(self.btnDelete.style())
 
     def count_changed(self):
-        self.btnDelete.setText(str(len(self.pids)))
+        self.btnDelete.setText(str(len(self.processes)))
 
     def delete(self):
         msgBox = QMessageBox.question(
@@ -264,11 +263,11 @@ class ObserveInstances(QThread):
         self.started.emit()
 
         while self.parent:
-            for pid in self.parent.pids:
-                if not psutil.pid_exists(pid):
-                    self.parent.pids.remove(pid)
+            for process in self.parent.processes:
+                if process.poll() is not None:
+                    self.parent.processes.remove(process)
 
-                if len(self.parent.pids) > 0:
+                if len(self.parent.processes) > 0:
                     self.count_changed.emit()
                 else:
                     self.finished.emit()
