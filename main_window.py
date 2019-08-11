@@ -340,22 +340,23 @@ class BVMQMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         self.pressing = False
 
     def toggle_run_on_startup(self, is_checked):
-        key = winreg.OpenKey(winreg.HKEY_CURRENT_USER,
-                             r'SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run',
-                             0, winreg.KEY_SET_VALUE)
+        if (self.platform == 'Windows'):
+            key = winreg.OpenKey(winreg.HKEY_CURRENT_USER,
+                                 r'SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run',
+                                 0, winreg.KEY_SET_VALUE)
 
-        if (is_checked):
-            path = sys.executable
-            winreg.SetValueEx(key, 'Blender Version Manager',
-                              0, winreg.REG_SZ, path)
-        else:
-            try:
-                winreg.DeleteValue(key, 'Blender Version Manager')
-            except:
-                pass
+            if (is_checked):
+                path = sys.executable
+                winreg.SetValueEx(key, 'Blender Version Manager',
+                                  0, winreg.REG_SZ, path)
+            else:
+                try:
+                    winreg.DeleteValue(key, 'Blender Version Manager')
+                except:
+                    pass
 
-        key.Close()
-        self.settings.setValue('is_run_on_startup', is_checked)
+            key.Close()
+            self.settings.setValue('is_run_on_startup', is_checked)
 
     def bring_to_front(self):
         self.setWindowState(self.windowState() & ~
