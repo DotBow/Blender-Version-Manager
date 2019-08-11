@@ -128,14 +128,15 @@ class BuildLoader(QThread):
         # Register .blend extension
         if self.parent.settings.value('is_register_blend', type=bool):
             if self.platform == 'Windows':
-                    b3d_exe = target_path / "blender.exe"
-                    subprocess.call([str(b3d_exe), "-r"], creationflags=CREATE_NO_WINDOW,
-                                    shell=True, stdout=PIPE, stderr=STDOUT, stdin=DEVNULL)
+                b3d_exe = target_path / "blender.exe"
+                subprocess.call([str(b3d_exe), "-r"], creationflags=CREATE_NO_WINDOW,
+                                shell=True, stdout=PIPE, stderr=STDOUT, stdin=DEVNULL)
             elif self.platform == 'Linux':
-                    # TODO Linux has different file association method?
-                    # b3d_exe = target_path / "blender"
-                    # subprocess.call([str(b3d_exe), "-r"],
-                                    # shell=True, stdout=PIPE, stderr=STDOUT, stdin=DEVNULL)
+                pass
+                # TODO Linux has different file association method?
+                # b3d_exe = target_path / "blender"
+                # subprocess.call([str(b3d_exe), "-r"],
+                # shell=True, stdout=PIPE, stderr=STDOUT, stdin=DEVNULL)
 
         self.finished.emit(nice_name)
 
