@@ -132,9 +132,10 @@ class BuildLoader(QThread):
                     subprocess.call([str(b3d_exe), "-r"], creationflags=CREATE_NO_WINDOW,
                                     shell=True, stdout=PIPE, stderr=STDOUT, stdin=DEVNULL)
             elif self.platform == 'Linux':
-                    b3d_exe = target_path / "blender"
-                    subprocess.call([str(b3d_exe), "-r"],
-                                    shell=True, stdout=PIPE, stderr=STDOUT, stdin=DEVNULL)
+                    # TODO Linux has different file association method?
+                    # b3d_exe = target_path / "blender"
+                    # subprocess.call([str(b3d_exe), "-r"],
+                                    # shell=True, stdout=PIPE, stderr=STDOUT, stdin=DEVNULL)
 
         self.finished.emit(nice_name)
 
