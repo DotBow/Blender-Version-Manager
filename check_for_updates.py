@@ -41,8 +41,7 @@ class CheckForUpdates(QThread):
             except urllib.error.URLError as e:
                 print(e)
 
-            print("Check For Updates")
-            QThread.sleep(60)
+            QThread.sleep(600)
 
         return
 
