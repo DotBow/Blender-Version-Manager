@@ -27,6 +27,45 @@
    <string notr="true">QMainWindow
 {
 	background-color: rgb(30, 30, 30);
+}
+
+QScrollBar:vertical
+{
+	background-color: #1e1e1e;
+	width: 4px;
+}
+
+QScrollBar::handle:vertical:hover
+{
+	background-color: #4f4f4f;
+	width: 4px;
+}
+
+QScrollBar::handle:vertical
+{
+	background-color: #424242;
+}
+
+QScrollBar::sub-page:vertical
+{
+	 background: none;
+}
+
+QScrollBar::add-page:vertical
+{
+	background-color: rgb(30, 30, 30);
+}
+
+QScrollBar::add-line:vertical
+{
+	border: none;
+	background: none;
+}
+
+QScrollBar::sub-line:vertical 
+{
+	border: none;
+	background: none;
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -602,45 +641,6 @@ QPushButton:hover
        <string notr="true">QWidget
 {
 	background-color: #1e1e1e;
-}
-
-QScrollBar:vertical
-{
-	background-color: #1e1e1e;
-	width: 4px;
-}
-
-QScrollBar::handle:vertical:hover
-{
-	background-color: #4f4f4f;
-	width: 4px;
-}
-
-QScrollBar::handle:vertical
-{
-	background-color: #424242;
-}
-
-QScrollBar::sub-page:vertical
-{
-	 background: none;
-}
-
-QScrollBar::add-page:vertical
-{
-	background-color: rgb(30, 30, 30);
-}
-
-QScrollBar::add-line:vertical
-{
-	border: none;
-	background: none;
-}
-
-QScrollBar::sub-line:vertical 
-{
-	border: none;
-	background: none;
 }</string>
       </property>
       <property name="frameShape">
@@ -651,9 +651,6 @@ QScrollBar::sub-line:vertical
       </property>
       <property name="lineWidth">
        <number>0</number>
-      </property>
-      <property name="verticalScrollBarPolicy">
-       <enum>Qt::ScrollBarAsNeeded</enum>
       </property>
       <property name="horizontalScrollBarPolicy">
        <enum>Qt::ScrollBarAlwaysOff</enum>
