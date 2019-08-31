@@ -171,7 +171,7 @@ class BVMQMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
         if self.isHidden():
             self.tray_icon.showMessage(
                 "Blender Version Manager",
-                "New version of Blender 2.8 is avaliable!",
+                "New build of Blender is available!",
                 QSystemTrayIcon.Information, 4000)
 
     def set_task_visible(self, is_visible):
@@ -303,7 +303,7 @@ class BVMQMainWindow(QMainWindow, main_window_design.Ui_MainWindow):
 
             self.tray_icon.showMessage(
                 "Blender Version Manager",
-                "Update finished!",
+                "Download finished!",
                 QSystemTrayIcon.Information, 4000)
 
         self.draw_list_versions()
