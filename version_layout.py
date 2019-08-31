@@ -270,6 +270,7 @@ class ObserveInstances(QThread):
                 if len(self.parent.processes) > 0:
                     self.count_changed.emit()
                 else:
+                    process.kill()
                     self.finished.emit()
                     return
 
