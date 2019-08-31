@@ -843,7 +843,13 @@ QMenu::icon:unchecked
     </iconset>
    </property>
    <property name="text">
-    <string>Run Minimized To Tray</string>
+    <string>Launch Minimized</string>
+   </property>
+   <property name="iconText">
+    <string>Launch Minimized</string>
+   </property>
+   <property name="toolTip">
+    <string>Launch Minimized</string>
    </property>
    <property name="statusTip">
     <string notr="true"/>
@@ -888,7 +894,13 @@ QMenu::icon:unchecked
     </iconset>
    </property>
    <property name="text">
-    <string>Run When Windows Starts</string>
+    <string>Launch When System Starts</string>
+   </property>
+   <property name="iconText">
+    <string>Launch When System Starts</string>
+   </property>
+   <property name="toolTip">
+    <string>Launch When System Starts</string>
    </property>
    <property name="statusTip">
     <string notr="true"/>

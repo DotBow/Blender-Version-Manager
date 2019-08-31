@@ -539,9 +539,13 @@ class Ui_MainWindow(object):
         self.zeroBuildsWarning.setText(_translate("MainWindow", "No Local Builds Found!"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.actionToggleRegisterBlend.setText(_translate("MainWindow", "Register Blend-file Extension"))
-        self.actionToggleRunMinimized.setText(_translate("MainWindow", "Run Minimized To Tray"))
+        self.actionToggleRunMinimized.setText(_translate("MainWindow", "Launch Minimized"))
+        self.actionToggleRunMinimized.setIconText(_translate("MainWindow", "Launch Minimized"))
+        self.actionToggleRunMinimized.setToolTip(_translate("MainWindow", "Launch Minimized"))
         self.actionQuit.setShortcut(_translate("MainWindow", "Ctrl+Q"))
-        self.actionToggleRunOnStartup.setText(_translate("MainWindow", "Run When Windows Starts"))
+        self.actionToggleRunOnStartup.setText(_translate("MainWindow", "Launch When System Starts"))
+        self.actionToggleRunOnStartup.setIconText(_translate("MainWindow", "Launch When System Starts"))
+        self.actionToggleRunOnStartup.setToolTip(_translate("MainWindow", "Launch When System Starts"))
         self.actionasd_as_sa_da.setText(_translate("MainWindow", "asd as sa da "))
 
 import resources_rc
