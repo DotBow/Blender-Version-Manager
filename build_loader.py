@@ -63,6 +63,9 @@ class BuildLoader(QThread):
                     self.finished.emit(None)
                     return
 
+        # Show extraction progress at 0
+        self.progress_changed.emit(0, 0, "Extracting: %p%")
+
         # Extract
         if self.platform == 'Windows':
             zf = zipfile.ZipFile(path)
