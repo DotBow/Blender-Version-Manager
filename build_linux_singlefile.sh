@@ -1,4 +1,4 @@
-pyinstaller \
+PYTHONOPTIMIZE=2 pyinstaller \
 --noconsole \
 --noupx \
 --onefile \
