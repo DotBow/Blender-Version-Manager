@@ -824,9 +824,6 @@ QMenu::icon:unchecked
    <property name="text">
     <string>Register Blend-file Extension</string>
    </property>
-   <property name="statusTip">
-    <string notr="true"/>
-   </property>
    <property name="font">
     <font>
      <pointsize>10</pointsize>
@@ -844,15 +841,6 @@ QMenu::icon:unchecked
    </property>
    <property name="text">
     <string>Launch Minimized</string>
-   </property>
-   <property name="iconText">
-    <string>Launch Minimized</string>
-   </property>
-   <property name="toolTip">
-    <string>Launch Minimized</string>
-   </property>
-   <property name="statusTip">
-    <string notr="true"/>
    </property>
    <property name="font">
     <font>
@@ -895,15 +883,6 @@ QMenu::icon:unchecked
    </property>
    <property name="text">
     <string>Launch When System Starts</string>
-   </property>
-   <property name="iconText">
-    <string>Launch When System Starts</string>
-   </property>
-   <property name="toolTip">
-    <string>Launch When System Starts</string>
-   </property>
-   <property name="statusTip">
-    <string notr="true"/>
    </property>
    <property name="font">
     <font>
