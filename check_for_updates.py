@@ -53,7 +53,7 @@ class CheckForUpdates(QThread):
 
         if platform == 'Windows':
             build_url = soup.find(href=re.compile(
-                r'blender-.+win64'))['href']
+                r'blender-.+win.+64'))['href']
         elif platform == 'Linux':
             build_url = soup.find(href=re.compile(
                 r'blender-.+linux.+64'))['href']
