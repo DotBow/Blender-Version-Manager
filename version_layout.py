@@ -186,7 +186,7 @@ class B3dItemLayout(QHBoxLayout):
         elif self.platform == 'Linux':
             b3d_exe = os.path.join(self.root_folder, self.version, "blender")
             process = subprocess.Popen(
-                "nohup " + b3d_exe, shell=True, stdout=None, stderr=None, preexec_fn=os.setpgrp)
+                'nohup "' + b3d_exe + '"', shell=True, stdout=None, stderr=None, preexec_fn=os.setpgrp)
 
         self.processes.append(process)
 
