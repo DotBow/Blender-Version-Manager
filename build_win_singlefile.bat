@@ -4,6 +4,7 @@ if exist dist rd /S /Q dist
 if exist "Blender Version Manager.spec" del /Q "Blender Version Manager.spec"
 
 python -OO -m PyInstaller ^
+--clean ^
 --noconsole ^
 --noupx ^
 --onefile ^
