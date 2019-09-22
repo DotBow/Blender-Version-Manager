@@ -1,5 +1,5 @@
 ## Blender Version Manager
-Minimalistic download manager for Blender 2.8 (Win x64) latest builds.
+Minimalistic download manager for Blender 2.8 (Win x64, Linux x64) latest builds.
 
 * Simple UI with list of downloaded builds from [BuildBot](https://builder.blender.org/download/)
 * Automatic checking of latest builds
