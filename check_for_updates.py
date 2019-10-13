@@ -58,6 +58,40 @@ class CheckForUpdates(QThread):
             build_url = soup.find(href=re.compile(
                 r'blender-.+linux.+64'))['href']
 
+        # Start Experimental
+        builder_url = "https://builder.blender.org"
+        content = urlopen(builder_url + "/download").read()
+        soup = BeautifulSoup(content, 'html.parser')
+        platform = get_platform()
+        links = []
+
+        if platform == 'Windows':
+            for link in soup.find_all(href=re.compile(r'blender-.+win.+64')):
+                links.append(builder_url + link['href'])
+                # print(link)
+        elif platform == 'Linux':
+            for link in soup.find_all(href=re.compile(r'blender-.+linux.+64')):
+                links.append(builder_url + link['href'])
+
+        print("Daily Builds")
+        print(links)
+
+        content = urlopen(builder_url + "/download/branches").read()
+        soup = BeautifulSoup(content, 'html.parser')
+        links = []
+
+        if platform == 'Windows':
+            for link in soup.find_all(href=re.compile(r'blender-.+win.+64')):
+                links.append(builder_url + link['href'])
+                # print(link.get(re.compile(r'build-var.+')))
+        elif platform == 'Linux':
+            for link in soup.find_all(href=re.compile(r'blender-.+linux.+64')):
+                links.append(builder_url + link['href'])
+
+        print("Experimental Branches")
+        print(links)
+        # End Experimental
+
         return builder_url + build_url
 
     def get_commit_datetime(self, commit):
