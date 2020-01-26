@@ -1,3 +1,4 @@
+import locale
 import os
 import re
 import shutil
@@ -118,6 +119,11 @@ class BuildLoader(QThread):
         # Delete temp folder
         if os.path.isdir(temp_path):
             shutil.rmtree(temp_path)
+
+        if platform == 'Windows':
+            locale.setlocale(locale.LC_ALL, 'eng_usa')
+        elif platform == 'Linux':
+            locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
         # Make nice name for dir
         git = self.url.split('-',)[-2]

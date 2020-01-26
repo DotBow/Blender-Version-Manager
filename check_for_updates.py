@@ -1,3 +1,4 @@
+import locale
 import re
 import time
 import urllib
@@ -19,6 +20,8 @@ class CheckForUpdates(QThread):
         self.download_url = None
 
     def run(self):
+        platform = get_platform()
+
         while self.is_running:
             try:
                 self.download_url = self.get_download_url()
@@ -31,6 +34,12 @@ class CheckForUpdates(QThread):
 
                 if new_version:
                     datetime = self.get_commit_datetime(commit)
+
+                    if platform == 'Windows':
+                        locale.setlocale(locale.LC_ALL, 'eng_usa')
+                    elif platform == 'Linux':
+                        locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+
                     self.strptime = time.strptime(
                         datetime, '%a, %d %b %Y %H:%M:%S %z')
                     strftime = time.strftime("%d-%b-%H:%M", self.strptime)
