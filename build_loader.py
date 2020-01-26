@@ -120,9 +120,9 @@ class BuildLoader(QThread):
         if os.path.isdir(temp_path):
             shutil.rmtree(temp_path)
 
-        if platform == 'Windows':
+        if self.platform == 'Windows':
             locale.setlocale(locale.LC_ALL, 'eng_usa')
-        elif platform == 'Linux':
+        elif self.platform == 'Linux':
             locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
         # Make nice name for dir
