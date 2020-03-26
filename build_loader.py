@@ -136,7 +136,8 @@ class BuildLoader(QThread):
 
         # Link to permanent environment variable
         symlink_path = Path(os.path.join(self.root_folder, "blender.exe"))
-        os.symlink(target_path / "blender.exe", symlink_path)
+        symlink_path.unlink(missing_ok=True)
+        symlink_path.symlink_to(target_path / "blender.exe")
 
         # Register .blend extension
         if self.parent.settings.value('is_register_blend', type=bool):
