@@ -1,6 +1,5 @@
-## Project no longer supported! For new versions visit [Blender Launcher](https://github.com/DotBow/Blender-Launcher) repository!
-
-***
+# 🛑 Project no longer supported!
+# ✔️ For new versions visit [Blender Launcher](https://github.com/DotBow/Blender-Launcher) repository!
 
 ## Blender Version Manager
 Minimalistic download manager for Blender 2.8 (Win x64, Linux x64) latest builds.
